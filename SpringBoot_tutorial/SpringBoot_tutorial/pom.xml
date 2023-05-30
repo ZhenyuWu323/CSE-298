@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>CSE298</groupId>
-	<artifactId>SpringBoot-tutorial</artifactId>
+	<artifactId>SpringBoot_tutorial</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>SpringBoot-tutorial</name>
+	<name>SpringBoot_tutorial</name>
 	<description>Spring Boot tutorial</description>
 	<properties>
 		<java.version>17</java.version>
