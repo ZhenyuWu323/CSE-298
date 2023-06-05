@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,10 +19,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import CSE298.SpringBoot_tutorial.model.Content;
 import CSE298.SpringBoot_tutorial.repository.ContentCollectionRepository;
+import jakarta.validation.Valid;
 
 //Handle Request,Return Response
 @RestController
 @RequestMapping("/api/content")
+@CrossOrigin
 public class ContentController {
 
     //Bean Injection
@@ -44,13 +47,13 @@ public class ContentController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("")
-    public void saveContent(@RequestBody Content c){
+    public void saveContent(@Valid @RequestBody Content c){
         repository.saveContent(c);
     }
     
     
     @PutMapping("/{id}")
-    public void updateContent(@PathVariable Integer id, @RequestBody Content c){
+    public void updateContent(@Valid @PathVariable Integer id, @Valid @RequestBody Content c){
         if(!repository.existById(id)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Content not found");
         }
@@ -58,7 +61,7 @@ public class ContentController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteContent(@PathVariable Integer id){
+    public void deleteContent(@Valid @PathVariable Integer id){
         if(!repository.existById(id)){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Content not found");
         }
