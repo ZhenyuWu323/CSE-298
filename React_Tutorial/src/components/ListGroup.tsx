@@ -1,4 +1,4 @@
-import { Dispatch, MouseEvent, useState } from "react";
+import { Dispatch, useState } from "react";
 
 interface ListGroupProps {
   items: string[];
