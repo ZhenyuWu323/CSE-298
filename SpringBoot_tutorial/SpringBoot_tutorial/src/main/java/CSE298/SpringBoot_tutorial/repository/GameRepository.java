@@ -20,4 +20,8 @@ public class GameRepository {
     public void AddGame(Games game){
         GameList.add(game);
     }
+
+    public void CleanGame(){
+        GameList.clear();
+    }
 }
