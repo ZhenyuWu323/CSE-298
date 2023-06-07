@@ -2,7 +2,7 @@ package CSE298.SpringBoot_tutorial.model;
 
 import java.time.LocalDateTime;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 public record Content(
     Integer id,
