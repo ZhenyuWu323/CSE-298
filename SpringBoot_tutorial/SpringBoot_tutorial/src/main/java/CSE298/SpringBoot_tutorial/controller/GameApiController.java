@@ -30,6 +30,7 @@ public class GameApiController {
 
     @GetMapping("/games")
     public Object getGameList() throws IOException, ParseException {
+        //可passin page number 加入？page=pagenum 来fetch下一页的
         String steamApiUrl = "https://api.rawg.io/api/games?key=56d8217442f84e2398c806076bdff38d";
 
         URL url = new URL(steamApiUrl);
