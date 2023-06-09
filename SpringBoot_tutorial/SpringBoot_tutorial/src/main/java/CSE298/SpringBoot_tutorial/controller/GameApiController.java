@@ -35,7 +35,7 @@ public class GameApiController {
     }
 
     @GetMapping("/games")
-    public Object getGameList(@RequestParam("page") @Min(1) @Max(7) int PageNum) throws IOException, ParseException {
+    public Object getGameList(@RequestParam("page") @Min(1) @Max(42511) int PageNum) throws IOException, ParseException {
         GameList.CleanGame();
         String steamApiUrl = "https://api.rawg.io/api/games?key=56d8217442f84e2398c806076bdff38d&page=" + String.valueOf(PageNum);
         System.out.println(steamApiUrl);
