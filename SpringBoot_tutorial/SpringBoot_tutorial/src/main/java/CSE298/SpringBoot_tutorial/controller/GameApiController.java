@@ -64,7 +64,8 @@ public class GameApiController {
                 JSONObject game = (JSONObject) game_list.get(i);
                 String name = game.get("name").toString();
                 Integer id = Integer.parseInt(game.get("id").toString());
-                Games temp = new Games(id, name);
+                String image = game.get("background_image").toString();
+                Games temp = new Games(id, name,image);
                 GameList.AddGame(temp);
             }
             return GameList.FindAllGames();

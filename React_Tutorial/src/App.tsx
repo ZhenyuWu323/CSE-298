@@ -11,7 +11,7 @@ function App() {
       <Grid templateAreas={`'nav nav' 'aside main'`}>
         <GridItem area={'nav'} > <NavigationBar/></GridItem>
         <GridItem area={'aside'}> Aside</GridItem>
-        <GridItem area={'main'} > <GameGrid/></GridItem>
+        <GridItem area={'main'} ><GameGrid/></GridItem>
       </Grid>
     </div>
   );
