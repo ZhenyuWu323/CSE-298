@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Card, CardBody, Heading, SimpleGrid } from '@chakra-ui/react';
 
 interface Game{
     ID:number;
@@ -30,12 +31,15 @@ function GameGrid(){
 
       return (
         <div>
-          <h1>Main Page</h1>
-          <ul>
+          <SimpleGrid column={3} spacing={10}>
             {gameList.map((game:Game) => (
-              <li key={game.ID}>{game.Name}</li>
+              <Card>
+                <CardBody>
+                  <Heading>{game.Name}</Heading>
+                </CardBody>
+              </Card>
             ))}
-          </ul>
+          </SimpleGrid>
           {pageNum > 1 && <button onClick={() => setPage(pageNum - 1)}>Previous</button>}
           <span>Page {pageNum}</span>
           <button onClick={() => setPage(pageNum+1)}>Next</button>
