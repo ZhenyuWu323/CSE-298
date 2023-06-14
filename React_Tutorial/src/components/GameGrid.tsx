@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardBody, Heading, SimpleGrid, Image, Box, Grid } from "@chakra-ui/react";
+import { Card, CardBody, Heading, Image, Box, Grid } from "@chakra-ui/react";
 
 interface Game {
   ID: number;
@@ -17,37 +17,45 @@ function GameGrid() {
   //Set up gamelist
   const [gameList, setGameList] = useState<Game[]>([]);
   const [pageNum, setPage] = useState(1);
+  const [isLoading, setLoading] = useState(false);
+
 
   //Set up Fetch
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const response = await axios.get("http://localhost:8080/api/games", {
           params: {
             page: pageNum,
           },
         });
         setGameList(response.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
+        setLoading(false);
       }
     };
     fetchData();
   }, [pageNum]);
 
-  //GameGrid Area
   return (
     <Box mx="auto" maxW="auto" p={4}>
-      <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense">
-        {gameList.map((game: Game) => (
-          <Card key={game.ID} borderRadius={10} overflow='hidden'>
-          <Image src={ResizeImage(game.Image)} />
-          <CardBody>
-            <Heading fontSize='2xl'>{game.Name}</Heading>
-          </CardBody>
-        </Card>
-        ))}
-      </Grid>
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense">
+          {gameList.map((game: Game) => (
+            <Card key={game.ID} borderRadius={10} overflow="hidden">
+              <Image src={ResizeImage(game.Image)} />
+              <CardBody>
+                <Heading fontSize="2xl">{game.Name}</Heading>
+              </CardBody>
+            </Card>
+          ))}
+        </Grid>
+      )}
       {pageNum > 1 && (
         <button onClick={() => setPage(pageNum - 1)}>Previous</button>
       )}
@@ -57,4 +65,4 @@ function GameGrid() {
   );
 }
 
-export default GameGrid;
+export default GameGrid
