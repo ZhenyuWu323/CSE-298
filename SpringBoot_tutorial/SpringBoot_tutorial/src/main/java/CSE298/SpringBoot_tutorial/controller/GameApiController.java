@@ -35,44 +35,46 @@ public class GameApiController {
     }
 
     @GetMapping("/games")
-    public Object getGameList(@RequestParam("page") @Min(1) @Max(42511) int PageNum) throws IOException, ParseException {
+    public Object getGameList(@RequestParam("page") @Min(1) @Max(42511) int PageNum) throws ParseException {
         GameList.CleanGame();
-        String steamApiUrl = "https://api.rawg.io/api/games?key=56d8217442f84e2398c806076bdff38d&page=" + String.valueOf(PageNum);
-        System.out.println(steamApiUrl);
-        URL url = new URL(steamApiUrl);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("GET");
-        connection.setConnectTimeout(5000);
-
-        int responseCode = connection.getResponseCode();
-        if (responseCode == HttpURLConnection.HTTP_OK) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String steamApiUrl = "https://api.rawg.io/api/games?key=56d8217442f84e2398c806076bdff38d&page=" + String.valueOf(PageNum);
+            System.out.println(steamApiUrl);
             StringBuilder response = new StringBuilder();
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-                response.append(line);
+            try {
+                URL url = new URL(steamApiUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setConnectTimeout(5000);
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            response.append(line);
+                        }
+                    }
+                } else {
+                    System.out.println("HTTP Error: " + responseCode);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-
-            reader.close();
+            
             //Parse the string response
             JSONParser parser = new JSONParser();
             JSONObject res = (JSONObject) parser.parse(String.valueOf(response));
             JSONArray game_list = (JSONArray) res.get("results");
             System.out.println(game_list.size());
             for (int i = 0; i < game_list.size(); i++){
-                JSONObject game = (JSONObject) game_list.get(i);
-                String name = game.get("name").toString();
-                Integer id = Integer.parseInt(game.get("id").toString());
-                String image = game.get("background_image").toString();
-                Games temp = new Games(id, name,image);
-                GameList.AddGame(temp);
+            JSONObject game = (JSONObject) game_list.get(i);
+            String name = game.get("name").toString();
+            Integer id = Integer.parseInt(game.get("id").toString());
+            String image = game.get("background_image").toString();
+            Games temp = new Games(id, name,image);
+            GameList.AddGame(temp);
             }
             return GameList.FindAllGames();
 
-        } else {
-            // Handle error response
-            return responseCode;
-        }
+        } 
     }
-}
+
