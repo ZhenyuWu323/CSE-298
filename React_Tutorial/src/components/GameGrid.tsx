@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex, Icon, Button } from "@chakra-ui/react";
+import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex,  Button } from "@chakra-ui/react";
 import { TbArrowBigRight, TbArrowBigLeft } from "react-icons/tb";
 
 interface Game {
@@ -67,7 +67,7 @@ function GameGrid() {
             ))}
           </Grid>
         )}
-        
+
         {/* Page Bar */}
         <Skeleton isLoaded={!isLoading} key="PageBar">
           <Flex justify="center" alignItems="center" mt={4}>
