@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardBody, Heading, Image, Box, Grid } from "@chakra-ui/react";
+import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex, Icon, Button } from "@chakra-ui/react";
+import{TbArrowBigRight,TbArrowBigLeft} from "react-icons/tb";
 
 interface Game {
   ID: number;
@@ -42,25 +43,33 @@ function GameGrid() {
 
   return (
     <Box mx="auto" maxW="auto" p={4}>
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
+      <>
         <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense">
           {gameList.map((game: Game) => (
-            <Card key={game.ID} borderRadius={10} overflow="hidden">
-              <Image src={ResizeImage(game.Image)} />
-              <CardBody>
-                <Heading fontSize="2xl">{game.Name}</Heading>
-              </CardBody>
-            </Card>
+            <Skeleton isLoaded = {!isLoading} key={game.ID} fadeDuration={1}>
+              
+              <Card key={game.ID} borderRadius={10} overflow="hidden" >
+                <Image src={ResizeImage(game.Image)} />
+                <CardBody>
+                  <Heading fontSize="2xl">{game.Name}</Heading>
+                </CardBody>
+              </Card>
+              
+            </Skeleton>
           ))}
         </Grid>
-      )}
-      {pageNum > 1 && (
-        <button onClick={() => setPage(pageNum - 1)}>Previous</button>
-      )}
-      <span>Page {pageNum}</span>
-      <button onClick={() => setPage(pageNum + 1)}>Next</button>
+        <Skeleton isLoaded = {!isLoading} key='PageBar'>
+          <Flex justify="center" alignItems="center" mt={4}>
+            {pageNum > 1 && (
+              <Button leftIcon={<TbArrowBigLeft />} colorScheme='gray' variant='solid' onClick={() => setPage(pageNum + 1)}>Back</Button>
+            )}
+            <Box mx={6} >Page {pageNum + ' / 42511'}</Box>
+            {pageNum < 42512 && (
+              <Button rightIcon={<TbArrowBigRight />} colorScheme='gray' variant='solid' onClick={() => setPage(pageNum + 1)}>Next</Button>
+            )}
+          </Flex>
+        </Skeleton>
+      </>
     </Box>
   );
 }
