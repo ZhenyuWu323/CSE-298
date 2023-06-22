@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import CSE298.SpringBoot_tutorial.model.GameContent;
 import CSE298.SpringBoot_tutorial.model.Games;
 import CSE298.SpringBoot_tutorial.repository.GameRepository;
 import jakarta.validation.constraints.Max;
@@ -35,16 +36,16 @@ public class GameApiController {
     }
 
     @GetMapping("/games")
-    public Object getGameList(@RequestParam("page") @Min(1) @Max(42511) int PageNum) throws ParseException {
+    public Object getGameList(@RequestParam("page") @Min(1) int PageNum) throws ParseException {
         GameList.CleanGame();
-            String steamApiUrl = "https://api.rawg.io/api/games?key=56d8217442f84e2398c806076bdff38d&page=" + String.valueOf(PageNum);
+            String steamApiUrl = "https://api.rawg.io/api/games?key=c5cbbf661c79425e9064cd8c3976db42&page=" + String.valueOf(PageNum);
             System.out.println(steamApiUrl);
             StringBuilder response = new StringBuilder();
             try {
                 URL url = new URL(steamApiUrl);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
-                connection.setConnectTimeout(5000);
+                //connection.setConnectTimeout(5000);
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
@@ -63,6 +64,7 @@ public class GameApiController {
             //Parse the string response
             JSONParser parser = new JSONParser();
             JSONObject res = (JSONObject) parser.parse(String.valueOf(response));
+            Integer totalPage = Integer.parseInt(res.get("count").toString()) / 20;
             JSONArray game_list = (JSONArray) res.get("results");
             System.out.println(game_list.size());
             for (int i = 0; i < game_list.size(); i++){
@@ -73,8 +75,7 @@ public class GameApiController {
             Games temp = new Games(id, name,image);
             GameList.AddGame(temp);
             }
-            return GameList.FindAllGames();
-
+            return new GameContent(totalPage, GameList.FindAllGames());
         } 
     }
 

@@ -10,6 +10,11 @@ interface Game {
   Image: string;
 }
 
+interface GameContent{
+  TotalPage: number;
+  GameList: Game[];
+}
+
 const ResizeImage = (url: string) => {
   const index = url.indexOf("media/") + "media/".length;
   return url.slice(0, index) + "crop/600/400/" + url.slice(index);
@@ -17,7 +22,9 @@ const ResizeImage = (url: string) => {
 
 function GameGrid() {
   {/* Game List*/}
+  const [gameContent, setGameContent] = useState<GameContent>()
   const [gameList, setGameList] = useState<Game[]>([]);
+  const [totalPage, setTotalPage] = useState<number>()
 
   {/* Search Parameter */}
   const[param, setParam] = useSearchParams()
@@ -35,7 +42,9 @@ function GameGrid() {
             page: pageNum,
           },
         });
-        setGameList(response.data);
+        setGameContent(response.data);
+        setGameList(gameContent.GameList);
+        setTotalPage(gameContent.TotalPage);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -43,10 +52,6 @@ function GameGrid() {
       }
     };
     fetchData();
-  }, [pageNum]);
-
-  useEffect(() => {
-    sessionStorage.setItem("currentPage", pageNum.toString());
   }, [pageNum]);
 
   return (
@@ -85,8 +90,8 @@ function GameGrid() {
                 Back
               </Button>
             )}
-            <Box mx={6}>Page {pageNum + " / 42511"}</Box>
-            {pageNum < 42512 && (
+            <Box mx={6}>Page {pageNum + " / " + totalPage}</Box>
+            {pageNum < totalPage && (
               <Button
                 rightIcon={<TbArrowBigRight />}
                 colorScheme="gray"
