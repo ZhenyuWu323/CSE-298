@@ -1,19 +1,15 @@
 
-
-import GameGrid from "./components/GameGrid";
-import { Grid, GridItem} from "@chakra-ui/react";
-import { NavigationBar } from "./components/NavigationBar";
+import {Route, Routes } from "react-router-dom";
+import Home from "./components/Home";
 
 
 function App() {
   return (
-    <div>
-      <Grid templateAreas={`'nav nav' 'panel main'`}>
-        <GridItem area={'nav'} > <NavigationBar/></GridItem>
-        <GridItem area={'panel'}> Aside</GridItem>
-        <GridItem area={'main'} ><GameGrid/></GridItem>
-      </Grid>
-    </div>
+    <Routes>
+      <Route path="/" element={<Home/>}></Route>
+      <Route path="/a" element={<h1>Hello</h1>}></Route>
+    </Routes>
+    
   );
 }
 
