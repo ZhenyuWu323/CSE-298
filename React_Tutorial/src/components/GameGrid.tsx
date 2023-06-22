@@ -17,7 +17,7 @@ const ResizeImage = (url: string) => {
 function GameGrid() {
   const [gameList, setGameList] = useState<Game[]>([]);
   const [pageNum, setPage] = useState(() => {
-    const storedPage = localStorage.getItem("currentPage");
+    const storedPage = sessionStorage.getItem("currentPage");
     return storedPage ? parseInt(storedPage) : 1;
   });
   const [isLoading, setLoading] = useState(false);
@@ -42,7 +42,7 @@ function GameGrid() {
   }, [pageNum]);
 
   useEffect(() => {
-    localStorage.setItem("currentPage", pageNum.toString());
+    sessionStorage.setItem("currentPage", pageNum.toString());
   }, [pageNum]);
 
   return (
