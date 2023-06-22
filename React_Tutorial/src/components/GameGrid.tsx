@@ -54,6 +54,13 @@ function GameGrid() {
     fetchData();
   }, [pageNum]);
 
+  useEffect(() => {
+    if (gameContent) {
+      setGameList(gameContent.GameList);
+      setTotalPage(gameContent.TotalPage);
+    }
+  }, [gameContent]);
+
   return (
     <Box mx="auto" maxW="auto" p={4}>
       <>
