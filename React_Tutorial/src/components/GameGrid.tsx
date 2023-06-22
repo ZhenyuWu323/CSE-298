@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex,  Button } from "@chakra-ui/react";
 import { TbArrowBigRight, TbArrowBigLeft } from "react-icons/tb";
+import { useSearchParams } from "react-router-dom";
 
 interface Game {
   ID: number;
@@ -15,11 +16,14 @@ const ResizeImage = (url: string) => {
 };
 
 function GameGrid() {
+  {/* Game List*/}
   const [gameList, setGameList] = useState<Game[]>([]);
-  const [pageNum, setPage] = useState(() => {
-    const storedPage = sessionStorage.getItem("currentPage");
-    return storedPage ? parseInt(storedPage) : 1;
-  });
+
+  {/* Search Parameter */}
+  const[param, setParam] = useSearchParams()
+  const pageNum = param.get("page") ? parseInt(param.get("page")) : 1;
+
+  {/* Loading State */}
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -76,7 +80,7 @@ function GameGrid() {
                 leftIcon={<TbArrowBigLeft />}
                 colorScheme="gray"
                 variant="solid"
-                onClick={() => setPage((prevPage) => prevPage - 1)}
+                onClick={() => setParam({page: (pageNum - 1).toString()})}
               >
                 Back
               </Button>
@@ -87,7 +91,7 @@ function GameGrid() {
                 rightIcon={<TbArrowBigRight />}
                 colorScheme="gray"
                 variant="solid"
-                onClick={() => setPage((prevPage) => prevPage + 1)}
+                onClick={() => setParam({page: (pageNum + 1).toString()})}
               >
                 Next
               </Button>
