@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex,  Button } from "@chakra-ui/react";
+import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex,  Button , Text, HStack, Icon, VStack} from "@chakra-ui/react";
 import { TbArrowBigRight, TbArrowBigLeft } from "react-icons/tb";
+import{FaLinux, FaWindows, FaPlaystation, FaXbox, FaApple, FaAndroid} from "react-icons/fa"
+import {BsNintendoSwitch} from 'react-icons/bs'
 import { useSearchParams } from "react-router-dom";
+import { IconType } from "react-icons";
 
 interface Game {
   ID: number;
   Name: string;
   Image: string;
+  Genre: string[];
+  Platform: string[];
+  Metacritic: string;
+  Released: string;
 }
 
 interface GameContent{
@@ -21,6 +28,18 @@ const ResizeImage = (url: string) => {
 };
 
 function GameGrid() {
+  {/* Game Platform Icon */}
+  const PlatformIcon : {[key:string] : IconType} = {
+    PC:FaWindows,
+    PlayStation: FaPlaystation,
+    Xbox: FaXbox,
+    iOS: FaApple,
+    Android: FaAndroid,
+    Nintendo: BsNintendoSwitch,
+    Linux: FaLinux,
+    "Apple Macintosh": FaApple,
+    default: FaWindows
+  }
   {/* Game List*/}
   const [gameContent, setGameContent] = useState<GameContent>()
   const [gameList, setGameList] = useState<Game[]>([]);
@@ -78,6 +97,14 @@ function GameGrid() {
                 <Image src={ResizeImage(game.Image)} />
                 <CardBody>
                   <Heading fontSize="2xl">{game.Name}</Heading>
+                  <HStack>
+                    {game.Platform.map((platform) => (<Icon as= {PlatformIcon[platform]}></Icon>))}
+                  </HStack>
+                  <VStack>
+                    <Text fontSize='xs' as='b' color='gray.400'>{game.Genre.join(", ")}</Text>
+                    <Text fontSize='xs' as='b' color='gray.400'>{game.Metacritic}</Text>
+                    <Text fontSize='xs' as='b' color='gray.400'>{game.Released}</Text>
+                  </VStack>
                 </CardBody>
               </Card>
             ))}
