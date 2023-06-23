@@ -1,4 +1,9 @@
 package CSE298.SpringBoot_tutorial.controller;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.HttpClients;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -39,92 +44,90 @@ public class GameApiController {
     @GetMapping("/games")
     public Object getGameList(@RequestParam("page") @Min(1) @Max(50) int PageNum) throws ParseException {
         GameList.CleanGame();
-            String steamApiUrl = "https://api.rawg.io/api/games?key=c5cbbf661c79425e9064cd8c3976db42&page=" + String.valueOf(PageNum);
-            System.out.println(steamApiUrl);
-            StringBuilder response = new StringBuilder();
-            try {
-                URL url = new URL(steamApiUrl);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                //connection.setConnectTimeout(5000);
-                int responseCode = connection.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            response.append(line);
-                        }
+        String steamApiUrl = "https://api.rawg.io/api/games?key=c5cbbf661c79425e9064cd8c3976db42&page=" + String.valueOf(PageNum);
+        System.out.println(steamApiUrl);
+        StringBuilder response = new StringBuilder();
+        HttpClient httpClient = HttpClients.createDefault();
+
+        try {
+            HttpGet request = new HttpGet(steamApiUrl);
+            HttpResponse httpResponse = httpClient.execute(request);
+            HttpEntity entity = httpResponse.getEntity();
+
+            if (entity != null) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
                     }
-                } else {
-                    System.out.println("HTTP Error: " + responseCode);
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-            
-            //Parse the string response
-            JSONParser parser = new JSONParser();
-            JSONObject res = (JSONObject) parser.parse(String.valueOf(response));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Parse the string response
+        JSONParser parser = new JSONParser();
+        JSONObject res = (JSONObject) parser.parse(String.valueOf(response));
 
-            Integer totalPage = Integer.parseInt(res.get("count").toString()) / 20;
-            
-            JSONArray game_list = (JSONArray) res.get("results");
-            System.out.println(game_list.size());
-            for (int i = 0; i < game_list.size(); i++){
-                //Each Game
-                JSONObject game = (JSONObject) game_list.get(i);
+        Integer totalPage = Integer.parseInt(res.get("count").toString()) / 20;
+        
+        JSONArray game_list = (JSONArray) res.get("results");
+        System.out.println(game_list.size());
+        for (int i = 0; i < game_list.size(); i++){
+            //Each Game
+            JSONObject game = (JSONObject) game_list.get(i);
 
-                //Game Name
-                String name = game.get("name").toString();
+            //Game Name
+            String name = game.get("name").toString();
 
-                //Game ID
-                Integer id = Integer.parseInt(game.get("id").toString());
+            //Game ID
+            Integer id = Integer.parseInt(game.get("id").toString());
 
-                //Game Image
-                String image = game.get("background_image").toString();
+            //Game Image
+            String image = game.get("background_image").toString();
 
-                //Game Genre
-                JSONArray genre_list = (JSONArray) game.get("genres");
-                List<String> genre = new ArrayList<>();
-                for(int j = 0; j < genre_list.size(); j++){
-                    JSONObject temp = (JSONObject) genre_list.get(j);
-                    String item = temp.get("name").toString();
-                    genre.add(item);
-                }
-
-                //Game Platform
-                JSONArray platform_list = (JSONArray) game.get("parent_platforms");
-                List<String> platform = new ArrayList<>();
-                for(int j = 0; j < platform_list.size(); j++){
-                    JSONObject temp = (JSONObject) platform_list.get(j);
-                    JSONObject each_temp = (JSONObject) temp.get("platform");
-                    String item = each_temp.get("name").toString();
-                    platform.add(item);
-                }
-
-                //Game metacritic
-                String metacritic = "";
-                if (game.get("metacritic") == null){
-                    metacritic = "0";
-                }
-                else{
-                    metacritic = game.get("metacritic").toString();
-                }
-
-
-                //Game release
-                String release = "";
-                if (game.get("released") == null){
-                    release = "0";
-                }
-                else{
-                    release = game.get("released").toString();
-                }
-
-                Games singleGame = new Games(id, name,image, genre, platform, metacritic, release);
-                GameList.AddGame(singleGame);
+            //Game Genre
+            JSONArray genre_list = (JSONArray) game.get("genres");
+            List<String> genre = new ArrayList<>();
+            for(int j = 0; j < genre_list.size(); j++){
+                JSONObject temp = (JSONObject) genre_list.get(j);
+                String item = temp.get("name").toString();
+                genre.add(item);
             }
-            return new GameContent(totalPage, GameList.FindAllGames());
-        } 
-    }
+
+            //Game Platform
+            JSONArray platform_list = (JSONArray) game.get("parent_platforms");
+            List<String> platform = new ArrayList<>();
+            for(int j = 0; j < platform_list.size(); j++){
+                JSONObject temp = (JSONObject) platform_list.get(j);
+                JSONObject each_temp = (JSONObject) temp.get("platform");
+                String item = each_temp.get("name").toString();
+                platform.add(item);
+            }
+
+            //Game metacritic
+            String metacritic = "";
+            if (game.get("metacritic") == null){
+                metacritic = "0";
+            }
+            else{
+                metacritic = game.get("metacritic").toString();
+            }
+
+
+            //Game release
+            String release = "";
+            if (game.get("released") == null){
+                release = "0";
+            }
+            else{
+                release = game.get("released").toString();
+            }
+
+            Games singleGame = new Games(id, name,image, genre, platform, metacritic, release);
+            GameList.AddGame(singleGame);
+        }
+        return new GameContent(totalPage, GameList.FindAllGames());
+    } 
+}
 
