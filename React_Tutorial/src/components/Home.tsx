@@ -6,9 +6,9 @@ import GenreList from "./GenreList";
 function Home(){
     return(
         <div>
-          <Grid templateAreas={`'nav nav' 'panel main'`}>
+          <Grid templateAreas={`'nav nav' 'panel main'`} templateColumns={"200px 1fr"}>
             <GridItem area={'nav'} > <NavigationBar/></GridItem>
-            <GridItem area={'panel'}> <GenreList/></GridItem>
+            <GridItem area={'panel'} paddingX={5}> <GenreList/></GridItem>
             <GridItem area={'main'} ><GameGrid/></GridItem>
           </Grid>
         </div>

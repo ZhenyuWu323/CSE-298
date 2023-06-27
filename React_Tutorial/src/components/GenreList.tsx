@@ -1,3 +1,4 @@
+import { HStack, List, ListItem, Image,Text} from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -6,6 +7,12 @@ interface Genre {
   name: string;
   image: string;
 }
+
+const ResizeImage = (url: string) => {
+	const index = url.indexOf("media/") + "media/".length;
+	return url.slice(0, index) + "crop/600/400/" + url.slice(index);
+};
+
 const GenreList = () => {
 
 	{/* Genre List */}
@@ -32,9 +39,17 @@ const GenreList = () => {
 
 
 	return (
-	<ul>
-		{genreList.map((genre : Genre) => (<li key={genre.id}>{genre.name}</li>))}
-	</ul>
+	<List>
+		{genreList.map((genre : Genre) => (
+			<ListItem key={genre.id} paddingY = "10px">
+				<HStack>
+					<Image boxSize="32px" borderRadius={8} src={ResizeImage(genre.image)}></Image>
+					<Text fontSize="large">{genre.name}</Text>
+				</HStack>
+			</ListItem>	
+		))}
+	</List>
+		
 	);
 };
 
