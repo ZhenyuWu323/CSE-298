@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import CSE298.SpringBoot_tutorial.model.GameContent;
 import CSE298.SpringBoot_tutorial.model.Games;
+import CSE298.SpringBoot_tutorial.model.Genre;
 import CSE298.SpringBoot_tutorial.repository.GameRepository;
+import CSE298.SpringBoot_tutorial.repository.GenreRepository;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
@@ -36,13 +38,15 @@ import java.util.List;
 @CrossOrigin
 public class GameApiController {
     private final GameRepository GameList;
+    private final GenreRepository GenreList;
     @Autowired
-    public GameApiController(GameRepository GameList){
+    public GameApiController(GameRepository GameList, GenreRepository GenreList){
         this.GameList = GameList;
+        this.GenreList = GenreList;
     }
 
     @GetMapping("/games")
-    public Object getGameList(@RequestParam("page") @Min(1) @Max(50) int PageNum) throws ParseException {
+    public Object getGameList(@RequestParam("page") @Min(1) int PageNum) throws ParseException {
         GameList.CleanGame();
         String steamApiUrl = "https://api.rawg.io/api/games?key=c5cbbf661c79425e9064cd8c3976db42&page=" + String.valueOf(PageNum);
         System.out.println(steamApiUrl);
@@ -128,6 +132,53 @@ public class GameApiController {
             GameList.AddGame(singleGame);
         }
         return new GameContent(totalPage, GameList.FindAllGames());
+    } 
+
+    @GetMapping("/genres")
+    public Object getGenreList() throws ParseException {
+        GenreList.CleanGenre();
+        String steamApiUrl = "https://api.rawg.io/api/genres?key=c5cbbf661c79425e9064cd8c3976db42";
+        System.out.println(steamApiUrl);
+        StringBuilder response = new StringBuilder();
+        HttpClient httpClient = HttpClients.createDefault();
+
+        try {
+            HttpGet request = new HttpGet(steamApiUrl);
+            HttpResponse httpResponse = httpClient.execute(request);
+            HttpEntity entity = httpResponse.getEntity();
+
+            if (entity != null) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Parse the string response
+        JSONParser parser = new JSONParser();
+        JSONObject res = (JSONObject) parser.parse(String.valueOf(response));
+        
+        JSONArray genre_list = (JSONArray) res.get("results");
+        for (int i = 0; i < genre_list.size(); i++){
+            //Each Genre
+            JSONObject genre = (JSONObject) genre_list.get(i);
+
+            //Genre Name
+            String name = genre.get("name").toString();
+
+            //Genre ID
+            String id = genre.get("id").toString();
+
+            //Genre Image
+            String image = genre.get("image_background").toString();
+            Genre singleGenre = new Genre(id, name, image);
+            GenreList.AddGenre(singleGenre);
+        }
+        return GenreList.FindAllGenre();
     } 
 }
 

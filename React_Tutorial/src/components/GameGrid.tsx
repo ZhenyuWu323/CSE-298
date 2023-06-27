@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex,  Button , Text, HStack, Icon, VStack} from "@chakra-ui/react";
+import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex,  Button , Text, HStack, Icon, VStack, Badge} from "@chakra-ui/react";
 import { TbArrowBigRight, TbArrowBigLeft } from "react-icons/tb";
 import{FaLinux, FaWindows, FaPlaystation, FaXbox, FaApple, FaAndroid} from "react-icons/fa"
 import {BsNintendoSwitch} from 'react-icons/bs'
@@ -56,7 +56,7 @@ function GameGrid() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:8080/api/games", {
+        const response = await axios.get("https://cse-298.up.railway.app/api/games", {
           params: {
             page: pageNum,
           },
@@ -99,12 +99,12 @@ function GameGrid() {
                   <Heading fontSize="2xl">{game.Name}</Heading>
                   <HStack>
                     {game.Platform.map((platform) => (<Icon as= {PlatformIcon[platform]}></Icon>))}
+                    <Badge colorScheme={parseInt(game.Metacritic) > 75 ? "green" : parseInt(game.Metacritic) > 60 ? 'yellow': 'red'} fontSize= '14px' paddingX={2} borderRadius="4px">{game.Metacritic}</Badge>
                   </HStack>
-                  <VStack>
+                  <HStack justifyContent={'space-between'}>
                     <Text fontSize='xs' as='b' color='gray.400'>{game.Genre.join(", ")}</Text>
-                    <Text fontSize='xs' as='b' color='gray.400'>{game.Metacritic}</Text>
                     <Text fontSize='xs' as='b' color='gray.400'>{game.Released}</Text>
-                  </VStack>
+                  </HStack>
                 </CardBody>
               </Card>
             ))}
