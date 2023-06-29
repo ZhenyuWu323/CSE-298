@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex,  Button , Text, HStack, Icon, Badge} from "@chakra-ui/react";
+import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex,  Button , Text, HStack, Icon, Badge, GridItem} from "@chakra-ui/react";
 import { TbArrowBigRight, TbArrowBigLeft } from "react-icons/tb";
 import{FaLinux, FaWindows, FaPlaystation, FaXbox, FaApple, FaAndroid} from "react-icons/fa"
 import {BsNintendoSwitch} from 'react-icons/bs'
@@ -10,13 +10,13 @@ import { useSearchParams } from "react-router-dom";
 import { IconType } from "react-icons";
 
 interface Game {
-  ID: number;
-  Name: string;
-  Image: string;
-  Genre: string[];
-  Platform: string[];
-  Metacritic: string;
-  Released: string;
+  id: string;
+  name: string;
+  image: string;
+  genre: string[];
+  platform: string[];
+  metacritic: string;
+  released: string;
 }
 
 interface GameContent{
@@ -106,17 +106,17 @@ function GameGrid() {
         ) : (
           <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense">
             {gameList.map((game: Game) => (
-              <Card key={game.ID} borderRadius={10} overflow="hidden">
-                <Image src={ResizeImage(game.Image)} />
+              <Card key={game.id} borderRadius={10} overflow="hidden">
+                <Image src={ResizeImage(game.image)} />
                 <CardBody>
-                  <Heading fontSize="2xl">{game.Name}</Heading>
+                  <Heading fontSize="2xl">{game.name}</Heading>
                   <HStack>
-                    {game.Platform.map((platform) => (<Icon as= {PlatformIcon[platform]}></Icon>))}
-                    <Badge colorScheme={parseInt(game.Metacritic) > 75 ? "green" : parseInt(game.Metacritic) > 60 ? 'yellow': 'red'} fontSize= '14px' paddingX={2} borderRadius="4px">{game.Metacritic}</Badge>
+                    {game.platform.map((platform) => (<Icon as= {PlatformIcon[platform]}></Icon>))}
+                    <Badge colorScheme={parseInt(game.metacritic) > 75 ? "green" : parseInt(game.metacritic) > 60 ? 'yellow': 'red'} fontSize= '14px' paddingX={2} borderRadius="4px">{game.metacritic}</Badge>
                   </HStack>
                   <HStack justifyContent={'space-between'}>
-                    <Text fontSize='xs' as='b' color='gray.400'>{game.Genre.join(", ")}</Text>
-                    <Text fontSize='xs' as='b' color='gray.400'>{game.Released}</Text>
+                    <Text fontSize='xs' as='b' color='gray.400'>{game.genre.join(", ")}</Text>
+                    <Text fontSize='xs' as='b' color='gray.400'>{game.released}</Text>
                   </HStack>
                 </CardBody>
               </Card>
