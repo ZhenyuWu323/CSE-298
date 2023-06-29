@@ -12,8 +12,11 @@ interface Platform {
   name: string;
 }
 
+interface LoadingProps {
+	setLoading: (isLoading: boolean) => void;
+}
 
-const PlatformList = () => {
+const PlatformList = ({ setLoading }: LoadingProps) => {
     {/* Game Platform Icon */}
   const PlatformIcon : {[key:string] : IconType} = {
     PC:FaWindows,
@@ -35,8 +38,6 @@ const PlatformList = () => {
 
 	{/* Genre List */}
 	const [plaftormList, setPlatformList] = useState<Platform[]>([]);
-	{/* Loading State */}
-	const [isLoading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -58,8 +59,11 @@ const PlatformList = () => {
 
 	return (
 	<List>
+        <ListItem paddingY="1px" key="PlatformTitle">
+        <Text fontSize="3xl" fontWeight="bold" mb="4px" as='u'>Platforms</Text>
+		</ListItem>
 		{plaftormList.map((platform : Platform) => (
-			<ListItem key={platform.id} paddingY = "10px">
+			<ListItem key={platform.id} paddingY = "5px">
 				<HStack>
                     <Icon as= {PlatformIcon[platform.name]}></Icon>
 					<Text fontSize="large">{platform.name}</Text>

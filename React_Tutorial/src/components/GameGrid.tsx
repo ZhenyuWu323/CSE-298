@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex,  Button , Text, HStack, Icon, Badge, GridItem} from "@chakra-ui/react";
+import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex,  Button , Text, HStack, Icon, Badge, GridItem, SkeletonText} from "@chakra-ui/react";
 import { TbArrowBigRight, TbArrowBigLeft } from "react-icons/tb";
 import{FaLinux, FaWindows, FaPlaystation, FaXbox, FaApple, FaAndroid} from "react-icons/fa"
 import {BsNintendoSwitch} from 'react-icons/bs'
@@ -100,7 +100,13 @@ function GameGrid() {
         {isLoading ? (
           <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense">
             {Array.from({ length: 20 }).map((_, index) => (
-              <Skeleton key={index} height="300px" width="400px"/>
+              <Card key={index} borderRadius={10} overflow="hidden" height="340px" width="345px">
+                <Skeleton height="200px"/>
+                <CardBody>
+                  <SkeletonText/>
+                </CardBody>
+
+              </Card>
             ))}
           </Grid>
         ) : (

@@ -1,14 +1,26 @@
-import GenreList from "./GenreList"
-import PlatformList from "./PlatformList"
-
+import { VStack } from "@chakra-ui/react";
+import GenreList from "./GenreList";
+import PlatformList from "./PlatformList";
+import { useEffect, useState } from "react";
 
 const SidePanel = () => {
-  return (
-    <div>
-        <GenreList />
-        <PlatformList />
-    </div>
-  )
-}
+  const [isGenreListLoading, setGenreListLoading] = useState(true);
+  const [isPlatformListLoading, setPlatformListLoading] = useState(true);
+  const [isDataLoading, setDataLoading] = useState(true);
 
-export default SidePanel
+  useEffect(() => {
+    if (!isGenreListLoading && !isPlatformListLoading) {
+      // Both GenreList and PlatformList finished loading
+      setDataLoading(false);
+    }
+  }, [isGenreListLoading, isPlatformListLoading]);
+  return (
+    <VStack spacing={20}>
+        {isDataLoading && <p>Loading...</p>}
+      <GenreList setLoading={setGenreListLoading} />
+      <PlatformList setLoading={setPlatformListLoading} />
+    </VStack>
+  );
+};
+
+export default SidePanel;
