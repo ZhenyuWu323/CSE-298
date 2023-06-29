@@ -24,7 +24,7 @@ const GenreList = () => {
 		const fetchData = async () => {
 		  try {
 			setLoading(true);
-			const response = await axios.get("http://localhost:8080/api/genres", {
+			const response = await axios.get("https://cse-298.up.railway.app/api/genres", {
 			});
 			setGenreList(response.data)
 			setLoading(false);

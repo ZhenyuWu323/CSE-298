@@ -29,6 +29,7 @@ const PlatformList = () => {
     Atari: SiAtari,
     "3DO":SiD3Dotjs,
     "Neo Geo": SiApplearcade,
+    Web: MdDesktopMac,
     default: MdDesktopMac
   }
 
@@ -41,7 +42,7 @@ const PlatformList = () => {
 		const fetchData = async () => {
 		  try {
 			setLoading(true);
-			const response = await axios.get("http://localhost:8080/api/plaforms", {
+			const response = await axios.get("https://cse-298.up.railway.app/api/platforms", {
 			});
 			setPlatformList(response.data)
 			setLoading(false);

@@ -95,7 +95,7 @@ public class GameApiController {
             String name = game.get("name").toString();
 
             //Game ID
-            Integer id = Integer.parseInt(game.get("id").toString());
+            String id = game.get("id").toString();
 
             //Game Image
             String image = game.get("background_image").toString();

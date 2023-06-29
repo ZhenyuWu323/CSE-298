@@ -45,6 +45,7 @@ function GameGrid() {
     Atari: SiAtari,
     "3DO":SiD3Dotjs,
     "Neo Geo": SiApplearcade,
+    Web: MdDesktopMac,
     default: MdDesktopMac
   }
   {/* Game List*/}
@@ -63,14 +64,12 @@ function GameGrid() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("http://localhost:8080/api/games", {
+        const response = await axios.get("https://cse-298.up.railway.app/api/games", {
           params: {
             page: pageNum,
           },
         });
         setGameContent(response.data);
-        setGameList(gameContent.GameList);
-        setTotalPage(gameContent.TotalPage);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -79,7 +78,14 @@ function GameGrid() {
     };
     fetchData();
   }, [pageNum]);
-
+  
+  useEffect(() => {
+    if (gameContent) {
+      setGameList(gameContent.GameList);
+      setTotalPage(gameContent.TotalPage);
+    }
+  }, [gameContent]);
+  
   useEffect(() => {
     if (gameContent) {
       setGameList(gameContent.GameList);
