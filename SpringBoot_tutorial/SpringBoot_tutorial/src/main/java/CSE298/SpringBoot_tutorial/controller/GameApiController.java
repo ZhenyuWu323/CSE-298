@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 import CSE298.SpringBoot_tutorial.model.GameContent;
 import CSE298.SpringBoot_tutorial.model.Games;
 import CSE298.SpringBoot_tutorial.model.Genre;
+import CSE298.SpringBoot_tutorial.model.Platforms;
 import CSE298.SpringBoot_tutorial.repository.GameRepository;
 import CSE298.SpringBoot_tutorial.repository.GenreRepository;
+import CSE298.SpringBoot_tutorial.repository.PlatformRepository;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 
@@ -39,16 +41,24 @@ import java.util.List;
 public class GameApiController {
     private final GameRepository GameList;
     private final GenreRepository GenreList;
+    private final PlatformRepository PlatformList;
     @Autowired
-    public GameApiController(GameRepository GameList, GenreRepository GenreList){
+    public GameApiController(GameRepository GameList, GenreRepository GenreList, PlatformRepository PlatformList){
         this.GameList = GameList;
         this.GenreList = GenreList;
+        this.PlatformList = PlatformList;
     }
 
     @GetMapping("/games")
-    public Object getGameList(@RequestParam("page") @Min(1) int PageNum) throws ParseException {
+    public Object getGameList(@RequestParam("page") @Min(1) int PageNum, @RequestParam(required = false) String genres, @RequestParam(required = false) String platforms) throws ParseException {
         GameList.CleanGame();
         String steamApiUrl = "https://api.rawg.io/api/games?key=c5cbbf661c79425e9064cd8c3976db42&page=" + String.valueOf(PageNum);
+        if(genres != null){
+            steamApiUrl = steamApiUrl + "&genres=" + genres;
+        }
+        if(platforms != null){
+            steamApiUrl = steamApiUrl + "&parent_platforms=" + platforms;
+        }
         System.out.println(steamApiUrl);
         StringBuilder response = new StringBuilder();
         HttpClient httpClient = HttpClients.createDefault();
@@ -179,6 +189,51 @@ public class GameApiController {
             GenreList.AddGenre(singleGenre);
         }
         return GenreList.FindAllGenre();
+    } 
+
+    @GetMapping("/platforms")
+    public Object getPlatformList() throws ParseException {
+        PlatformList.CleanPlatform();;
+        String steamApiUrl = "https://api.rawg.io/api/platforms/lists/parents?key=c5cbbf661c79425e9064cd8c3976db42";
+        System.out.println(steamApiUrl);
+        StringBuilder response = new StringBuilder();
+        HttpClient httpClient = HttpClients.createDefault();
+
+        try {
+            HttpGet request = new HttpGet(steamApiUrl);
+            HttpResponse httpResponse = httpClient.execute(request);
+            HttpEntity entity = httpResponse.getEntity();
+
+            if (entity != null) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Parse the string response
+        JSONParser parser = new JSONParser();
+        JSONObject res = (JSONObject) parser.parse(String.valueOf(response));
+        
+        JSONArray platform_list = (JSONArray) res.get("results");
+        for (int i = 0; i < platform_list.size(); i++){
+            //Each platform
+            JSONObject platform = (JSONObject) platform_list.get(i);
+
+            //platform Name
+            String name = platform.get("name").toString();
+
+            //platform ID
+            String id = platform.get("id").toString();
+
+            Platforms singlePlatform = new Platforms(id, name);
+            PlatformList.AddPlatform(singlePlatform);
+        }
+        return PlatformList.FindAllPlatform();
     } 
 }
 
