@@ -1,14 +1,14 @@
 import GameGrid from "./GameGrid";
 import { Grid, GridItem} from "@chakra-ui/react";
 import { NavigationBar } from "./NavigationBar";
-import GenreList from "./GenreList";
+import SidePanel from "./SidePanel";
 
 function Home(){
     return(
         <div>
           <Grid templateAreas={`'nav nav' 'panel main'`} templateColumns={"200px 1fr"}>
             <GridItem area={'nav'} > <NavigationBar/></GridItem>
-            <GridItem area={'panel'} paddingX={5}> <GenreList/></GridItem>
+            <GridItem area={'panel'} paddingX={5}> <SidePanel /></GridItem>
             <GridItem area={'main'} ><GameGrid/></GridItem>
           </Grid>
         </div>

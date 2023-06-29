@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex,  Button , Text, HStack, Icon, VStack, Badge} from "@chakra-ui/react";
+import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex,  Button , Text, HStack, Icon, Badge} from "@chakra-ui/react";
 import { TbArrowBigRight, TbArrowBigLeft } from "react-icons/tb";
 import{FaLinux, FaWindows, FaPlaystation, FaXbox, FaApple, FaAndroid} from "react-icons/fa"
 import {BsNintendoSwitch} from 'react-icons/bs'
+import {MdDesktopMac} from 'react-icons/md'
+import {SiAtari, SiCommodore, SiD3Dotjs, SiSega,SiApplearcade} from 'react-icons/si'
 import { useSearchParams } from "react-router-dom";
 import { IconType } from "react-icons";
 
@@ -37,8 +39,13 @@ function GameGrid() {
     Android: FaAndroid,
     Nintendo: BsNintendoSwitch,
     Linux: FaLinux,
-    "Apple Macintosh": FaApple,
-    default: FaWindows
+    "Apple Macintosh": MdDesktopMac,
+    "Commodore / Amiga": SiCommodore,
+    SEGA: SiSega,
+    Atari: SiAtari,
+    "3DO":SiD3Dotjs,
+    "Neo Geo": SiApplearcade,
+    default: MdDesktopMac
   }
   {/* Game List*/}
   const [gameContent, setGameContent] = useState<GameContent>()
@@ -56,7 +63,7 @@ function GameGrid() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get("https://cse-298.up.railway.app/api/games", {
+        const response = await axios.get("http://localhost:8080/api/games", {
           params: {
             page: pageNum,
           },
