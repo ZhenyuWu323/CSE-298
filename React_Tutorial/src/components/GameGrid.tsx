@@ -41,6 +41,11 @@ const ResizeImage = (url: string) => {
   return url.slice(0, index) + "crop/600/400/" + url.slice(index);
 };
 
+
+
+
+
+
 function GameGrid({selectedGenre}:Props) {
   {/* Game Platform Icon */}
   const PlatformIcon : {[key:string] : IconType} = {
@@ -72,6 +77,9 @@ function GameGrid({selectedGenre}:Props) {
   {/* Loading State */}
   const [isLoading, setLoading] = useState(false);
 
+  {/*Error handler */}
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -88,10 +96,19 @@ function GameGrid({selectedGenre}:Props) {
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false);
+        setError("An error occurred while fetching data.");
       }
     };
     fetchData();
   }, [pageNum, selectedGenre]);
+
+  if (isLoading || !gameContent) {
+    return (
+      <Box height="100%" display="flex" alignItems="center" justifyContent="center">
+            <Text fontSize="2xl">{error}</Text>
+      </Box>
+    );
+  }
   
   useEffect(() => {
     if (gameContent) {
