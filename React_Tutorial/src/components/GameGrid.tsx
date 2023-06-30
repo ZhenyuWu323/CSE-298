@@ -8,6 +8,7 @@ import {MdDesktopMac} from 'react-icons/md'
 import {SiAtari, SiCommodore, SiD3Dotjs, SiSega,SiApplearcade} from 'react-icons/si'
 import { useSearchParams } from "react-router-dom";
 import { IconType } from "react-icons";
+import { Genre } from "./GenreList";
 
 interface Game {
   id: string;
@@ -24,12 +25,23 @@ interface GameContent{
   GameList: Game[];
 }
 
+{/*Request Parameter*/}
+interface Params {
+  page: number;
+  genres?: string;
+}
+
+{/*Properties*/}
+interface Props{
+  selectedGenre: Genre | null
+}
+
 const ResizeImage = (url: string) => {
   const index = url.indexOf("media/") + "media/".length;
   return url.slice(0, index) + "crop/600/400/" + url.slice(index);
 };
 
-function GameGrid() {
+function GameGrid({selectedGenre}:Props) {
   {/* Game Platform Icon */}
   const PlatformIcon : {[key:string] : IconType} = {
     PC:FaWindows,
@@ -54,8 +66,8 @@ function GameGrid() {
   const [totalPage, setTotalPage] = useState<number>()
 
   {/* Search Parameter */}
-  const[param, setParam] = useSearchParams()
-  const pageNum = param.get("page") ? parseInt(param.get("page")) : 1;
+  const[searchParam, setSearchParam] = useSearchParams()
+  const pageNum = searchParam.get("page") ? parseInt(searchParam.get("page")) : 1;
 
   {/* Loading State */}
   const [isLoading, setLoading] = useState(false);
@@ -64,10 +76,12 @@ function GameGrid() {
     const fetchData = async () => {
       try {
         setLoading(true);
+        const params:Params = { page: pageNum };
+        if (selectedGenre) {
+          params.genres = selectedGenre.id;
+        }
         const response = await axios.get("https://cse-298.up.railway.app/api/games", {
-          params: {
-            page: pageNum,
-          },
+          params: params,
         });
         setGameContent(response.data);
         setLoading(false);
@@ -77,7 +91,7 @@ function GameGrid() {
       }
     };
     fetchData();
-  }, [pageNum]);
+  }, [pageNum, selectedGenre]);
   
   useEffect(() => {
     if (gameContent) {
@@ -96,6 +110,8 @@ function GameGrid() {
   return (
     <Box mx="auto" maxW="auto" p={4}>
       <>
+        {/* Selected Genre */}
+        {selectedGenre && <Text>{selectedGenre.name}</Text>}
         {/* Game Cards */}
         {isLoading ? (
           <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense" key="GridSkeleton">
@@ -150,7 +166,7 @@ function GameGrid() {
                 leftIcon={<TbArrowBigLeft />}
                 colorScheme="gray"
                 variant="solid"
-                onClick={() => setParam({ page: (pageNum - 1).toString() })}
+                onClick={() => setSearchParam({ page: (pageNum - 1).toString() })}
               >
                 Back
               </Button>
@@ -161,7 +177,7 @@ function GameGrid() {
                 rightIcon={<TbArrowBigRight />}
                 colorScheme="gray"
                 variant="solid"
-                onClick={() => setParam({ page: (pageNum + 1).toString() })}
+                onClick={() => setSearchParam({ page: (pageNum + 1).toString() })}
               >
                 Next
               </Button>
