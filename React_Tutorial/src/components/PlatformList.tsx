@@ -1,4 +1,4 @@
-import { HStack, Icon, List, ListItem, Text} from "@chakra-ui/react";
+import { Button, HStack, Icon, List, ListItem, Text} from "@chakra-ui/react";
 import{FaLinux, FaWindows, FaPlaystation, FaXbox, FaApple, FaAndroid} from "react-icons/fa"
 import {BsNintendoSwitch} from 'react-icons/bs'
 import {MdDesktopMac} from 'react-icons/md'
@@ -37,7 +37,7 @@ const PlatformList = ({ setLoading }: LoadingProps) => {
   }
 
 	{/* Genre List */}
-	const [plaftormList, setPlatformList] = useState<Platform[]>([]);
+	const [platformList, setPlatformList] = useState<Platform[]>([]);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -58,19 +58,26 @@ const PlatformList = ({ setLoading }: LoadingProps) => {
 
 
 	return (
-	<List>
-        <ListItem paddingY="1px" key="PlatformTitle">
-        <Text fontSize="3xl" fontWeight="bold" mb="4px" as='u'>Platforms</Text>
-		</ListItem>
-		{plaftormList.map((platform : Platform) => (
-			<ListItem key={platform.id} paddingY = "5px">
-				<HStack>
-                    <Icon as= {PlatformIcon[platform.name]}></Icon>
-					<Text fontSize="large">{platform.name}</Text>
+		<List>
+		{!platformList.length && <ListItem></ListItem>}
+		{!!platformList.length && (
+		  <>
+			<ListItem paddingY="1px" key="PlatformTitle">
+			  <Text fontSize="3xl" fontWeight="bold" mb="4px" as="u">
+				Platforms
+			  </Text>
+			</ListItem>
+			{platformList.map((platform: Platform) => (
+			  <ListItem key={platform.id} paddingY="5px">
+				<HStack justify="flex-start">
+				  <Icon as={PlatformIcon[platform.name]} />
+				  <Button variant="link"><Text fontSize="large">{platform.name}</Text></Button>
 				</HStack>
-			</ListItem>	
-		))}
-	</List>
+			  </ListItem>
+			))}
+		  </>
+		)}
+	  </List>
 		
 	);
 };

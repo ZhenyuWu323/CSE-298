@@ -98,38 +98,50 @@ function GameGrid() {
       <>
         {/* Game Cards */}
         {isLoading ? (
-          <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense">
+          <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense" key="GridSkeleton">
             {Array.from({ length: 20 }).map((_, index) => (
               <Card key={index} borderRadius={10} overflow="hidden" height="340px" width="345px">
-                <Skeleton height="200px"/>
+                <Skeleton height="200px" />
                 <CardBody>
-                  <SkeletonText/>
+                  <SkeletonText />
                 </CardBody>
-
               </Card>
             ))}
           </Grid>
         ) : (
-          <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense">
+          <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense" key="GameGrid">
             {gameList.map((game: Game) => (
               <Card key={game.id} borderRadius={10} overflow="hidden">
                 <Image src={ResizeImage(game.image)} />
                 <CardBody>
                   <Heading fontSize="2xl">{game.name}</Heading>
                   <HStack>
-                    {game.platform.map((platform) => (<Icon as= {PlatformIcon[platform]}></Icon>))}
-                    <Badge colorScheme={parseInt(game.metacritic) > 75 ? "green" : parseInt(game.metacritic) > 60 ? 'yellow': 'red'} fontSize= '14px' paddingX={2} borderRadius="4px">{game.metacritic}</Badge>
+                    {game.platform.map((platform) => (
+                      <Icon key={platform} as={PlatformIcon[platform]} />
+                    ))}
+                    <Badge
+                      colorScheme={parseInt(game.metacritic) > 75 ? "green" : parseInt(game.metacritic) > 60 ? "yellow" : "red"}
+                      fontSize="14px"
+                      paddingX={2}
+                      borderRadius="4px"
+                    >
+                      {game.metacritic}
+                    </Badge>
                   </HStack>
-                  <HStack justifyContent={'space-between'}>
-                    <Text fontSize='xs' as='b' color='gray.400'>{game.genre.join(", ")}</Text>
-                    <Text fontSize='xs' as='b' color='gray.400'>{game.released}</Text>
+                  <HStack justifyContent="space-between">
+                    <Text fontSize="xs" as="b" color="gray.400">
+                      {game.genre.join(", ")}
+                    </Text>
+                    <Text fontSize="xs" as="b" color="gray.400">
+                      {game.released}
+                    </Text>
                   </HStack>
                 </CardBody>
               </Card>
             ))}
           </Grid>
         )}
-
+  
         {/* Page Bar */}
         <Skeleton isLoaded={!isLoading} key="PageBar">
           <Flex justify="center" alignItems="center" mt={4}>
@@ -138,7 +150,7 @@ function GameGrid() {
                 leftIcon={<TbArrowBigLeft />}
                 colorScheme="gray"
                 variant="solid"
-                onClick={() => setParam({page: (pageNum - 1).toString()})}
+                onClick={() => setParam({ page: (pageNum - 1).toString() })}
               >
                 Back
               </Button>
@@ -149,7 +161,7 @@ function GameGrid() {
                 rightIcon={<TbArrowBigRight />}
                 colorScheme="gray"
                 variant="solid"
-                onClick={() => setParam({page: (pageNum + 1).toString()})}
+                onClick={() => setParam({ page: (pageNum + 1).toString() })}
               >
                 Next
               </Button>

@@ -1,12 +1,19 @@
-import { VStack } from "@chakra-ui/react";
-import GenreList from "./GenreList";
+import { Skeleton, VStack } from "@chakra-ui/react";
+import GenreList, { Genre } from "./GenreList";
 import PlatformList from "./PlatformList";
 import { useEffect, useState } from "react";
 
-const SidePanel = () => {
+{/*Selected Props for platform & genre */}
+interface selectedProps{
+  onSelectedGenre: (genre: Genre) => void;
+}
+
+const SidePanel = ({onSelectedGenre}:selectedProps) => {
+  {/* Genre List & Platform List Loading state */}
   const [isGenreListLoading, setGenreListLoading] = useState(true);
   const [isPlatformListLoading, setPlatformListLoading] = useState(true);
   const [isDataLoading, setDataLoading] = useState(true);
+
 
   useEffect(() => {
     if (!isGenreListLoading && !isPlatformListLoading) {
@@ -14,12 +21,19 @@ const SidePanel = () => {
       setDataLoading(false);
     }
   }, [isGenreListLoading, isPlatformListLoading]);
+
   return (
-    <VStack spacing={20}>
-        {isDataLoading && <p>Loading...</p>}
-      <GenreList setLoading={setGenreListLoading} />
-      <PlatformList setLoading={setPlatformListLoading} />
-    </VStack>
+    <>
+      <Skeleton
+        isLoaded={!isDataLoading}
+        style={{ height: "100%", width: "100%" }}
+      >
+        <VStack spacing={20} style={{ height: "100%", width: "100%" }} borderRadius={10}>
+          <GenreList setLoading={setGenreListLoading} />
+          <PlatformList setLoading={setPlatformListLoading} />
+        </VStack>
+      </Skeleton>
+    </>
   );
 };
 
