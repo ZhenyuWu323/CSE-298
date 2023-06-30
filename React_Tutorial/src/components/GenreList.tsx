@@ -8,16 +8,21 @@ export interface Genre {
   image: string;
 }
 
-interface LoadingProps {
+{/*Genre Props*/}
+interface Props {
   setLoading: (isLoading: boolean) => void;
+  onSelectedGenre:(genre:Genre) => void;
+
 }
+
+
 
 const ResizeImage = (url: string) => {
   const index = url.indexOf("media/") + "media/".length;
   return url.slice(0, index) + "crop/600/400/" + url.slice(index);
 };
 
-const GenreList = ({ setLoading }: LoadingProps) => {
+const GenreList = ({ setLoading, onSelectedGenre}: Props) => {
   {
     /* Genre List */
   }
@@ -63,7 +68,7 @@ const GenreList = ({ setLoading }: LoadingProps) => {
                   borderRadius={8}
                   src={ResizeImage(genre.image)}
                 ></Image>
-                <Button onClick={() => console.log(genre)} variant='link' ><Text fontSize="large">{genre.name}</Text></Button>
+                <Button onClick={() => onSelectedGenre(genre)} variant='link' ><Text fontSize="large">{genre.name}</Text></Button>
               </HStack>
             </ListItem>
           ))}

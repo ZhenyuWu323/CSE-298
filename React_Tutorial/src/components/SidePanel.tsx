@@ -4,11 +4,11 @@ import PlatformList from "./PlatformList";
 import { useEffect, useState } from "react";
 
 {/*Selected Props for platform & genre */}
-interface selectedProps{
+interface Props{
   onSelectedGenre: (genre: Genre) => void;
 }
 
-const SidePanel = ({onSelectedGenre}:selectedProps) => {
+const SidePanel = ({onSelectedGenre}:Props) => {
   {/* Genre List & Platform List Loading state */}
   const [isGenreListLoading, setGenreListLoading] = useState(true);
   const [isPlatformListLoading, setPlatformListLoading] = useState(true);
@@ -29,7 +29,7 @@ const SidePanel = ({onSelectedGenre}:selectedProps) => {
         style={{ height: "100%", width: "100%" }}
       >
         <VStack spacing={20} style={{ height: "100%", width: "100%" }} borderRadius={10}>
-          <GenreList setLoading={setGenreListLoading} />
+          <GenreList setLoading={setGenreListLoading} onSelectedGenre={onSelectedGenre} />
           <PlatformList setLoading={setPlatformListLoading} />
         </VStack>
       </Skeleton>
