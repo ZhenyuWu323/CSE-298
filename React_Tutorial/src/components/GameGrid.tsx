@@ -87,6 +87,7 @@ function GameGrid({selectedGenre}:Props) {
         const params:Params = { page: pageNum };
         if (selectedGenre) {
           params.genres = selectedGenre.id;
+          setSearchParam({ page: pageNum.toString(), genres: selectedGenre.id })
         }
         const response = await axios.get("https://cse-298.up.railway.app/api/games", {
           params: params,
@@ -102,7 +103,8 @@ function GameGrid({selectedGenre}:Props) {
     fetchData();
   }, [pageNum, selectedGenre]);
 
-  if (isLoading || !gameContent) {
+  {/**Not working!!!!! */}
+  if (error) {
     return (
       <Box height="100%" display="flex" alignItems="center" justifyContent="center">
             <Text fontSize="2xl">{error}</Text>
@@ -183,7 +185,7 @@ function GameGrid({selectedGenre}:Props) {
                 leftIcon={<TbArrowBigLeft />}
                 colorScheme="gray"
                 variant="solid"
-                onClick={() => setSearchParam({ page: (pageNum - 1).toString() })}
+                onClick={() => setSearchParam({ page: (pageNum - 1).toString(),...(selectedGenre ? { genres: selectedGenre.id } : {}) })}
               >
                 Back
               </Button>
@@ -194,7 +196,7 @@ function GameGrid({selectedGenre}:Props) {
                 rightIcon={<TbArrowBigRight />}
                 colorScheme="gray"
                 variant="solid"
-                onClick={() => setSearchParam({ page: (pageNum + 1).toString() })}
+                onClick={() => setSearchParam({ page: (pageNum + 1).toString(), ...(selectedGenre ? { genres: selectedGenre.id } : {}) })}
               >
                 Next
               </Button>
