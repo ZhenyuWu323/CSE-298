@@ -78,7 +78,7 @@ function GameGrid({selectedGenre}:Props) {
   const [isLoading, setLoading] = useState(false);
 
   {/*Error handler */}
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -94,118 +94,119 @@ function GameGrid({selectedGenre}:Props) {
         });
         setGameContent(response.data);
         setLoading(false);
+        setError(0);
       } catch (error) {
         console.error("Error fetching data:", error);
         setLoading(false);
-        setError("An error occurred while fetching data.");
+        setError(1);
       }
     };
     fetchData();
   }, [pageNum, selectedGenre]);
 
-  {/**Not working!!!!! */}
-  if (error) {
-    return (
-      <Box height="100%" display="flex" alignItems="center" justifyContent="center">
-            <Text fontSize="2xl">{error}</Text>
-      </Box>
-    );
-  }
   
   useEffect(() => {
     if (gameContent) {
       setGameList(gameContent.GameList);
       setTotalPage(gameContent.TotalPage);
-    }
-  }, [gameContent]);
-  
-  useEffect(() => {
-    if (gameContent) {
-      setGameList(gameContent.GameList);
-      setTotalPage(gameContent.TotalPage);
+      if(totalPage == 0){
+        setError(1);
+      }
+      else{
+        setError(0);
+      }
     }
   }, [gameContent]);
 
-  return (
-    <Box mx="auto" maxW="auto" p={4}>
-      <>
-        {/* Selected Genre */}
-        {selectedGenre && <Text>{selectedGenre.name}</Text>}
-        {/* Game Cards */}
-        {isLoading ? (
-          <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense" key="GridSkeleton">
-            {Array.from({ length: 20 }).map((_, index) => (
-              <Card key={index} borderRadius={10} overflow="hidden" height="340px" width="345px">
-                <Skeleton height="200px" />
-                <CardBody>
-                  <SkeletonText />
-                </CardBody>
-              </Card>
-            ))}
-          </Grid>
-        ) : (
-          <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense" key="GameGrid">
-            {gameList.map((game: Game) => (
-              <Card key={game.id} borderRadius={10} overflow="hidden">
-                <Image src={ResizeImage(game.image)} />
-                <CardBody>
-                  <Heading fontSize="2xl">{game.name}</Heading>
-                  <HStack>
-                    {game.platform.map((platform) => (
-                      <Icon key={platform} as={PlatformIcon[platform]} />
-                    ))}
-                    <Badge
-                      colorScheme={parseInt(game.metacritic) > 75 ? "green" : parseInt(game.metacritic) > 60 ? "yellow" : "red"}
-                      fontSize="14px"
-                      paddingX={2}
-                      borderRadius="4px"
-                    >
-                      {game.metacritic}
-                    </Badge>
-                  </HStack>
-                  <HStack justifyContent="space-between">
-                    <Text fontSize="xs" as="b" color="gray.400">
-                      {game.genre.join(", ")}
-                    </Text>
-                    <Text fontSize="xs" as="b" color="gray.400">
-                      {game.released}
-                    </Text>
-                  </HStack>
-                </CardBody>
-              </Card>
-            ))}
-          </Grid>
-        )}
-  
-        {/* Page Bar */}
-        <Skeleton isLoaded={!isLoading} key="PageBar">
-          <Flex justify="center" alignItems="center" mt={4}>
-            {pageNum > 1 && (
-              <Button
-                leftIcon={<TbArrowBigLeft />}
-                colorScheme="gray"
-                variant="solid"
-                onClick={() => setSearchParam({ page: (pageNum - 1).toString(),...(selectedGenre ? { genres: selectedGenre.id } : {}) })}
-              >
-                Back
-              </Button>
-            )}
-            <Box mx={6}>Page {pageNum + " / " + totalPage}</Box>
-            {pageNum < totalPage && (
-              <Button
-                rightIcon={<TbArrowBigRight />}
-                colorScheme="gray"
-                variant="solid"
-                onClick={() => setSearchParam({ page: (pageNum + 1).toString(), ...(selectedGenre ? { genres: selectedGenre.id } : {}) })}
-              >
-                Next
-              </Button>
-            )}
-          </Flex>
-        </Skeleton>
-      </>
-    </Box>
-  );
+  if (error == 1) {
+    return (
+      <Box height="100%" display="flex" alignItems="center" justifyContent="center">
+            <Text fontSize="2xl">Error occured when fetching data</Text>
+      </Box>
+    );
+  }
+  else{
+    return (
+      <Box mx="auto" maxW="auto" p={4}>
+        <>
+          {/* Selected Genre */}
+          {selectedGenre && <Text>{selectedGenre.name}</Text>}
+          {/* Game Cards */}
+          {isLoading ? (
+            <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense" key="GridSkeleton">
+              {Array.from({ length: 20 }).map((_, index) => (
+                <Card key={index} borderRadius={10} overflow="hidden" height="340px" width="345px">
+                  <Skeleton height="200px" />
+                  <CardBody>
+                    <SkeletonText />
+                  </CardBody>
+                </Card>
+              ))}
+            </Grid>
+          ) : (
+            <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense" key="GameGrid">
+              {gameList.map((game: Game) => (
+                <Card key={game.id} borderRadius={10} overflow="hidden">
+                  <Image src={ResizeImage(game.image)} />
+                  <CardBody>
+                    <Heading fontSize="2xl">{game.name}</Heading>
+                    <HStack>
+                      {game.platform.map((platform) => (
+                        <Icon key={platform} as={PlatformIcon[platform]} />
+                      ))}
+                      <Badge
+                        colorScheme={parseInt(game.metacritic) > 75 ? "green" : parseInt(game.metacritic) > 60 ? "yellow" : "red"}
+                        fontSize="14px"
+                        paddingX={2}
+                        borderRadius="4px"
+                      >
+                        {game.metacritic}
+                      </Badge>
+                    </HStack>
+                    <HStack justifyContent="space-between">
+                      <Text fontSize="xs" as="b" color="gray.400">
+                        {game.genre.join(", ")}
+                      </Text>
+                      <Text fontSize="xs" as="b" color="gray.400">
+                        {game.released}
+                      </Text>
+                    </HStack>
+                  </CardBody>
+                </Card>
+              ))}
+            </Grid>
+          )}
+    
+          {/* Page Bar */}
+          <Skeleton isLoaded={!isLoading} key="PageBar">
+            <Flex justify="center" alignItems="center" mt={4}>
+              {pageNum > 1 && (
+                <Button
+                  leftIcon={<TbArrowBigLeft />}
+                  colorScheme="gray"
+                  variant="solid"
+                  onClick={() => setSearchParam({ page: (pageNum - 1).toString(),...(selectedGenre ? { genres: selectedGenre.id } : {}) })}
+                >
+                  Back
+                </Button>
+              )}
+              <Box mx={6}>Page {pageNum + " / " + totalPage}</Box>
+              {pageNum < totalPage && (
+                <Button
+                  rightIcon={<TbArrowBigRight />}
+                  colorScheme="gray"
+                  variant="solid"
+                  onClick={() => setSearchParam({ page: (pageNum + 1).toString(), ...(selectedGenre ? { genres: selectedGenre.id } : {}) })}
+                >
+                  Next
+                </Button>
+              )}
+            </Flex>
+          </Skeleton>
+        </>
+      </Box>
+    );
+  }
 }
 
 export default GameGrid;
