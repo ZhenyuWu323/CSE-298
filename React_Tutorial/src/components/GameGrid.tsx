@@ -65,6 +65,9 @@ function GameGrid({selectedGenre}:Props) {
     Web: MdDesktopMac,
     default: MdDesktopMac
   }
+  {/*Genre */}
+  const[genre, setGenre] = useState<Genre>()
+
   {/* Game List*/}
   const [gameContent, setGameContent] = useState<GameContent>()
   const [gameList, setGameList] = useState<Game[]>([]);
@@ -80,15 +83,25 @@ function GameGrid({selectedGenre}:Props) {
   {/*Error handler */}
   const [error, setError] = useState(0);
 
+  useEffect(()=>{
+    setGenre(selectedGenre);
+  }, [selectedGenre])
+
+  useEffect(()=>{
+    if(genre != null){
+      setSearchParam({ page: pageNum.toString(), genres: genre.id })
+    }
+  },[pageNum,genre])
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const params:Params = { page: pageNum };
-        if (selectedGenre) {
-          params.genres = selectedGenre.id;
-          setSearchParam({ page: pageNum.toString(), genres: selectedGenre.id })
+        if (genre) {
+          params.genres = genre.id;
         }
+        console.log(params.genres);
         const response = await axios.get("https://cse-298.up.railway.app/api/games", {
           params: params,
         });
@@ -102,7 +115,7 @@ function GameGrid({selectedGenre}:Props) {
       }
     };
     fetchData();
-  }, [pageNum, selectedGenre]);
+  }, [pageNum, genre]);
 
   
   useEffect(() => {
@@ -130,7 +143,7 @@ function GameGrid({selectedGenre}:Props) {
       <Box mx="auto" maxW="auto" p={4}>
         <>
           {/* Selected Genre */}
-          {selectedGenre && <Text>{selectedGenre.name}</Text>}
+          {genre && <Text>{genre.name}</Text>}
           {/* Game Cards */}
           {isLoading ? (
             <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense" key="GridSkeleton">
@@ -185,7 +198,7 @@ function GameGrid({selectedGenre}:Props) {
                   leftIcon={<TbArrowBigLeft />}
                   colorScheme="gray"
                   variant="solid"
-                  onClick={() => setSearchParam({ page: (pageNum - 1).toString(),...(selectedGenre ? { genres: selectedGenre.id } : {}) })}
+                  onClick={() => setSearchParam({ page: (pageNum - 1).toString(),...(genre ? { genres: genre.id } : {}) })}
                 >
                   Back
                 </Button>
@@ -196,7 +209,7 @@ function GameGrid({selectedGenre}:Props) {
                   rightIcon={<TbArrowBigRight />}
                   colorScheme="gray"
                   variant="solid"
-                  onClick={() => setSearchParam({ page: (pageNum + 1).toString(), ...(selectedGenre ? { genres: selectedGenre.id } : {}) })}
+                  onClick={() => setSearchParam({ page: (pageNum + 1).toString(), ...(genre ? { genres: genre.id } : {}) })}
                 >
                   Next
                 </Button>
