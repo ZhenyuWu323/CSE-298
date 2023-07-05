@@ -42,10 +42,6 @@ const ResizeImage = (url: string) => {
 };
 
 
-
-
-
-
 function GameGrid({selectedGenre}:Props) {
   {/* Game Platform Icon */}
   const PlatformIcon : {[key:string] : IconType} = {
@@ -67,6 +63,7 @@ function GameGrid({selectedGenre}:Props) {
   }
   {/*Genre */}
   const[genre, setGenre] = useState<Genre>()
+  const[preGenre, setPreGenre] = useState<Genre>();
 
   {/* Game List*/}
   const [gameContent, setGameContent] = useState<GameContent>()
@@ -77,6 +74,7 @@ function GameGrid({selectedGenre}:Props) {
   const[searchParam, setSearchParam] = useSearchParams()
   const pageNum = searchParam.get("page") ? parseInt(searchParam.get("page")) : 1;
   const genreNum = searchParam.get("genres")
+  const [queryParam, setQueryParam] = useState<[string|null, string|null]> ([pageNum.toString(), genreNum]);
 
   {/* Loading State */}
   const [isLoading, setLoading] = useState(false);
@@ -84,13 +82,14 @@ function GameGrid({selectedGenre}:Props) {
   {/*Error handler */}
   const [error, setError] = useState(0);
 
-
+  {/*Hook: Update Route */}
   useEffect(()=>{
     if(selectedGenre != null){
       setSearchParam({ page: pageNum.toString(), genres: selectedGenre.id })
     }
   },[pageNum,selectedGenre])
 
+  {/*Hook: Http request Based on Route */}
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -121,7 +120,7 @@ function GameGrid({selectedGenre}:Props) {
     fetchData();
   }, [pageNum, genreNum]);
 
-  
+  {/*Hook: Fetch Games:TotoalPage & GameList*/}
   useEffect(() => {
     if (gameContent) {
       setGameList(gameContent.GameList);
@@ -134,6 +133,10 @@ function GameGrid({selectedGenre}:Props) {
       }
     }
   }, [gameContent]);
+
+
+
+
 
   if (error == 1) {
     return (
