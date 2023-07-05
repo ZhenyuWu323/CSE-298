@@ -7,16 +7,17 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
 
-interface Platform {
+export interface Platform {
   id: string;
   name: string;
 }
 
-interface LoadingProps {
+interface Props {
 	setLoading: (isLoading: boolean) => void;
+	onSelectedPlatform:(platform: Platform) => void;
 }
 
-const PlatformList = ({ setLoading }: LoadingProps) => {
+const PlatformList = ({ setLoading, onSelectedPlatform}: Props) => {
     {/* Game Platform Icon */}
   const PlatformIcon : {[key:string] : IconType} = {
     PC:FaWindows,
@@ -71,7 +72,7 @@ const PlatformList = ({ setLoading }: LoadingProps) => {
 			  <ListItem key={platform.id} paddingY="5px">
 				<HStack justify="flex-start">
 				  <Icon as={PlatformIcon[platform.name]} />
-				  <Button variant="link"><Text fontSize="large">{platform.name}</Text></Button>
+				  <Button onClick={() => onSelectedPlatform(platform)} variant="link"><Text fontSize="large">{platform.name}</Text></Button>
 				</HStack>
 			  </ListItem>
 			))}

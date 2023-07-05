@@ -9,6 +9,7 @@ import {SiAtari, SiCommodore, SiD3Dotjs, SiSega,SiApplearcade} from 'react-icons
 import { useSearchParams } from "react-router-dom";
 import { IconType } from "react-icons";
 import { Genre } from "./GenreList";
+import { Platform } from "./PlatformList";
 
 interface Game {
   id: string;
@@ -29,11 +30,13 @@ interface GameContent{
 interface Params {
   page: number;
   genres?: string;
+  platforms?: string;
 }
 
 {/*Properties*/}
 interface Props{
   selectedGenre: Genre | null
+  selectedPlatform: Platform | null
 }
 
 const ResizeImage = (url: string) => {
@@ -42,7 +45,7 @@ const ResizeImage = (url: string) => {
 };
 
 
-function GameGrid({selectedGenre}:Props) {
+function GameGrid({selectedGenre, selectedPlatform}:Props) {
   {/* Game Platform Icon */}
   const PlatformIcon : {[key:string] : IconType} = {
     PC:FaWindows,
@@ -63,7 +66,10 @@ function GameGrid({selectedGenre}:Props) {
   }
   {/*Genre */}
   const[genre, setGenre] = useState<Genre>()
-  const[preGenre, setPreGenre] = useState<Genre>();
+
+  {/*Platform */}
+  const[platform, setPlatform] = useState<Platform>()
+
 
   {/* Game List*/}
   const [gameContent, setGameContent] = useState<GameContent>()
@@ -74,7 +80,7 @@ function GameGrid({selectedGenre}:Props) {
   const[searchParam, setSearchParam] = useSearchParams()
   const pageNum = searchParam.get("page") ? parseInt(searchParam.get("page")) : 1;
   const genreNum = searchParam.get("genres")
-  const [queryParam, setQueryParam] = useState<[string|null, string|null]> ([pageNum.toString(), genreNum]);
+  const platformNum = searchParam.get("platforms")
 
   {/* Loading State */}
   const [isLoading, setLoading] = useState(false);
@@ -84,10 +90,14 @@ function GameGrid({selectedGenre}:Props) {
 
   {/*Hook: Update Route */}
   useEffect(()=>{
-    if(selectedGenre != null){
-      setSearchParam({ page: pageNum.toString(), genres: selectedGenre.id })
-    }
-  },[pageNum,selectedGenre])
+    setSearchParam({
+      page: pageNum.toString(),
+      ...(selectedGenre ? { genres: selectedGenre.id } : {}),
+      ...(selectedPlatform ? { platforms: selectedPlatform.id } : {})
+
+    });
+  },[pageNum,selectedGenre, selectedPlatform])
+
 
   {/*Hook: Http request Based on Route */}
   useEffect(() => {
@@ -95,6 +105,7 @@ function GameGrid({selectedGenre}:Props) {
       try {
         setLoading(true);
         const params:Params = { page: pageNum };
+        {/*Adding genre */}
         if (genreNum) {
           const newGenre: Genre = {
             id: genreNum,
@@ -103,6 +114,15 @@ function GameGrid({selectedGenre}:Props) {
           };
           setGenre(newGenre);
           params.genres = genreNum;
+        }
+        {/*Adding platform */}
+        if (platformNum) {
+          const newPlatform: Platform = {
+            id: platformNum,
+            name: "New Platform",
+          };
+          setPlatform(newPlatform);
+          params.platforms = platformNum;
         }
         const response = await axios.get("https://cse-298.up.railway.app/api/games", {
           params: params,
@@ -118,7 +138,7 @@ function GameGrid({selectedGenre}:Props) {
       }
     };
     fetchData();
-  }, [pageNum, genreNum]);
+  }, [pageNum, genreNum,platformNum]);
 
   {/*Hook: Fetch Games:TotoalPage & GameList*/}
   useEffect(() => {
@@ -151,6 +171,7 @@ function GameGrid({selectedGenre}:Props) {
         <>
           {/* Selected Genre */}
           {genre && <Text>{genre.name}</Text>}
+          {platform && <Text>{platform.name}</Text>}
           {/* Game Cards */}
           {isLoading ? (
             <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense" key="GridSkeleton">
