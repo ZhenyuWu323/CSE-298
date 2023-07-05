@@ -76,6 +76,7 @@ function GameGrid({selectedGenre}:Props) {
   {/* Search Parameter */}
   const[searchParam, setSearchParam] = useSearchParams()
   const pageNum = searchParam.get("page") ? parseInt(searchParam.get("page")) : 1;
+  const genreNum = searchParam.get("genres")
 
   {/* Loading State */}
   const [isLoading, setLoading] = useState(false);
@@ -83,28 +84,31 @@ function GameGrid({selectedGenre}:Props) {
   {/*Error handler */}
   const [error, setError] = useState(0);
 
-  useEffect(()=>{
-    setGenre(selectedGenre);
-  }, [selectedGenre])
 
   useEffect(()=>{
-    if(genre != null){
-      setSearchParam({ page: pageNum.toString(), genres: genre.id })
+    if(selectedGenre != null){
+      setSearchParam({ page: pageNum.toString(), genres: selectedGenre.id })
     }
-  },[pageNum,genre])
+  },[pageNum,selectedGenre])
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const params:Params = { page: pageNum };
-        if (genre) {
-          params.genres = genre.id;
+        if (genreNum) {
+          const newGenre: Genre = {
+            id: genreNum,
+            name: "New Genre",
+            image: "none",
+          };
+          setGenre(newGenre);
+          params.genres = genreNum;
         }
-        console.log(params.genres);
         const response = await axios.get("https://cse-298.up.railway.app/api/games", {
           params: params,
         });
+        console.log(response.request);
         setGameContent(response.data);
         setLoading(false);
         setError(0);
@@ -115,7 +119,7 @@ function GameGrid({selectedGenre}:Props) {
       }
     };
     fetchData();
-  }, [pageNum, genre]);
+  }, [pageNum, genreNum]);
 
   
   useEffect(() => {
