@@ -90,14 +90,29 @@ function GameGrid({selectedGenre, selectedPlatform}:Props) {
 
   {/*Hook: Update Route */}
   useEffect(()=>{
-    setSearchParam({
-      page: pageNum.toString(),
-      ...(selectedGenre ? { genres: selectedGenre.id } : {}),
-      ...(selectedPlatform ? { platforms: selectedPlatform.id } : {})
-
-    });
-  },[pageNum,selectedGenre, selectedPlatform])
-
+    console.log("wr")
+    if(selectedGenre || selectedPlatform){
+      setSearchParam({
+        page: pageNum.toString(),
+        ...(selectedGenre ? { genres: selectedGenre.id } : {}),
+        ...(selectedPlatform ? { platforms: selectedPlatform.id } : {})
+  
+      });
+    }
+    else if(genreNum || platformNum){
+      setSearchParam({
+        page: pageNum.toString(),
+        ...(genreNum ? { genres: genreNum } : {}),
+        ...(platformNum ? { platforms: platformNum } : {})
+  
+      });
+    }
+    else{
+      setSearchParam({
+        page: pageNum.toString(),
+      });
+    }
+  },[selectedGenre, selectedPlatform])
 
   {/*Hook: Http request Based on Route */}
   useEffect(() => {
@@ -106,7 +121,16 @@ function GameGrid({selectedGenre, selectedPlatform}:Props) {
         setLoading(true);
         const params:Params = { page: pageNum };
         {/*Adding genre */}
-        if (genreNum) {
+        if (selectedGenre) {
+          const newGenre: Genre = {
+            id: selectedGenre.id,
+            name: "New Genre",
+            image: "none",
+          };
+          setGenre(newGenre);
+          params.genres = selectedGenre.id;
+        }
+        else if(genreNum){
           const newGenre: Genre = {
             id: genreNum,
             name: "New Genre",
@@ -115,8 +139,17 @@ function GameGrid({selectedGenre, selectedPlatform}:Props) {
           setGenre(newGenre);
           params.genres = genreNum;
         }
+
         {/*Adding platform */}
-        if (platformNum) {
+        if (selectedPlatform) {
+          const newPlatform: Platform = {
+            id: selectedPlatform.id,
+            name: "New Platform",
+          };
+          setPlatform(newPlatform);
+          params.platforms = selectedPlatform.id;
+        }
+        else if(platformNum){
           const newPlatform: Platform = {
             id: platformNum,
             name: "New Platform",
@@ -138,7 +171,8 @@ function GameGrid({selectedGenre, selectedPlatform}:Props) {
       }
     };
     fetchData();
-  }, [pageNum, genreNum,platformNum]);
+  }, [pageNum, selectedGenre, selectedPlatform]);
+
 
   {/*Hook: Fetch Games:TotoalPage & GameList*/}
   useEffect(() => {
@@ -226,7 +260,12 @@ function GameGrid({selectedGenre, selectedPlatform}:Props) {
                   leftIcon={<TbArrowBigLeft />}
                   colorScheme="gray"
                   variant="solid"
-                  onClick={() => setSearchParam({ page: (pageNum - 1).toString(),...(genre ? { genres: genre.id } : {}) })}
+                  onClick={() => setSearchParam({
+                    page: (pageNum-1).toString(),
+                    ...(genreNum ? { genres:genreNum } : {}),
+                    ...(platformNum ? { platforms: platformNum } : {})
+              
+                  })}
                 >
                   Back
                 </Button>
@@ -237,7 +276,12 @@ function GameGrid({selectedGenre, selectedPlatform}:Props) {
                   rightIcon={<TbArrowBigRight />}
                   colorScheme="gray"
                   variant="solid"
-                  onClick={() => setSearchParam({ page: (pageNum + 1).toString(), ...(genre ? { genres: genre.id } : {}) })}
+                  onClick={() =>setSearchParam({
+                    page: (pageNum+1).toString(),
+                    ...(genreNum ? { genres: genreNum } : {}),
+                    ...(platformNum ? { platforms: platformNum } : {})
+              
+                  })}
                 >
                   Next
                 </Button>
