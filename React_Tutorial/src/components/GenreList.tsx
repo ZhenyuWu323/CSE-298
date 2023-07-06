@@ -12,6 +12,7 @@ export interface Genre {
 interface Props {
   setLoading: (isLoading: boolean) => void;
   onSelectedGenre:(genre:Genre) => void;
+  updateGenreMap:(from: string, to: string) => void;
 
 }
 
@@ -22,7 +23,7 @@ const ResizeImage = (url: string) => {
   return url.slice(0, index) + "crop/600/400/" + url.slice(index);
 };
 
-const GenreList = ({ setLoading, onSelectedGenre}: Props) => {
+const GenreList = ({ setLoading, onSelectedGenre, updateGenreMap}: Props) => {
   {
     /* Genre List */
   }
@@ -49,6 +50,12 @@ const GenreList = ({ setLoading, onSelectedGenre}: Props) => {
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    genreList.forEach((genre) => {
+      updateGenreMap(genre.id, genre.name);
+    });
+  }, [genreList]);
 
   return (
     <List>

@@ -7,9 +7,11 @@ import { useEffect, useState } from "react";
 interface Props{
   onSelectedGenre: (genre: Genre) => void;
   onSelectedPlatform: (platform: Platform) => void;
+  updateGenreMap : (from: string, to: string) => void;
+  updatePlatformMap : (from: string, to: string) => void;
 }
 
-const SidePanel = ({onSelectedGenre, onSelectedPlatform}:Props) => {
+const SidePanel = ({onSelectedGenre, onSelectedPlatform, updateGenreMap, updatePlatformMap}:Props) => {
   {/* Genre List & Platform List Loading state */}
   const [isGenreListLoading, setGenreListLoading] = useState(true);
   const [isPlatformListLoading, setPlatformListLoading] = useState(true);
@@ -30,8 +32,8 @@ const SidePanel = ({onSelectedGenre, onSelectedPlatform}:Props) => {
         style={{ height: "100%", width: "100%" }}
       >
         <VStack spacing={20} style={{ height: "100%", width: "100%" }} borderRadius={10}>
-          <GenreList setLoading={setGenreListLoading} onSelectedGenre={onSelectedGenre} />
-          <PlatformList setLoading={setPlatformListLoading} onSelectedPlatform={onSelectedPlatform}/>
+          <GenreList setLoading={setGenreListLoading} onSelectedGenre={onSelectedGenre} updateGenreMap={updateGenreMap} />
+          <PlatformList setLoading={setPlatformListLoading} onSelectedPlatform={onSelectedPlatform} updatePlatformMap={updatePlatformMap}/>
         </VStack>
       </Skeleton>
     </>

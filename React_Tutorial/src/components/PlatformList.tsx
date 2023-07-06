@@ -15,9 +15,10 @@ export interface Platform {
 interface Props {
 	setLoading: (isLoading: boolean) => void;
 	onSelectedPlatform:(platform: Platform) => void;
+	updatePlatformMap: (from: string, to: string) => void;
 }
 
-const PlatformList = ({ setLoading, onSelectedPlatform}: Props) => {
+const PlatformList = ({ setLoading, onSelectedPlatform, updatePlatformMap}: Props) => {
     {/* Game Platform Icon */}
   const PlatformIcon : {[key:string] : IconType} = {
     PC:FaWindows,
@@ -56,7 +57,11 @@ const PlatformList = ({ setLoading, onSelectedPlatform}: Props) => {
 		fetchData();
 	  }, []);
 
-
+	  useEffect(() => {
+		platformList.forEach((platform) => {
+		  updatePlatformMap(platform.id, platform.name);
+		});
+	  }, [platformList]);
 
 	return (
 		<List>

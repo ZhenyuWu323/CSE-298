@@ -37,6 +37,8 @@ interface Params {
 interface Props{
   selectedGenre: Genre | null
   selectedPlatform: Platform | null
+  genreMap: { [key: string]: string }
+  platformMap: { [key: string]: string }
 }
 
 const ResizeImage = (url: string) => {
@@ -45,7 +47,7 @@ const ResizeImage = (url: string) => {
 };
 
 
-function GameGrid({selectedGenre, selectedPlatform}:Props) {
+function GameGrid({selectedGenre, selectedPlatform, genreMap, platformMap}:Props) {
   {/* Game Platform Icon */}
   const PlatformIcon : {[key:string] : IconType} = {
     PC:FaWindows,
@@ -90,7 +92,6 @@ function GameGrid({selectedGenre, selectedPlatform}:Props) {
 
   {/*Hook: Update Route */}
   useEffect(()=>{
-    console.log("wr")
     if(selectedGenre || selectedPlatform){
       setSearchParam({
         page: pageNum.toString(),
@@ -124,7 +125,7 @@ function GameGrid({selectedGenre, selectedPlatform}:Props) {
         if (selectedGenre) {
           const newGenre: Genre = {
             id: selectedGenre.id,
-            name: "New Genre",
+            name: selectedGenre.name,
             image: "none",
           };
           setGenre(newGenre);
@@ -133,7 +134,7 @@ function GameGrid({selectedGenre, selectedPlatform}:Props) {
         else if(genreNum){
           const newGenre: Genre = {
             id: genreNum,
-            name: "New Genre",
+            name: genreMap[genreNum],
             image: "none",
           };
           setGenre(newGenre);
@@ -144,7 +145,7 @@ function GameGrid({selectedGenre, selectedPlatform}:Props) {
         if (selectedPlatform) {
           const newPlatform: Platform = {
             id: selectedPlatform.id,
-            name: "New Platform",
+            name: selectedPlatform.name,
           };
           setPlatform(newPlatform);
           params.platforms = selectedPlatform.id;
@@ -152,7 +153,7 @@ function GameGrid({selectedGenre, selectedPlatform}:Props) {
         else if(platformNum){
           const newPlatform: Platform = {
             id: platformNum,
-            name: "New Platform",
+            name: platformMap[platformNum],
           };
           setPlatform(newPlatform);
           params.platforms = platformNum;
@@ -192,6 +193,7 @@ function GameGrid({selectedGenre, selectedPlatform}:Props) {
 
 
 
+
   if (error == 1) {
     return (
       <Box height="100%" display="flex" alignItems="center" justifyContent="center">
@@ -203,9 +205,17 @@ function GameGrid({selectedGenre, selectedPlatform}:Props) {
     return (
       <Box mx="auto" maxW="auto" p={4}>
         <>
-          {/* Selected Genre */}
-          {genre && <Text>{genre.name}</Text>}
-          {platform && <Text>{platform.name}</Text>}
+          {/* Selected Genre & Platform */}
+          <Flex align="center" gap="20px">
+              {!isLoading &&genre && genreMap && (
+                <Text fontSize="5xl" fontWeight="bold" mb="4px" as="u">
+                  {genreMap[genre.id]}
+                </Text>
+              )}
+              {!isLoading && platform && platformMap && (
+                <Icon as={PlatformIcon[platformMap[platform.id]]} boxSize={10} />
+              )}
+            </Flex>
           {/* Game Cards */}
           {isLoading ? (
             <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense" key="GridSkeleton">
