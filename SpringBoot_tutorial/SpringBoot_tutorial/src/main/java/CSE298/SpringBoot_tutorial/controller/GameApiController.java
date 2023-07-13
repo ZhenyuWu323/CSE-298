@@ -60,7 +60,7 @@ public class GameApiController {
             steamApiUrl = steamApiUrl + "&parent_platforms=" + platforms;
         }
         if(ordering != null){
-            steamApiUrl = steamApiUrl + "&ordering=" + platforms;
+            steamApiUrl = steamApiUrl + "&ordering=" + ordering;
         }
         System.out.println(steamApiUrl);
         StringBuilder response = new StringBuilder();
