@@ -14,7 +14,7 @@ export interface Platform {
 
 interface Props {
 	setLoading: (isLoading: boolean) => void;
-	onSelectedPlatform:(platform: Platform) => void;
+	onSelectedPlatform:(platform: string) => void;
 	updatePlatformMap: (from: string, to: string) => void;
 }
 
@@ -77,7 +77,7 @@ const PlatformList = ({ setLoading, onSelectedPlatform, updatePlatformMap}: Prop
 			  <ListItem key={platform.id} paddingY="5px">
 				<HStack justify="flex-start">
 				  <Icon as={PlatformIcon[platform.name]} />
-				  <Button onClick={() => onSelectedPlatform(platform)} variant="link"><Text fontSize="large">{platform.name}</Text></Button>
+				  <Button onClick={() => onSelectedPlatform(platform.id)} variant="link"><Text fontSize="large">{platform.name}</Text></Button>
 				</HStack>
 			  </ListItem>
 			))}

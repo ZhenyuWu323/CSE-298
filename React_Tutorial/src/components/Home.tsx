@@ -3,7 +3,6 @@ import { Grid, GridItem} from "@chakra-ui/react";
 import { NavigationBar } from "./NavigationBar";
 import SidePanel from "./SidePanel";
 import { useState } from "react";
-import { Genre } from "./GenreList";
 import { Platform } from "./PlatformList";
 
 interface GenreMap{
@@ -14,9 +13,9 @@ interface PlatformMap{
 }
 function Home(){
   {/*Selected Genre*/}
-  const[selectedGenre, setSelectedGenre] = useState<Genre | null>(null)
+  const[selectedGenre, setSelectedGenre] = useState<string | null>(null)
   {/*Selected Platform*/}
-  const[selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null)
+  const[selectedPlatform, setSelectedPlatform] = useState<string | null>(null)
   {/*Genre Mapping*/}
   const [genreMap, setGenreMap] = useState<GenreMap>({});
   const updateGenreMap = (from: string, to: string) => {

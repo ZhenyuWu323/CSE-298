@@ -11,7 +11,7 @@ export interface Genre {
 {/*Genre Props*/}
 interface Props {
   setLoading: (isLoading: boolean) => void;
-  onSelectedGenre:(genre:Genre) => void;
+  onSelectedGenre:(genre:String) => void;
   updateGenreMap:(from: string, to: string) => void;
 
 }
@@ -75,7 +75,7 @@ const GenreList = ({ setLoading, onSelectedGenre, updateGenreMap}: Props) => {
                   borderRadius={8}
                   src={ResizeImage(genre.image)}
                 ></Image>
-                <Button onClick={() => onSelectedGenre(genre)} variant='link' ><Text fontSize="large">{genre.name}</Text></Button>
+                <Button onClick={() => onSelectedGenre(genre.id)} variant='link' ><Text fontSize="large">{genre.name}</Text></Button>
               </HStack>
             </ListItem>
           ))}

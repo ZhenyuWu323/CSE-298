@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 
 {/*Selected Props for platform & genre */}
 interface Props{
-  onSelectedGenre: (genre: Genre) => void;
-  onSelectedPlatform: (platform: Platform) => void;
+  onSelectedGenre: (genre:string) => void;
+  onSelectedPlatform: (platform: string) => void;
   updateGenreMap : (from: string, to: string) => void;
   updatePlatformMap : (from: string, to: string) => void;
 }

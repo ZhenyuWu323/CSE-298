@@ -35,8 +35,8 @@ interface Params {
 
 {/*Properties*/}
 interface Props{
-  selectedGenre: Genre | null
-  selectedPlatform: Platform | null
+  selectedGenre: string | null
+  selectedPlatform: string | null
   genreMap: { [key: string]: string }
   platformMap: { [key: string]: string }
 }
@@ -95,8 +95,8 @@ function GameGrid({selectedGenre, selectedPlatform, genreMap, platformMap}:Props
     if(selectedGenre || selectedPlatform){
       setSearchParam({
         page: pageNum.toString(),
-        ...(selectedGenre ? { genres: selectedGenre.id } : {}),
-        ...(selectedPlatform ? { platforms: selectedPlatform.id } : {})
+        ...(selectedGenre ? { genres: selectedGenre } : {}),
+        ...(selectedPlatform ? { platforms: selectedPlatform } : {})
   
       });
     }
@@ -124,12 +124,12 @@ function GameGrid({selectedGenre, selectedPlatform, genreMap, platformMap}:Props
         {/*Adding genre */}
         if (selectedGenre) {
           const newGenre: Genre = {
-            id: selectedGenre.id,
-            name: selectedGenre.name,
+            id: selectedGenre,
+            name: genreMap[selectedGenre],
             image: "none",
           };
           setGenre(newGenre);
-          params.genres = selectedGenre.id;
+          params.genres = selectedGenre;
         }
         else if(genreNum){
           const newGenre: Genre = {
@@ -144,11 +144,11 @@ function GameGrid({selectedGenre, selectedPlatform, genreMap, platformMap}:Props
         {/*Adding platform */}
         if (selectedPlatform) {
           const newPlatform: Platform = {
-            id: selectedPlatform.id,
-            name: selectedPlatform.name,
+            id: selectedPlatform,
+            name:platformMap[selectedPlatform],
           };
           setPlatform(newPlatform);
-          params.platforms = selectedPlatform.id;
+          params.platforms = selectedPlatform;
         }
         else if(platformNum){
           const newPlatform: Platform = {
