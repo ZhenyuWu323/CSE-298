@@ -81,8 +81,20 @@ function GameGrid({selectedGenre, selectedPlatform, genreMap, platformMap}:Props
   {/* Search Parameter */}
   const[searchParam, setSearchParam] = useSearchParams()
   const pageNum = searchParam.get("page") ? parseInt(searchParam.get("page")) : 1;
-  const genreNum = searchParam.get("genres")
-  const platformNum = searchParam.get("platforms")
+  let genreNum = null;
+  if(selectedGenre){
+    genreNum = selectedGenre;
+  }
+  else{
+    genreNum = searchParam.get("genres")
+  }
+  let platformNum = null;
+  if(selectedPlatform){
+    platformNum = selectedPlatform
+  }
+  else{
+    platformNum = searchParam.get("platforms")
+  }
 
   {/* Loading State */}
   const [isLoading, setLoading] = useState(false);
@@ -96,10 +108,8 @@ function GameGrid({selectedGenre, selectedPlatform, genreMap, platformMap}:Props
       page: pageNum.toString(),
       ...(genreNum ? { genres: genreNum } : {}),
       ...(platformNum ? { platforms: platformNum } : {}),
-      ...(selectedGenre ? { genres: selectedGenre } : {}),
-      ...(selectedPlatform ? { platforms: selectedPlatform } : {})
     });
-  },[selectedGenre, selectedPlatform])
+  },[genreNum, platformNum])
 
   {/*Hook: Http request Based on Route */}
   useEffect(() => {
@@ -108,16 +118,7 @@ function GameGrid({selectedGenre, selectedPlatform, genreMap, platformMap}:Props
         setLoading(true);
         const params:Params = { page: pageNum };
         {/*Adding genre */}
-        if (selectedGenre) {
-          const newGenre: Genre = {
-            id: selectedGenre,
-            name: genreMap[selectedGenre],
-            image: "none",
-          };
-          setGenre(newGenre);
-          params.genres = selectedGenre;
-        }
-        else if(genreNum){
+        if(genreNum){
           const newGenre: Genre = {
             id: genreNum,
             name: genreMap[genreNum],
@@ -128,15 +129,7 @@ function GameGrid({selectedGenre, selectedPlatform, genreMap, platformMap}:Props
         }
 
         {/*Adding platform */}
-        if (selectedPlatform) {
-          const newPlatform: Platform = {
-            id: selectedPlatform,
-            name:platformMap[selectedPlatform],
-          };
-          setPlatform(newPlatform);
-          params.platforms = selectedPlatform;
-        }
-        else if(platformNum){
+        if(platformNum){
           const newPlatform: Platform = {
             id: platformNum,
             name: platformMap[platformNum],
