@@ -101,7 +101,10 @@ public class GameApiController {
             String id = game.get("id").toString();
 
             //Game Image
-            String image = game.get("background_image").toString();
+            String image = "";
+            if(game.get("background_image") != null){
+                image = game.get("background_image").toString();
+            }
 
             //Game Genre
             JSONArray genre_list = (JSONArray) game.get("genres");
