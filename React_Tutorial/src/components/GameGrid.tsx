@@ -92,27 +92,13 @@ function GameGrid({selectedGenre, selectedPlatform, genreMap, platformMap}:Props
 
   {/*Hook: Update Route */}
   useEffect(()=>{
-    if(selectedGenre || selectedPlatform){
-      setSearchParam({
-        page: pageNum.toString(),
-        ...(selectedGenre ? { genres: selectedGenre } : {}),
-        ...(selectedPlatform ? { platforms: selectedPlatform } : {})
-  
-      });
-    }
-    else if(genreNum || platformNum){
-      setSearchParam({
-        page: pageNum.toString(),
-        ...(genreNum ? { genres: genreNum } : {}),
-        ...(platformNum ? { platforms: platformNum } : {})
-  
-      });
-    }
-    else{
-      setSearchParam({
-        page: pageNum.toString(),
-      });
-    }
+    setSearchParam({
+      page: pageNum.toString(),
+      ...(genreNum ? { genres: genreNum } : {}),
+      ...(platformNum ? { platforms: platformNum } : {}),
+      ...(selectedGenre ? { genres: selectedGenre } : {}),
+      ...(selectedPlatform ? { platforms: selectedPlatform } : {})
+    });
   },[selectedGenre, selectedPlatform])
 
   {/*Hook: Http request Based on Route */}
