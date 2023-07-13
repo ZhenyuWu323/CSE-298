@@ -10,6 +10,7 @@ import { useSearchParams } from "react-router-dom";
 import { IconType } from "react-icons";
 import { Genre } from "./GenreList";
 import { Platform } from "./PlatformList";
+import noImage from "../assets/no-image.png";
 
 interface Game {
   id: string;
@@ -31,23 +32,26 @@ interface Params {
   page: number;
   genres?: string;
   platforms?: string;
+  ordering?: string;
 }
 
 {/*Properties*/}
 interface Props{
   selectedGenre: string | null
   selectedPlatform: string | null
+  selectedOrder: string
   genreMap: { [key: string]: string }
   platformMap: { [key: string]: string }
 }
 
 const ResizeImage = (url: string) => {
+  if(url == "") return noImage;
   const index = url.indexOf("media/") + "media/".length;
   return url.slice(0, index) + "crop/600/400/" + url.slice(index);
 };
 
 
-function GameGrid({selectedGenre, selectedPlatform, genreMap, platformMap}:Props) {
+function GameGrid({selectedOrder, selectedGenre, selectedPlatform, genreMap, platformMap}:Props) {
   {/* Game Platform Icon */}
   const PlatformIcon : {[key:string] : IconType} = {
     PC:FaWindows,
@@ -95,6 +99,13 @@ function GameGrid({selectedGenre, selectedPlatform, genreMap, platformMap}:Props
   else{
     platformNum = searchParam.get("platforms")
   }
+  let orderNum = null
+  if(selectedOrder){
+    orderNum = selectedOrder
+  }
+  else{
+    orderNum = searchParam.get("ordering")
+  }
 
   {/* Loading State */}
   const [isLoading, setLoading] = useState(false);
@@ -108,8 +119,9 @@ function GameGrid({selectedGenre, selectedPlatform, genreMap, platformMap}:Props
       page: pageNum.toString(),
       ...(genreNum ? { genres: genreNum } : {}),
       ...(platformNum ? { platforms: platformNum } : {}),
+      ...(orderNum&&orderNum!="none" ? { ordering: orderNum } : {}),
     });
-  },[genreNum, platformNum])
+  },[genreNum, platformNum, orderNum])
 
   {/*Hook: Http request Based on Route */}
   useEffect(() => {
@@ -137,6 +149,9 @@ function GameGrid({selectedGenre, selectedPlatform, genreMap, platformMap}:Props
           setPlatform(newPlatform);
           params.platforms = platformNum;
         }
+        if(orderNum && orderNum != "none"){
+          params.ordering = orderNum;
+        }
         const response = await axios.get("https://cse-298.up.railway.app/api/games", {
           params: params,
         });
@@ -151,7 +166,7 @@ function GameGrid({selectedGenre, selectedPlatform, genreMap, platformMap}:Props
       }
     };
     fetchData();
-  }, [pageNum, selectedGenre, selectedPlatform]);
+  }, [pageNum, selectedGenre, selectedPlatform, selectedOrder]);
 
 
   {/*Hook: Fetch Games:TotoalPage & GameList*/}

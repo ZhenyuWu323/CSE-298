@@ -3,7 +3,6 @@ import { Grid, GridItem, HStack} from "@chakra-ui/react";
 import { NavigationBar } from "./NavigationBar";
 import SidePanel from "./SidePanel";
 import { useState } from "react";
-import { Platform } from "./PlatformList";
 import SortSelector from "./SortSelector";
 
 interface GenreMap{
@@ -42,9 +41,9 @@ function Home(){
             <GridItem area={'panel'} paddingX={5}> <SidePanel onSelectedGenre={setSelectedGenre} onSelectedPlatform={setSelectedPlatform} updateGenreMap={updateGenreMap} updatePlatformMap={updatePlatformMap}/></GridItem>
             <GridItem area={'main'} >
               <HStack spacing={5} paddingLeft={5}>  
-                <SortSelector onSelectedOrder={setSelectedOrder}></SortSelector>
+                <SortSelector selectedOrder={selectedOrder} onSelectedOrder={setSelectedOrder}></SortSelector>
               </HStack>
-              <GameGrid selectedGenre={selectedGenre} selectedPlatform={selectedPlatform} genreMap={genreMap} platformMap={platformMap}/>
+              <GameGrid selectedOrder={selectedOrder} selectedGenre={selectedGenre} selectedPlatform={selectedPlatform} genreMap={genreMap} platformMap={platformMap}/>
             </GridItem>
           </Grid>
         </div>
