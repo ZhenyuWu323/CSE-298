@@ -1,9 +1,11 @@
 import GameGrid from "./GameGrid";
-import { Grid, GridItem, HStack} from "@chakra-ui/react";
+import { Flex, Grid, GridItem, HStack, Text, Icon, VStack} from "@chakra-ui/react";
 import { NavigationBar } from "./NavigationBar";
 import SidePanel from "./SidePanel";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SortSelector from "./SortSelector";
+import { useSearchParams } from "react-router-dom";
+import { PlatformIcon } from "./PlatformList";
 
 interface GenreMap{
   [key:string] : string;
@@ -34,15 +36,36 @@ function Home(){
       [from]: to,
     }));
   };
+  {/**Search Param */}
+  const[searchParam, setSearchParam] = useSearchParams()
+
+  useEffect(() => {
+    setSelectedOrder(searchParam.get("ordering"))
+    setSelectedGenre(searchParam.get('genres'))
+    setSelectedPlatform(searchParam.get("platforms"))
+  }, []);
+
+
+
     return(
         <div>
           <Grid templateAreas={`'nav nav' 'panel main'`} templateColumns={"230px 1fr"}>
             <GridItem area={'nav'} > <NavigationBar/></GridItem>
             <GridItem area={'panel'} paddingX={5}> <SidePanel onSelectedGenre={setSelectedGenre} onSelectedPlatform={setSelectedPlatform} updateGenreMap={updateGenreMap} updatePlatformMap={updatePlatformMap}/></GridItem>
             <GridItem area={'main'} >
-              <HStack spacing={5} paddingLeft={5}>  
-                <SortSelector selectedOrder={selectedOrder} onSelectedOrder={setSelectedOrder}></SortSelector>
-              </HStack>
+              <VStack spacing={5} paddingLeft={5} align="start">
+                <Flex align="center" gap="20px">
+                  {selectedGenre && genreMap && (
+                    <Text fontSize="5xl" fontWeight="bold" mb="4px" as="u">
+                      {genreMap[selectedGenre]}
+                    </Text>
+                  )}
+                  {selectedPlatform && platformMap && (
+                    <Icon as={PlatformIcon[platformMap[selectedPlatform]]} boxSize={10} />
+                  )}
+                </Flex>  
+                <SortSelector selectedOrder={selectedOrder} onSelectedOrder={setSelectedOrder} />
+              </VStack>
               <GameGrid selectedOrder={selectedOrder} selectedGenre={selectedGenre} selectedPlatform={selectedPlatform} genreMap={genreMap} platformMap={platformMap}/>
             </GridItem>
           </Grid>

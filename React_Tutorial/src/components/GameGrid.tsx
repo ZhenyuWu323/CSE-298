@@ -2,14 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex,  Button , Text, HStack, Icon, Badge, GridItem, SkeletonText} from "@chakra-ui/react";
 import { TbArrowBigRight, TbArrowBigLeft } from "react-icons/tb";
-import{FaLinux, FaWindows, FaPlaystation, FaXbox, FaApple, FaAndroid} from "react-icons/fa"
-import {BsNintendoSwitch} from 'react-icons/bs'
-import {MdDesktopMac} from 'react-icons/md'
-import {SiAtari, SiCommodore, SiD3Dotjs, SiSega,SiApplearcade} from 'react-icons/si'
 import { useSearchParams } from "react-router-dom";
-import { IconType } from "react-icons";
 import { Genre } from "./GenreList";
-import { Platform } from "./PlatformList";
+import { Platform, PlatformIcon } from "./PlatformList";
 import noImage from "../assets/no-image.png";
 
 interface Game {
@@ -52,24 +47,7 @@ const ResizeImage = (url: string) => {
 
 
 function GameGrid({selectedOrder, selectedGenre, selectedPlatform, genreMap, platformMap}:Props) {
-  {/* Game Platform Icon */}
-  const PlatformIcon : {[key:string] : IconType} = {
-    PC:FaWindows,
-    PlayStation: FaPlaystation,
-    Xbox: FaXbox,
-    iOS: FaApple,
-    Android: FaAndroid,
-    Nintendo: BsNintendoSwitch,
-    Linux: FaLinux,
-    "Apple Macintosh": MdDesktopMac,
-    "Commodore / Amiga": SiCommodore,
-    SEGA: SiSega,
-    Atari: SiAtari,
-    "3DO":SiD3Dotjs,
-    "Neo Geo": SiApplearcade,
-    Web: MdDesktopMac,
-    default: MdDesktopMac
-  }
+  
   {/*Genre */}
   const[genre, setGenre] = useState<Genre>()
 
@@ -149,6 +127,7 @@ function GameGrid({selectedOrder, selectedGenre, selectedPlatform, genreMap, pla
           setPlatform(newPlatform);
           params.platforms = platformNum;
         }
+        {/*Adding order */}
         if(orderNum && orderNum != "none"){
           params.ordering = orderNum;
         }
@@ -199,17 +178,6 @@ function GameGrid({selectedOrder, selectedGenre, selectedPlatform, genreMap, pla
     return (
       <Box mx="auto" maxW="auto" p={4}>
         <>
-          {/* Selected Genre & Platform */}
-          <Flex align="center" gap="20px">
-              {!isLoading &&genre && genreMap && (
-                <Text fontSize="5xl" fontWeight="bold" mb="4px" as="u">
-                  {genreMap[genre.id]}
-                </Text>
-              )}
-              {!isLoading && platform && platformMap && (
-                <Icon as={PlatformIcon[platformMap[platform.id]]} boxSize={10} />
-              )}
-            </Flex>
           {/* Game Cards */}
           {isLoading ? (
             <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense" key="GridSkeleton">

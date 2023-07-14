@@ -18,6 +18,24 @@ interface Props {
 	updatePlatformMap: (from: string, to: string) => void;
 }
 
+export const PlatformIcon : {[key:string] : IconType} = {
+    PC:FaWindows,
+    PlayStation: FaPlaystation,
+    Xbox: FaXbox,
+    iOS: FaApple,
+    Android: FaAndroid,
+    Nintendo: BsNintendoSwitch,
+    Linux: FaLinux,
+    "Apple Macintosh": MdDesktopMac,
+    "Commodore / Amiga": SiCommodore,
+    SEGA: SiSega,
+    Atari: SiAtari,
+    "3DO":SiD3Dotjs,
+    "Neo Geo": SiApplearcade,
+    Web: MdDesktopMac,
+    default: MdDesktopMac
+  }
+
 const PlatformList = ({ setLoading, onSelectedPlatform, updatePlatformMap}: Props) => {
     {/* Game Platform Icon */}
   const PlatformIcon : {[key:string] : IconType} = {
