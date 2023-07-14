@@ -16,10 +16,13 @@ interface PlatformMap{
 function Home(){
   {/*Selected Genre*/}
   const[selectedGenre, setSelectedGenre] = useState<string | null>(null)
+  const[usedGenre, setUsedGenre] = useState<string | null>(null)
   {/*Selected Platform*/}
   const[selectedPlatform, setSelectedPlatform] = useState<string | null>(null)
+  const[usedPlatform, setUsedPlatform] = useState<string | null>(null)
   {/*Selected Order */}
   const[selectedOrder, setSelectedOrder] = useState<string | null>(null)
+  const[usedOrder,setUsedOrder] = useState<string | null>(null)
   {/*Genre Mapping*/}
   const [genreMap, setGenreMap] = useState<GenreMap>({});
   const updateGenreMap = (from: string, to: string) => {
@@ -40,10 +43,10 @@ function Home(){
   const[searchParam, setSearchParam] = useSearchParams()
 
   useEffect(() => {
-    setSelectedOrder(searchParam.get("ordering"))
-    setSelectedGenre(searchParam.get('genres'))
-    setSelectedPlatform(searchParam.get("platforms"))
-  }, []);
+    setUsedOrder(searchParam.get('ordering'))
+    setUsedGenre(searchParam.get('genres'))
+    setUsedPlatform(searchParam.get('platforms'))
+  }, [searchParam]);
 
 
 
@@ -55,18 +58,18 @@ function Home(){
             <GridItem area={'main'} >
               <VStack spacing={5} paddingLeft={5} align="start">
                 <Flex align="center" gap="20px">
-                  {selectedGenre && genreMap && (
+                  {usedGenre && genreMap && (
                     <Text fontSize="5xl" fontWeight="bold" mb="4px" as="u">
-                      {genreMap[selectedGenre]}
+                      {genreMap[usedGenre]}
                     </Text>
                   )}
-                  {selectedPlatform && platformMap && (
-                    <Icon as={PlatformIcon[platformMap[selectedPlatform]]} boxSize={10} />
+                  {usedPlatform && platformMap && (
+                    <Icon as={PlatformIcon[platformMap[usedPlatform]]} boxSize={10} />
                   )}
                 </Flex>  
-                <SortSelector selectedOrder={selectedOrder} onSelectedOrder={setSelectedOrder} />
+                <SortSelector selectedOrder={usedOrder} onSelectedOrder={setSelectedOrder} />
               </VStack>
-              <GameGrid selectedOrder={selectedOrder} selectedGenre={selectedGenre} selectedPlatform={selectedPlatform} genreMap={genreMap} platformMap={platformMap}/>
+              <GameGrid selectedOrder={selectedOrder} selectedGenre={selectedGenre} selectedPlatform={selectedPlatform}/>
             </GridItem>
           </Grid>
         </div>

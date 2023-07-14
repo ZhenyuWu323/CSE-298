@@ -3,8 +3,7 @@ import axios from "axios";
 import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex,  Button , Text, HStack, Icon, Badge, GridItem, SkeletonText} from "@chakra-ui/react";
 import { TbArrowBigRight, TbArrowBigLeft } from "react-icons/tb";
 import { useSearchParams } from "react-router-dom";
-import { Genre } from "./GenreList";
-import { Platform, PlatformIcon } from "./PlatformList";
+import { PlatformIcon } from "./PlatformList";
 import noImage from "../assets/no-image.png";
 
 interface Game {
@@ -35,8 +34,6 @@ interface Props{
   selectedGenre: string | null
   selectedPlatform: string | null
   selectedOrder: string
-  genreMap: { [key: string]: string }
-  platformMap: { [key: string]: string }
 }
 
 const ResizeImage = (url: string) => {
@@ -46,14 +43,7 @@ const ResizeImage = (url: string) => {
 };
 
 
-function GameGrid({selectedOrder, selectedGenre, selectedPlatform, genreMap, platformMap}:Props) {
-  
-  {/*Genre */}
-  const[genre, setGenre] = useState<Genre>()
-
-  {/*Platform */}
-  const[platform, setPlatform] = useState<Platform>()
-
+function GameGrid({selectedOrder, selectedGenre, selectedPlatform}:Props) {
 
   {/* Game List*/}
   const [gameContent, setGameContent] = useState<GameContent>()
@@ -109,24 +99,14 @@ function GameGrid({selectedOrder, selectedGenre, selectedPlatform, genreMap, pla
         const params:Params = { page: pageNum };
         {/*Adding genre */}
         if(genreNum){
-          const newGenre: Genre = {
-            id: genreNum,
-            name: genreMap[genreNum],
-            image: "none",
-          };
-          setGenre(newGenre);
           params.genres = genreNum;
         }
 
         {/*Adding platform */}
         if(platformNum){
-          const newPlatform: Platform = {
-            id: platformNum,
-            name: platformMap[platformNum],
-          };
-          setPlatform(newPlatform);
           params.platforms = platformNum;
         }
+
         {/*Adding order */}
         if(orderNum && orderNum != "none"){
           params.ordering = orderNum;
