@@ -59,5 +59,5 @@ export const useGameGridController = (props: Props) => {
         }
     }, [gameContent]);
 
-    return { gameList, isLoading, error, setSearchParam, pageNum, totalPage, genreNum, platformNum, viewQuery};
+    return { gameList, isLoading, error, setSearchParam, pageNum, totalPage, genreNum, platformNum, viewQuery, orderNum};
 };

@@ -29,9 +29,9 @@ interface GameViewQuery{
 
 {/**Game Query */}
 export interface GameQuery{
-  selectedGenre: string | null
-  selectedPlatform: string | null
-  selectedOrder: string | null
+  selectedGenre: string | null;
+  selectedPlatform: string | null;
+  selectedOrder: string | null;
 }
 
 

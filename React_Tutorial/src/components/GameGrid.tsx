@@ -12,7 +12,7 @@ const ResizeImage = (url: string) => {
 };
 
 function GameGrid(props: Props) {
-    const { gameList, isLoading, error, setSearchParam, pageNum, totalPage, genreNum, platformNum, viewQuery} = useGameGridController(props);
+    const { gameList, isLoading, error, setSearchParam, pageNum, totalPage, genreNum, platformNum, viewQuery, orderNum} = useGameGridController(props);
 
     if (error == 1) {
       return (
@@ -82,7 +82,8 @@ function GameGrid(props: Props) {
                     onClick={() => setSearchParam({
                       page: (pageNum-1).toString(),
                       ...(genreNum ? { genres:genreNum } : {}),
-                      ...(platformNum ? { platforms: platformNum } : {})
+                      ...(platformNum ? { platforms: platformNum } : {}),
+                      ...(orderNum && orderNum != "none" ? { ordering: orderNum } : {})
                 
                     })}
                   >
@@ -98,7 +99,8 @@ function GameGrid(props: Props) {
                     onClick={() =>setSearchParam({
                       page: (pageNum+1).toString(),
                       ...(genreNum ? { genres: genreNum } : {}),
-                      ...(platformNum ? { platforms: platformNum } : {})
+                      ...(platformNum ? { platforms: platformNum } : {}),
+                      ...(orderNum && orderNum != "none" ? { ordering: orderNum } : {})
                 
                     })}
                   >
