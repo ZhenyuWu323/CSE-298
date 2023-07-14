@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchGameData, Params, GameContent, Game } from "../models/GameModel";
+import { ViewQuery } from "../components/Home";
 
 export interface Props {
   selectedGenre: string | null
   selectedPlatform: string | null
   selectedOrder: string
+  viewQuery: ViewQuery
 }
 
 export const useGameGridController = (props: Props) => {
-    const { selectedOrder, selectedGenre, selectedPlatform } = props;
+    const { selectedOrder, selectedGenre, selectedPlatform, viewQuery} = props;
     const [gameContent, setGameContent] = useState<GameContent>();
     const [gameList, setGameList] = useState<Game[]>([]);
     const [totalPage, setTotalPage] = useState<number>();
@@ -59,5 +61,5 @@ export const useGameGridController = (props: Props) => {
         }
     }, [gameContent]);
 
-    return { gameList, isLoading, error, setSearchParam, pageNum, totalPage, genreNum, platformNum };
+    return { gameList, isLoading, error, setSearchParam, pageNum, totalPage, genreNum, platformNum, viewQuery};
 };

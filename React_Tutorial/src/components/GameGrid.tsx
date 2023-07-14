@@ -12,7 +12,7 @@ const ResizeImage = (url: string) => {
 };
 
 function GameGrid(props: Props) {
-    const { gameList, isLoading, error, setSearchParam, pageNum, totalPage, genreNum, platformNum} = useGameGridController(props);
+    const { gameList, isLoading, error, setSearchParam, pageNum, totalPage, genreNum, platformNum, viewQuery} = useGameGridController(props);
 
     if (error == 1) {
       return (
@@ -48,22 +48,22 @@ function GameGrid(props: Props) {
                         {game.platform.map((platform) => (
                           <Icon key={platform} as={PlatformIcon[platform]} />
                         ))}
-                        <Badge
+                        {viewQuery.onMetacritic && (<Badge
                           colorScheme={parseInt(game.metacritic) > 75 ? "green" : parseInt(game.metacritic) > 60 ? "yellow" : "red"}
                           fontSize="14px"
                           paddingX={2}
                           borderRadius="4px"
                         >
                           {game.metacritic}
-                        </Badge>
+                        </Badge>)}
                       </HStack>
                       <HStack justifyContent="space-between">
-                        <Text fontSize="xs" as="b" color="gray.400">
+                        {viewQuery.onGenre && (<Text fontSize="xs" as="b" color="gray.400">
                           {game.genre.join(", ")}
-                        </Text>
-                        <Text fontSize="xs" as="b" color="gray.400">
+                        </Text>)}
+                        {viewQuery.onRelease && (<Text fontSize="xs" as="b" color="gray.400">
                           {game.released}
-                        </Text>
+                        </Text>)}
                       </HStack>
                     </CardBody>
                   </Card>

@@ -1,5 +1,5 @@
 import GameGrid from "./GameGrid";
-import { Flex, Grid, GridItem, HStack, Text, Icon, VStack} from "@chakra-ui/react";
+import { Flex, Grid, GridItem, HStack, Text, Icon, VStack, CheckboxGroup, Stack, Checkbox} from "@chakra-ui/react";
 import { NavigationBar } from "./NavigationBar";
 import SidePanel from "./SidePanel";
 import { useEffect, useState } from "react";
@@ -12,6 +12,11 @@ interface GenreMap{
 }
 interface PlatformMap{
   [key:string] : string;
+}
+export interface ViewQuery{
+  onGenre : boolean;
+  onRelease: boolean;
+  onMetacritic: boolean;
 }
 function Home(){
   {/*Selected Genre*/}
@@ -41,6 +46,8 @@ function Home(){
   };
   {/**Search Param */}
   const[searchParam, setSearchParam] = useSearchParams()
+  {/**View Query */}
+  const[viewQuery, setViewQuery] = useState<ViewQuery>({onGenre:true, onRelease:true, onMetacritic:true})
 
   useEffect(() => {
     setUsedOrder(searchParam.get('ordering'))
@@ -68,8 +75,15 @@ function Home(){
                   )}
                 </Flex>  
                 <SortSelector selectedOrder={usedOrder} onSelectedOrder={setSelectedOrder} />
+                <CheckboxGroup colorScheme='green' defaultValue={['release','metacritic','genres']}>
+                  <Stack spacing={[1, 5]} direction={['column', 'row']}>
+                    <Checkbox value='release' onChange={() => setViewQuery({...viewQuery, onRelease:!viewQuery.onRelease})}>Release date</Checkbox>
+                    <Checkbox value='metacritic' onChange={() => setViewQuery({...viewQuery, onMetacritic:!viewQuery.onMetacritic})}>Metacritic</Checkbox>
+                    <Checkbox value='genres' onChange={() => setViewQuery({...viewQuery, onGenre:!viewQuery.onGenre})}>Genre</Checkbox>
+                  </Stack>
+                </CheckboxGroup>
               </VStack>
-              <GameGrid selectedOrder={selectedOrder} selectedGenre={selectedGenre} selectedPlatform={selectedPlatform}/>
+              <GameGrid selectedOrder={selectedOrder} selectedGenre={selectedGenre} selectedPlatform={selectedPlatform} viewQuery={viewQuery}/>
             </GridItem>
           </Grid>
         </div>
