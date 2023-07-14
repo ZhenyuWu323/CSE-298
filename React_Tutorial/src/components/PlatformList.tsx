@@ -6,6 +6,7 @@ import {SiAtari, SiCommodore, SiD3Dotjs, SiSega,SiApplearcade} from 'react-icons
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
+import { GameQuery } from "./Home";
 
 export interface Platform {
   id: string;
@@ -14,8 +15,9 @@ export interface Platform {
 
 interface Props {
 	setLoading: (isLoading: boolean) => void;
-	onSelectedPlatform:(platform: string) => void;
 	updatePlatformMap: (from: string, to: string) => void;
+	setGameQuery: (query: GameQuery) => void
+  	gameQuery: GameQuery
 }
 
 export const PlatformIcon : {[key:string] : IconType} = {
@@ -36,7 +38,7 @@ export const PlatformIcon : {[key:string] : IconType} = {
     default: MdDesktopMac
   }
 
-const PlatformList = ({ setLoading, onSelectedPlatform, updatePlatformMap}: Props) => {
+const PlatformList = ({ gameQuery, setGameQuery, setLoading, updatePlatformMap}: Props) => {
     {/* Game Platform Icon */}
   const PlatformIcon : {[key:string] : IconType} = {
     PC:FaWindows,
@@ -95,7 +97,7 @@ const PlatformList = ({ setLoading, onSelectedPlatform, updatePlatformMap}: Prop
 			  <ListItem key={platform.id} paddingY="5px">
 				<HStack justify="flex-start">
 				  <Icon as={PlatformIcon[platform.name]} />
-				  <Button onClick={() => onSelectedPlatform(platform.id)} variant="link"><Text fontSize="large">{platform.name}</Text></Button>
+				  <Button onClick={() => setGameQuery({...gameQuery, selectedPlatform: platform.id})} variant="link"><Text fontSize="large">{platform.name}</Text></Button>
 				</HStack>
 			  </ListItem>
 			))}

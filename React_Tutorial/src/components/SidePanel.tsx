@@ -1,17 +1,18 @@
 import { Skeleton, VStack } from "@chakra-ui/react";
-import GenreList, { Genre } from "./GenreList";
-import PlatformList, { Platform } from "./PlatformList";
+import GenreList from "./GenreList";
+import PlatformList from "./PlatformList";
 import { useEffect, useState } from "react";
+import { GameQuery } from "./Home";
 
 {/*Selected Props for platform & genre */}
 interface Props{
-  onSelectedGenre: (genre:string) => void;
-  onSelectedPlatform: (platform: string) => void;
   updateGenreMap : (from: string, to: string) => void;
   updatePlatformMap : (from: string, to: string) => void;
+  setGameQuery: (query: GameQuery) => void
+  gameQuery: GameQuery
 }
 
-const SidePanel = ({onSelectedGenre, onSelectedPlatform, updateGenreMap, updatePlatformMap}:Props) => {
+const SidePanel = ({gameQuery, setGameQuery, updateGenreMap, updatePlatformMap}:Props) => {
   {/* Genre List & Platform List Loading state */}
   const [isGenreListLoading, setGenreListLoading] = useState(true);
   const [isPlatformListLoading, setPlatformListLoading] = useState(true);
@@ -32,8 +33,8 @@ const SidePanel = ({onSelectedGenre, onSelectedPlatform, updateGenreMap, updateP
         style={{ height: "100%", width: "100%" }}
       >
         <VStack spacing={20} style={{ height: "100%", width: "100%" }} borderRadius={10}>
-          <GenreList setLoading={setGenreListLoading} onSelectedGenre={onSelectedGenre} updateGenreMap={updateGenreMap} />
-          <PlatformList setLoading={setPlatformListLoading} onSelectedPlatform={onSelectedPlatform} updatePlatformMap={updatePlatformMap}/>
+          <GenreList gameQuery={gameQuery} setGameQuery={setGameQuery} setLoading={setGenreListLoading} updateGenreMap={updateGenreMap} />
+          <PlatformList gameQuery={gameQuery} setGameQuery={setGameQuery} setLoading={setPlatformListLoading} updatePlatformMap={updatePlatformMap}/>
         </VStack>
       </Skeleton>
     </>

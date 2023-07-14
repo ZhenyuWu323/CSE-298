@@ -1,5 +1,5 @@
 import GameGrid from "./GameGrid";
-import { Flex, Grid, GridItem, HStack, Text, Icon, VStack, CheckboxGroup, Stack, Checkbox} from "@chakra-ui/react";
+import { Flex, Grid, GridItem, Text, Icon, VStack, CheckboxGroup, Stack, Checkbox} from "@chakra-ui/react";
 import { NavigationBar } from "./NavigationBar";
 import SidePanel from "./SidePanel";
 import { useEffect, useState } from "react";
@@ -27,17 +27,15 @@ interface GameViewQuery{
   usedOrder: string | null;
 }
 
+{/**Game Query */}
+export interface GameQuery{
+  selectedGenre: string | null
+  selectedPlatform: string | null
+  selectedOrder: string | null
+}
+
 
 function Home(){
-  {/*Selected Genre*/}
-  const[selectedGenre, setSelectedGenre] = useState<string | null>(null)
-  
-  {/*Selected Platform*/}
-  const[selectedPlatform, setSelectedPlatform] = useState<string | null>(null)
-  
-  {/*Selected Order */}
-  const[selectedOrder, setSelectedOrder] = useState<string | null>(null)
-  
   {/*Genre Mapping*/}
   const [genreMap, setGenreMap] = useState<GenreMap>({});
   const updateGenreMap = (from: string, to: string) => {
@@ -60,6 +58,8 @@ function Home(){
   const[viewQuery, setViewQuery] = useState<ViewQuery>({onGenre:true, onRelease:true, onMetacritic:true})
   {/**Game View Query */}
   const[gameViewQuery, setGameViewQuery] = useState<GameViewQuery>({usedGenre: null, usedPlatform: null, usedOrder:null})
+  {/**Game Query */}
+  const[gameQuery, setGameQuery] = useState<GameQuery>({} as GameQuery)
 
   useEffect(() => {
     setGameViewQuery({
@@ -76,7 +76,7 @@ function Home(){
         <div>
           <Grid templateAreas={`'nav nav' 'panel main'`} templateColumns={"230px 1fr"}>
             <GridItem area={'nav'} > <NavigationBar/></GridItem>
-            <GridItem area={'panel'} paddingX={5}> <SidePanel onSelectedGenre={setSelectedGenre} onSelectedPlatform={setSelectedPlatform} updateGenreMap={updateGenreMap} updatePlatformMap={updatePlatformMap}/></GridItem>
+            <GridItem area={'panel'} paddingX={5}> <SidePanel gameQuery={gameQuery} setGameQuery={setGameQuery} updateGenreMap={updateGenreMap} updatePlatformMap={updatePlatformMap}/></GridItem>
             <GridItem area={'main'} >
               <VStack spacing={5} paddingLeft={5} align="start">
                 <Flex align="center" gap="20px">
@@ -89,7 +89,7 @@ function Home(){
                     <Icon as={PlatformIcon[platformMap[gameViewQuery.usedPlatform]]} boxSize={10} />
                   )}
                 </Flex>  
-                <SortSelector selectedOrder={gameViewQuery.usedOrder} onSelectedOrder={setSelectedOrder} />
+                <SortSelector gameQuery={gameQuery} selectedOrder={gameViewQuery.usedOrder} setGameQuery={setGameQuery} />
                 <CheckboxGroup colorScheme='green' defaultValue={['release','metacritic','genres']}>
                   <Stack spacing={[1, 5]} direction={['column', 'row']}>
                     <Checkbox value='release' onChange={() => setViewQuery({...viewQuery, onRelease:!viewQuery.onRelease})}>Release date</Checkbox>
@@ -98,7 +98,7 @@ function Home(){
                   </Stack>
                 </CheckboxGroup>
               </VStack>
-              <GameGrid selectedOrder={selectedOrder} selectedGenre={selectedGenre} selectedPlatform={selectedPlatform} viewQuery={viewQuery}/>
+              <GameGrid viewQuery={viewQuery} gameQuery={gameQuery}/>
             </GridItem>
           </Grid>
         </div>

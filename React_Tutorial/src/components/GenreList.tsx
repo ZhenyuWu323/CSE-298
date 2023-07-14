@@ -1,6 +1,7 @@
 import { HStack, List, ListItem, Image, Text, Spinner, Button } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { GameQuery } from "./Home";
 
 export interface Genre {
   id: string;
@@ -11,8 +12,9 @@ export interface Genre {
 {/*Genre Props*/}
 interface Props {
   setLoading: (isLoading: boolean) => void;
-  onSelectedGenre:(genre:String) => void;
   updateGenreMap:(from: string, to: string) => void;
+  setGameQuery: (query: GameQuery) => void
+  gameQuery: GameQuery
 
 }
 
@@ -23,7 +25,7 @@ const ResizeImage = (url: string) => {
   return url.slice(0, index) + "crop/600/400/" + url.slice(index);
 };
 
-const GenreList = ({ setLoading, onSelectedGenre, updateGenreMap}: Props) => {
+const GenreList = ({gameQuery, setGameQuery, setLoading, updateGenreMap}: Props) => {
   {
     /* Genre List */
   }
@@ -75,7 +77,7 @@ const GenreList = ({ setLoading, onSelectedGenre, updateGenreMap}: Props) => {
                   borderRadius={8}
                   src={ResizeImage(genre.image)}
                 ></Image>
-                <Button onClick={() => onSelectedGenre(genre.id)} variant='link' ><Text fontSize="large">{genre.name}</Text></Button>
+                <Button onClick={() =>setGameQuery({...gameQuery, selectedGenre: genre.id})} variant='link' ><Text fontSize="large">{genre.name}</Text></Button>
               </HStack>
             </ListItem>
           ))}
