@@ -13,21 +13,31 @@ interface GenreMap{
 interface PlatformMap{
   [key:string] : string;
 }
+{/**Cutomization Query */}
 export interface ViewQuery{
   onGenre : boolean;
   onRelease: boolean;
   onMetacritic: boolean;
 }
+
+{/**View Game Query */}
+interface GameViewQuery{
+  usedGenre: string | null;
+  usedPlatform: string | null;
+  usedOrder: string | null;
+}
+
+
 function Home(){
   {/*Selected Genre*/}
   const[selectedGenre, setSelectedGenre] = useState<string | null>(null)
-  const[usedGenre, setUsedGenre] = useState<string | null>(null)
+  
   {/*Selected Platform*/}
   const[selectedPlatform, setSelectedPlatform] = useState<string | null>(null)
-  const[usedPlatform, setUsedPlatform] = useState<string | null>(null)
+  
   {/*Selected Order */}
   const[selectedOrder, setSelectedOrder] = useState<string | null>(null)
-  const[usedOrder,setUsedOrder] = useState<string | null>(null)
+  
   {/*Genre Mapping*/}
   const [genreMap, setGenreMap] = useState<GenreMap>({});
   const updateGenreMap = (from: string, to: string) => {
@@ -48,11 +58,16 @@ function Home(){
   const[searchParam, setSearchParam] = useSearchParams()
   {/**View Query */}
   const[viewQuery, setViewQuery] = useState<ViewQuery>({onGenre:true, onRelease:true, onMetacritic:true})
+  {/**Game View Query */}
+  const[gameViewQuery, setGameViewQuery] = useState<GameViewQuery>({usedGenre: null, usedPlatform: null, usedOrder:null})
 
   useEffect(() => {
-    setUsedOrder(searchParam.get('ordering'))
-    setUsedGenre(searchParam.get('genres'))
-    setUsedPlatform(searchParam.get('platforms'))
+    setGameViewQuery({
+      ...gameViewQuery, 
+      usedGenre: searchParam.get('genres'),
+      usedPlatform: searchParam.get('platforms'),
+      usedOrder: searchParam.get('ordering')
+    })
   }, [searchParam]);
 
 
@@ -65,16 +80,16 @@ function Home(){
             <GridItem area={'main'} >
               <VStack spacing={5} paddingLeft={5} align="start">
                 <Flex align="center" gap="20px">
-                  {usedGenre && genreMap && (
+                  {gameViewQuery.usedGenre && genreMap && (
                     <Text fontSize="5xl" fontWeight="bold" mb="4px" as="u">
-                      {genreMap[usedGenre]}
+                      {genreMap[gameViewQuery.usedGenre]}
                     </Text>
                   )}
-                  {usedPlatform && platformMap && (
-                    <Icon as={PlatformIcon[platformMap[usedPlatform]]} boxSize={10} />
+                  {gameViewQuery.usedPlatform && platformMap && (
+                    <Icon as={PlatformIcon[platformMap[gameViewQuery.usedPlatform]]} boxSize={10} />
                   )}
                 </Flex>  
-                <SortSelector selectedOrder={usedOrder} onSelectedOrder={setSelectedOrder} />
+                <SortSelector selectedOrder={gameViewQuery.usedOrder} onSelectedOrder={setSelectedOrder} />
                 <CheckboxGroup colorScheme='green' defaultValue={['release','metacritic','genres']}>
                   <Stack spacing={[1, 5]} direction={['column', 'row']}>
                     <Checkbox value='release' onChange={() => setViewQuery({...viewQuery, onRelease:!viewQuery.onRelease})}>Release date</Checkbox>
