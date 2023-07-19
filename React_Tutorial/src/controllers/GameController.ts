@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { fetchGameData, Params, GameContent, Game } from "../models/GameModel";
 import { GameQuery, ViewQuery } from "../components/Home";
 
@@ -14,10 +14,12 @@ export const useGameGridController = (props: Props) => {
     const [gameList, setGameList] = useState<Game[]>([]);
     const [totalPage, setTotalPage] = useState<number>();
     const [searchParam, setSearchParam] = useSearchParams();
+    const { searchText } = useParams();
     const pageNum = searchParam.get("page") ? parseInt(searchParam.get("page")) : 1;
     let genreNum = gameQuery.selectedGenre ? gameQuery.selectedGenre : searchParam.get("genres");
     let platformNum = gameQuery.selectedPlatform ? gameQuery.selectedPlatform : searchParam.get("platforms");
     let orderNum = gameQuery.selectedOrder ? gameQuery.selectedOrder : searchParam.get("ordering");
+    let search = gameQuery.selectedSearch? gameQuery.selectedSearch : searchText;
     const [isLoading, setLoading] = useState(false);
     const [error, setError] = useState(0);
 
@@ -38,7 +40,7 @@ export const useGameGridController = (props: Props) => {
                 if(genreNum) params.genres = genreNum;
                 if(platformNum) params.platforms = platformNum;
                 if(orderNum && orderNum != "none") params.ordering = orderNum;
-                if(gameQuery.selectedSearch) params.search = gameQuery.selectedSearch;
+                if(search) params.search = search;
                 const data = await fetchGameData(params);
                 setGameContent(data);
                 setLoading(false);
