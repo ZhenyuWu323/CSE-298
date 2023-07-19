@@ -1,4 +1,4 @@
-import { Button, Skeleton, VStack , Text} from "@chakra-ui/react";
+import { Button, Skeleton, VStack , Text, HStack} from "@chakra-ui/react";
 import GenreList from "./GenreList";
 import PlatformList from "./PlatformList";
 import { useEffect, useState } from "react";
@@ -30,14 +30,17 @@ const SidePanel = ({gameQuery, setGameQuery, updateGenreMap, updatePlatformMap, 
 
   return (
     <>
-      <Skeleton
-        isLoaded={!isDataLoading}
-        style={{ height: "100%", width: "100%" }}
-      >
-        <VStack spacing={20} style={{ height: "100%", width: "100%" }} borderRadius={10}>
+      <Skeleton isLoaded={!isDataLoading} style={{ height: "100%", width: "100%" }}>
+        <VStack style={{ height: "100%", width: "100%" }} borderRadius={10}>
+          <HStack alignSelf="flex-start" marginBottom="20px">
+            <Button onClick={() => { setSearchParam({ page: "1" }); setGameQuery({} as GameQuery) }} variant='link'>
+              <Text fontSize="3xl" fontWeight="bold" mb="4px">Home</Text>
+            </Button>
+          </HStack>
           <GenreList gameQuery={gameQuery} setGameQuery={setGameQuery} setLoading={setGenreListLoading} updateGenreMap={updateGenreMap} />
-          <PlatformList gameQuery={gameQuery} setGameQuery={setGameQuery} setLoading={setPlatformListLoading} updatePlatformMap={updatePlatformMap}/>
-          <Button onClick={() =>setSearchParam({page:"1"})} variant='link' ><Text fontSize="large">Home</Text></Button>
+          <VStack spacing={20}>
+            <PlatformList gameQuery={gameQuery} setGameQuery={setGameQuery} setLoading={setPlatformListLoading} updatePlatformMap={updatePlatformMap} />
+          </VStack>
         </VStack>
       </Skeleton>
     </>

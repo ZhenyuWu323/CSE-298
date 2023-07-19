@@ -48,7 +48,7 @@ export const useGameGridController = (props: Props) => {
             }
         };
         fetchData();
-    }, [pageNum, gameQuery]);
+    }, [pageNum, searchParam]);
 
     useEffect(() => {
         if (gameContent) {
