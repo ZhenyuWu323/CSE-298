@@ -1,6 +1,6 @@
 import GameGrid from "./GameGrid";
 import { Flex, Grid, GridItem, Text, Icon, VStack, CheckboxGroup, Stack, Checkbox} from "@chakra-ui/react";
-import { NavigationBar } from "./NavigationBar";
+import NavigationBar from "./NavigationBar";
 import SidePanel from "./SidePanel";
 import { useEffect, useState } from "react";
 import SortSelector from "./SortSelector";
@@ -32,6 +32,7 @@ export interface GameQuery{
   selectedGenre: string | null;
   selectedPlatform: string | null;
   selectedOrder: string | null;
+  selectedSearch: string | null;
 }
 
 
@@ -66,7 +67,7 @@ function Home(){
       ...gameViewQuery, 
       usedGenre: searchParam.get('genres'),
       usedPlatform: searchParam.get('platforms'),
-      usedOrder: searchParam.get('ordering')
+      usedOrder: searchParam.get('ordering'),
     })
   }, [searchParam]);
 
@@ -75,11 +76,16 @@ function Home(){
     return(
         <div>
           <Grid templateAreas={`'nav nav' 'panel main'`} templateColumns={"230px 1fr"}>
-            <GridItem area={'nav'} > <NavigationBar/></GridItem>
+            <GridItem area={'nav'} > <NavigationBar gameQuery={gameQuery} setGameQuery={setGameQuery}/></GridItem>
             <GridItem area={'panel'} paddingX={5}> <SidePanel gameQuery={gameQuery} setGameQuery={setGameQuery} updateGenreMap={updateGenreMap} updatePlatformMap={updatePlatformMap} setSearchParam={setSearchParam}/></GridItem>
             <GridItem area={'main'} >
               <VStack spacing={5} paddingLeft={5} align="start">
                 <Flex align="center" gap="20px">
+                {gameViewQuery.usedGenre && genreMap && (
+                    <Text fontSize="5xl" fontWeight="bold" mb="4px" as="u">
+                      {genreMap[gameViewQuery.usedGenre]}
+                    </Text>
+                  )}
                   {gameViewQuery.usedGenre && genreMap && (
                     <Text fontSize="5xl" fontWeight="bold" mb="4px" as="u">
                       {genreMap[gameViewQuery.usedGenre]}

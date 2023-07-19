@@ -3,7 +3,7 @@ import GenreList from "./GenreList";
 import PlatformList from "./PlatformList";
 import { useEffect, useState } from "react";
 import { GameQuery } from "./Home";
-import { SetURLSearchParams,} from "react-router-dom";
+import { SetURLSearchParams, useNavigate,} from "react-router-dom";
 
 {/*Selected Props for platform & genre */}
 interface Props{
@@ -19,6 +19,7 @@ const SidePanel = ({gameQuery, setGameQuery, updateGenreMap, updatePlatformMap, 
   const [isGenreListLoading, setGenreListLoading] = useState(true);
   const [isPlatformListLoading, setPlatformListLoading] = useState(true);
   const [isDataLoading, setDataLoading] = useState(true)
+  const navigation = useNavigate();
 
 
   useEffect(() => {
@@ -33,7 +34,7 @@ const SidePanel = ({gameQuery, setGameQuery, updateGenreMap, updatePlatformMap, 
       <Skeleton isLoaded={!isDataLoading} style={{ height: "100%", width: "100%" }}>
         <VStack style={{ height: "100%", width: "100%" }} borderRadius={10}>
           <HStack alignSelf="flex-start" marginBottom="20px">
-            <Button onClick={() => { setSearchParam({ page: "1" }); setGameQuery({} as GameQuery) }} variant='link'>
+            <Button onClick={() => { navigation('/'); setGameQuery({} as GameQuery) }} variant='link'>
               <Text fontSize="3xl" fontWeight="bold" mb="4px">Home</Text>
             </Button>
           </HStack>
