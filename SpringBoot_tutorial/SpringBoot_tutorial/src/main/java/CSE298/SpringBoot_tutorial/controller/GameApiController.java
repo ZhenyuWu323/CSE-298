@@ -50,7 +50,7 @@ public class GameApiController {
     }
 
     @GetMapping("/games")
-    public Object getGameList(@RequestParam("page") @Min(1) int PageNum, @RequestParam(required = false) String genres, @RequestParam(required = false) String platforms, @RequestParam(required = false) String ordering) throws ParseException {
+    public Object getGameList(@RequestParam("page") @Min(1) int PageNum, @RequestParam(required = false) String genres, @RequestParam(required = false) String platforms, @RequestParam(required = false) String ordering, @RequestParam(required = false) String search) throws ParseException {
         GameList.CleanGame();
         String steamApiUrl = "https://api.rawg.io/api/games?key=c5cbbf661c79425e9064cd8c3976db42&page=" + String.valueOf(PageNum);
         if(genres != null){
@@ -61,6 +61,9 @@ public class GameApiController {
         }
         if(ordering != null){
             steamApiUrl = steamApiUrl + "&ordering=" + ordering;
+        }
+        if(search != null){
+            steamApiUrl = steamApiUrl + "&search=" + search;
         }
         System.out.println(steamApiUrl);
         StringBuilder response = new StringBuilder();

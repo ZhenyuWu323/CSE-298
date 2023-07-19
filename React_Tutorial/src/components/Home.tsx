@@ -76,7 +76,7 @@ function Home(){
         <div>
           <Grid templateAreas={`'nav nav' 'panel main'`} templateColumns={"230px 1fr"}>
             <GridItem area={'nav'} > <NavigationBar/></GridItem>
-            <GridItem area={'panel'} paddingX={5}> <SidePanel gameQuery={gameQuery} setGameQuery={setGameQuery} updateGenreMap={updateGenreMap} updatePlatformMap={updatePlatformMap}/></GridItem>
+            <GridItem area={'panel'} paddingX={5}> <SidePanel gameQuery={gameQuery} setGameQuery={setGameQuery} updateGenreMap={updateGenreMap} updatePlatformMap={updatePlatformMap} setSearchParam={setSearchParam}/></GridItem>
             <GridItem area={'main'} >
               <VStack spacing={5} paddingLeft={5} align="start">
                 <Flex align="center" gap="20px">
