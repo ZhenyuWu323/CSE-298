@@ -1,9 +1,7 @@
-
-
 import { Flex, Box, Input, Stack, Button, Image, HStack, Text,Link} from "@chakra-ui/react";
 import IconImage from "../assets/Icon.png";
 
-const LoginPage = () => {
+const SignupPage = () => {
   return (
     <Flex
       align="center"
@@ -20,18 +18,12 @@ const LoginPage = () => {
         <Stack spacing={4} justify="center">
           <HStack>
             <Image src={IconImage} boxSize="70px" />
-            <Text fontSize="3xl" fontWeight="bold" mb="4px" color="teal">GameExplorer: Login</Text>
+            <Text fontSize="3xl" fontWeight="bold" mb="4px" color="teal">GameExplorer: Sign up</Text>
           </HStack>
           <Input type="text" placeholder="Username" />
           <Input type="password" placeholder="Password" />
-          <Text>
-            Don't have an account?{' '}
-            <Link color='teal.500' href='signup'>
-              Sign up with us
-            </Link>
-          </Text>
           <Button colorScheme="teal" size="lg" fontSize="md">
-            Log In
+            Sign Up
           </Button>
         </Stack>
       </Box>
@@ -39,4 +31,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignupPage;
