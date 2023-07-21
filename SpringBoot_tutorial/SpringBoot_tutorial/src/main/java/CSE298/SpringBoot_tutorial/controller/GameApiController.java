@@ -110,25 +110,30 @@ public class GameApiController {
             }
 
             //Game Genre
-            JSONArray genre_list = (JSONArray) game.get("genres");
             List<String> genre = new ArrayList<>();
-            if(genre_list.size() > 0 && genre_list != null){
-                for(int j = 0; j < genre_list.size(); j++){
-                JSONObject temp = (JSONObject) genre_list.get(j);
-                String item = temp.get("name").toString();
-                genre.add(item);
+            if(game.get("genres") != null){
+                JSONArray genre_list = (JSONArray) game.get("genres");
+                if(genre_list.size() > 0 ){
+                    for(int j = 0; j < genre_list.size(); j++){
+                    JSONObject temp = (JSONObject) genre_list.get(j);
+                    String item = temp.get("name").toString();
+                    genre.add(item);
+                    }
                 }
             }
 
             //Game Platform
-            JSONArray platform_list = (JSONArray) game.get("parent_platforms");
+            //JSONArray platform_list = (JSONArray) game.get("parent_platforms");
             List<String> platform = new ArrayList<>();
-            if(platform_list.size() > 0 && platform_list != null){
-                for(int j = 0; j < platform_list.size(); j++){
-                JSONObject temp = (JSONObject) platform_list.get(j);
-                JSONObject each_temp = (JSONObject) temp.get("platform");
-                String item = each_temp.get("name").toString();
-                platform.add(item);
+            if(game.get("parent_platforms") != null){
+                JSONArray platform_list = (JSONArray) game.get("parent_platforms");
+                if(platform_list.size() > 0){
+                    for(int j = 0; j < platform_list.size(); j++){
+                    JSONObject temp = (JSONObject) platform_list.get(j);
+                    JSONObject each_temp = (JSONObject) temp.get("platform");
+                    String item = each_temp.get("name").toString();
+                    platform.add(item);
+                    }
                 }
             }
 
