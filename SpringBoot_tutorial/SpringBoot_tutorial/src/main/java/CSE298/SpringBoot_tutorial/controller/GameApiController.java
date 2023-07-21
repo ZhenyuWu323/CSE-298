@@ -112,7 +112,7 @@ public class GameApiController {
             //Game Genre
             JSONArray genre_list = (JSONArray) game.get("genres");
             List<String> genre = new ArrayList<>();
-            if(genre_list.size() > 0){
+            if(genre_list.size() > 0 && genre_list != null){
                 for(int j = 0; j < genre_list.size(); j++){
                 JSONObject temp = (JSONObject) genre_list.get(j);
                 String item = temp.get("name").toString();
@@ -123,7 +123,7 @@ public class GameApiController {
             //Game Platform
             JSONArray platform_list = (JSONArray) game.get("parent_platforms");
             List<String> platform = new ArrayList<>();
-            if(platform_list.size() > 0){
+            if(platform_list.size() > 0 && platform_list != null){
                 for(int j = 0; j < platform_list.size(); j++){
                 JSONObject temp = (JSONObject) platform_list.get(j);
                 JSONObject each_temp = (JSONObject) temp.get("platform");
