@@ -112,20 +112,24 @@ public class GameApiController {
             //Game Genre
             JSONArray genre_list = (JSONArray) game.get("genres");
             List<String> genre = new ArrayList<>();
-            for(int j = 0; j < genre_list.size(); j++){
+            if(genre_list.size() > 0){
+                for(int j = 0; j < genre_list.size(); j++){
                 JSONObject temp = (JSONObject) genre_list.get(j);
                 String item = temp.get("name").toString();
                 genre.add(item);
+                }
             }
 
             //Game Platform
             JSONArray platform_list = (JSONArray) game.get("parent_platforms");
             List<String> platform = new ArrayList<>();
-            for(int j = 0; j < platform_list.size(); j++){
+            if(platform_list.size() > 0){
+                for(int j = 0; j < platform_list.size(); j++){
                 JSONObject temp = (JSONObject) platform_list.get(j);
                 JSONObject each_temp = (JSONObject) temp.get("platform");
                 String item = each_temp.get("name").toString();
                 platform.add(item);
+                }
             }
 
             //Game metacritic

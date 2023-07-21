@@ -25,7 +25,7 @@ export const useGameGridController = (props: Props) => {
 
     useEffect(()=>{
         setSearchParam({
-            page: pageNum.toString(),
+            ...(pageNum != 1 ? { page: pageNum.toString() } : {}),
             ...(genreNum ? { genres: genreNum } : {}),
             ...(platformNum ? { platforms: platformNum } : {}),
             ...(orderNum && orderNum != "none" ? { ordering: orderNum } : {}),
@@ -51,7 +51,7 @@ export const useGameGridController = (props: Props) => {
             }
         };
         fetchData();
-    }, [pageNum, gameQuery]);
+    }, [ searchParam, gameQuery]);
 
     useEffect(() => {
         if (gameContent) {

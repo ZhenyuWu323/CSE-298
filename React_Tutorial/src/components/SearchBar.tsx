@@ -1,30 +1,34 @@
 import { Input, InputGroup, InputLeftElement } from "@chakra-ui/react";
-import {  useRef } from "react";
+import { useRef } from "react";
 import { BsSearch } from "react-icons/bs";
 import { GameQuery } from "./Home";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-
-
-
-{/*Selected Props for platform & genre */}
-interface Props{
+{
+  /*Selected Props for platform & genre */
+}
+interface Props {
   setGameQuery: (query: GameQuery) => void;
 }
 
-const SearchBar = ({ setGameQuery}:Props) => {
-	const ref = useRef<HTMLInputElement>(null);
-	const navigation = useNavigate();
-	
-	
+const SearchBar = ({ setGameQuery }: Props) => {
+  const ref = useRef<HTMLInputElement>(null);
+  const navigation = useNavigate();
+
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
-				if(ref.current){
-				 navigation(`search/${encodeURIComponent(ref.current.value)}`)
-				 setGameQuery({selectedGenre:null,selectedOrder:null,selectedPlatform:null,selectedSearch:ref.current.value})
-				}
+        if (ref.current) {
+          const searchValue = ref.current.value.replace(/ /g, "+");
+          navigation(`search/${encodeURIComponent(ref.current.value)}`);
+          setGameQuery({
+            selectedGenre: null,
+            selectedOrder: null,
+            selectedPlatform: null,
+            selectedSearch: searchValue,
+          });
+        }
       }}
     >
       <InputGroup>
@@ -33,7 +37,7 @@ const SearchBar = ({ setGameQuery}:Props) => {
           borderRadius={20}
           placeholder="Search games......"
           variant="filled"
-					ref={ref}
+          ref={ref}
         />
       </InputGroup>
     </form>
