@@ -29,7 +29,7 @@ function GameGrid(props: Props) {
             {isLoading ? (
               <Grid templateColumns="repeat(4, 1fr)" gap={6} gridAutoFlow="row dense" key="GridSkeleton">
                 {Array.from({ length: 20 }).map((_, index) => (
-                  <Card key={index} borderRadius={10} overflow="hidden" height="340px" width="345px">
+                  <Card key={index} borderRadius={10} overflow="hidden" height="340px" width="340px">
                     <Skeleton height="200px" />
                     <CardBody>
                       <SkeletonText />
