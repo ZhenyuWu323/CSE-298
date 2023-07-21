@@ -32,6 +32,11 @@ export const useGameGridController = (props: Props) => {
         });
     },[genreNum, platformNum, orderNum]);
 
+    useEffect(()=>{
+        setError(0);
+    },[]);
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
