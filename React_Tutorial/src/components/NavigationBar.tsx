@@ -18,7 +18,7 @@ const NavigationBar = ({ setGameQuery }: Props) => {
       </HStack>
       <Spacer />
       <Box>
-        <Link to="/login">Login</Link>
+        <Link to="/userCenter">Login</Link>
       </Box>
     </HStack>
   );

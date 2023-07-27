@@ -28,7 +28,7 @@ const LoginPage = () => {
           <Input type="password" placeholder="Password" />
           <Text>
             Don't have an account?{' '}
-            <Link color='teal.500' href='signup'>
+            <Link color='teal.500' href='createAccount'>
               Sign up with us
             </Link>
           </Text>

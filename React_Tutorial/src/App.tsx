@@ -11,8 +11,8 @@ function App() {
       <Route path="/" element={<Home/>}>
         <Route path="searchByname/:searchText" element={<Home/>}></Route>
       </Route>
-      <Route path='login' element = {<Users type="login"/>}></Route>
-      <Route path='signup' element = {<Users type="signup"/>}></Route>
+      <Route path='userCenter' element = {<Users type="login"/>}></Route>
+      <Route path='createAccount' element = {<Users type="signup"/>}></Route>
       <Route path="secure" element={<Home/>}>
         <Route path="searchByname/:searchText" element={<Home/>}></Route>
       </Route>

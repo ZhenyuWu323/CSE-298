@@ -37,7 +37,7 @@ const Users = ({type}:Props) => {
                     colorScheme="gray"
                     variant="solid"
                     onClick={() => {
-                        navigation('/login');
+                        navigation('/userCenter');
                     }}
                     >
                     Back to Login
