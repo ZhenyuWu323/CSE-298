@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import SortSelector from "./SortSelector";
 import { useParams, useSearchParams } from "react-router-dom";
 import { PlatformIcon } from "./PlatformList";
+import axios from "axios";
 
 interface GenreMap{
   [key:string] : string;
@@ -36,7 +37,10 @@ export interface GameQuery{
   selectedSearch: string | null;
 }
 
-
+interface UserInfo{
+  name: string,
+  profileImage : string,
+}
 function Home(){
   {/*Genre Mapping*/}
   const [genreMap, setGenreMap] = useState<GenreMap>({});
@@ -73,6 +77,29 @@ function Home(){
       usedSearch: searchText
     })
   }, [searchParam,searchText]);
+
+
+  const [user, setUser] = useState<UserInfo | null>(null);
+
+  // Fetch user info when component mounts
+  useEffect(() => {
+      const fetchUserInfo = async () => {
+          try {
+              const response = await axios.get<UserInfo>('http://localhost:8080/user/google');
+              
+              if (response.data) {
+                  setUser(response.data);
+              }
+          } catch (error) {
+              console.error("Failed to fetch user info", error);
+          }
+      }
+
+      fetchUserInfo();
+  }, []);
+  if(user){
+    console.log(user.name);
+  }
 
 
 
