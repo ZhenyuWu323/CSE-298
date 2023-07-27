@@ -42,7 +42,7 @@ interface UserInfo{
   profileImage : string,
 }
 
-function Home(){
+function SecureHome(){
 
   const[user, setUser] = useState<UserInfo>();
 
@@ -82,19 +82,26 @@ function Home(){
     })
   }, [searchParam,searchText]);
 
+  const fetchUser = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/user/google');
+      console.log("NM");
+      console.log(response);
+  
+      // Check if the response contains 'name' property before accessing it
+      if (response.data && response.data.name && response.data.profileImage) {
+        setUser(response.data);
+        console.log(user.name);
+      } else {
+        console.error('Invalid server response:', response);
+      }
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    }
+  };
+  
   useEffect(() => {
-    const fetchUser = async () => {
-        try {
-            const response = await axios.get('http://localhost:8080/user/google');
-            setUser(response.data);
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
     fetchUser();
-    console.log("NM");
-    console.log(user.name, user.profileImage);
   }, []);
 
 
@@ -139,4 +146,4 @@ function Home(){
     );
 }
 
-export default Home;
+export default SecureHome;

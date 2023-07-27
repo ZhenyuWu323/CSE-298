@@ -17,20 +17,15 @@ import CSE298.SpringBoot_tutorial.model.UserInfo;
 public class UserController {
     //Google OAuth
     @GetMapping("/google")
-    public ResponseEntity<String> GoogleLogin(OAuth2AuthenticationToken token){
+    public UserInfo GoogleLogin(OAuth2AuthenticationToken token){
         // Fetch user details from the token attributes
         Map<String, Object> userDetails = token.getPrincipal().getAttributes();
 
         // Craft a welcome message
         String name = (String) userDetails.get("name");
-        //String pictureUrl = (String) userDetails.get("picture");
+        String pictureUrl = (String) userDetails.get("picture");
 
         // Respond with the welcome message
-        //return new UserInfo(name, pictureUrl);
-        // Craft a welcome message
-        String welcomeMessage = String.format("Hello, %s! You are logged in successfully.", name);
-
-        // Respond with the welcome message
-        return ResponseEntity.ok(welcomeMessage);
+        return new UserInfo(name, pictureUrl);
     }
 }
