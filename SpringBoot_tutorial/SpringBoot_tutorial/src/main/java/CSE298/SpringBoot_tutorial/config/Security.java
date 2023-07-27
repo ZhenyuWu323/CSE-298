@@ -18,7 +18,7 @@ public class Security {
         return http
         .authorizeHttpRequests(
             auth->{
-                auth.requestMatchers("/login/**").authenticated();
+                auth.requestMatchers("/login/google").authenticated();
                 auth.anyRequest().permitAll();
             }
         )
