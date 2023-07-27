@@ -22,7 +22,7 @@ public class Security {
                 auth.anyRequest().permitAll();
             }
         )
-        .oauth2Login(withDefaults())
+        .oauth2Login(login->login.defaultSuccessUrl("/secure", true))
         .build();
     
     }

@@ -14,7 +14,7 @@ function App() {
       </Route>
       <Route path='userCenter' element = {<Users type="login"/>}></Route>
       <Route path='createAccount' element = {<Users type="signup"/>}></Route>
-      <Route path="oauth" element={<SecureHome/>}>
+      <Route path="secure" element={<SecureHome/>}>
         <Route path="searchByname/:searchText" element={<SecureHome/>}></Route>
       </Route>
       <Route path="*" element={<h1>NOT FOUND</h1>}></Route>
