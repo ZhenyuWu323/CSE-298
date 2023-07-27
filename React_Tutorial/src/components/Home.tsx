@@ -37,9 +37,10 @@ export interface GameQuery{
   selectedSearch: string | null;
 }
 
-interface UserInfo{
+export interface UserInfo{
   name: string,
   profileImage : string,
+  session : string,
 }
 function Home(){
   {/*Genre Mapping*/}
@@ -103,44 +104,44 @@ function Home(){
 
 
 
-    return(
-        <div>
-          <Grid templateAreas={`'nav nav' 'panel main'`} templateColumns={"230px 1fr"}>
-            <GridItem area={'nav'} > <NavigationBar setGameQuery={setGameQuery}/></GridItem>
-            <GridItem area={'panel'} paddingX={5}> <SidePanel gameQuery={gameQuery} setGameQuery={setGameQuery} updateGenreMap={updateGenreMap} updatePlatformMap={updatePlatformMap} setSearchParam={setSearchParam}/></GridItem>
-            <GridItem area={'main'} >
-              <VStack spacing={5} paddingLeft={5} align="start">
-                <VStack align="start">
-                  {gameViewQuery.usedSearch && genreMap && (
-                    <Text fontSize="5xl" fontWeight="bold" mb="4px" >
-                      Result of: "{gameViewQuery.usedSearch}"
-                    </Text>
-                  )}
-                  <Flex align="center" gap="20px">
-                      {gameViewQuery.usedGenre && genreMap && (
-                        <Text fontSize="5xl" fontWeight="bold" mb="4px" as="u">
-                          {genreMap[gameViewQuery.usedGenre]}
-                        </Text>
-                      )}
-                      {gameViewQuery.usedPlatform && platformMap && (
-                        <Icon as={PlatformIcon[platformMap[gameViewQuery.usedPlatform]]} boxSize={10} />
-                      )}
-                  </Flex>
-                </VStack>
-                <SortSelector gameQuery={gameQuery} selectedOrder={gameViewQuery.usedOrder} setGameQuery={setGameQuery} />
-                <CheckboxGroup colorScheme='green' defaultValue={['release','metacritic','genres']}>
-                  <Stack spacing={[1, 5]} direction={['column', 'row']}>
-                    <Checkbox value='release' onChange={() => setViewQuery({...viewQuery, onRelease:!viewQuery.onRelease})}>Release date</Checkbox>
-                    <Checkbox value='metacritic' onChange={() => setViewQuery({...viewQuery, onMetacritic:!viewQuery.onMetacritic})}>Metacritic</Checkbox>
-                    <Checkbox value='genres' onChange={() => setViewQuery({...viewQuery, onGenre:!viewQuery.onGenre})}>Genre</Checkbox>
-                  </Stack>
-                </CheckboxGroup>
+  return(
+      <div>
+        <Grid templateAreas={`'nav nav' 'panel main'`} templateColumns={"230px 1fr"}>
+          <GridItem area={'nav'} > <NavigationBar setGameQuery={setGameQuery} user={user}/></GridItem>
+          <GridItem area={'panel'} paddingX={5}> <SidePanel gameQuery={gameQuery} setGameQuery={setGameQuery} updateGenreMap={updateGenreMap} updatePlatformMap={updatePlatformMap} setSearchParam={setSearchParam}/></GridItem>
+          <GridItem area={'main'} >
+            <VStack spacing={5} paddingLeft={5} align="start">
+              <VStack align="start">
+                {gameViewQuery.usedSearch && genreMap && (
+                  <Text fontSize="5xl" fontWeight="bold" mb="4px" >
+                    Result of: "{gameViewQuery.usedSearch}"
+                  </Text>
+                )}
+                <Flex align="center" gap="20px">
+                    {gameViewQuery.usedGenre && genreMap && (
+                      <Text fontSize="5xl" fontWeight="bold" mb="4px" as="u">
+                        {genreMap[gameViewQuery.usedGenre]}
+                      </Text>
+                    )}
+                    {gameViewQuery.usedPlatform && platformMap && (
+                      <Icon as={PlatformIcon[platformMap[gameViewQuery.usedPlatform]]} boxSize={10} />
+                    )}
+                </Flex>
               </VStack>
-              <GameGrid viewQuery={viewQuery} gameQuery={gameQuery}/>
-            </GridItem>
-          </Grid>
-        </div>
-    );
+              <SortSelector gameQuery={gameQuery} selectedOrder={gameViewQuery.usedOrder} setGameQuery={setGameQuery} />
+              <CheckboxGroup colorScheme='green' defaultValue={['release','metacritic','genres']}>
+                <Stack spacing={[1, 5]} direction={['column', 'row']}>
+                  <Checkbox value='release' onChange={() => setViewQuery({...viewQuery, onRelease:!viewQuery.onRelease})}>Release date</Checkbox>
+                  <Checkbox value='metacritic' onChange={() => setViewQuery({...viewQuery, onMetacritic:!viewQuery.onMetacritic})}>Metacritic</Checkbox>
+                  <Checkbox value='genres' onChange={() => setViewQuery({...viewQuery, onGenre:!viewQuery.onGenre})}>Genre</Checkbox>
+                </Stack>
+              </CheckboxGroup>
+            </VStack>
+            <GameGrid viewQuery={viewQuery} gameQuery={gameQuery}/>
+          </GridItem>
+        </Grid>
+      </div>
+  );
 }
 
 export default Home;

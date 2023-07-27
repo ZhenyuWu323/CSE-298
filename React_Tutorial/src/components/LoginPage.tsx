@@ -1,7 +1,8 @@
 
 
-import { Flex, Box, Input, Stack, Button, Image, HStack, Text,Link} from "@chakra-ui/react";
+import { Flex, Box, Input, Stack, Button, Image, HStack, Text,Link, Icon} from "@chakra-ui/react";
 import IconImage from "../assets/Icon.png";
+import { FaGoogle } from "react-icons/fa";
 
 const LoginPage = () => {
 
@@ -36,7 +37,7 @@ const LoginPage = () => {
             Log In
           </Button>
 
-          <Button as={Link} href="/oauth" colorScheme="teal">
+          <Button as={Link} href="/oauth" leftIcon={<Icon as={FaGoogle} />} colorScheme="white" variant="outline">
             Login with Google
           </Button>
           
