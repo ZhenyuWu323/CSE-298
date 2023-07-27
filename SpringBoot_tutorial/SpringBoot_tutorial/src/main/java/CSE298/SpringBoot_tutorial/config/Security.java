@@ -21,7 +21,7 @@ public class Security {
                 auth.anyRequest().permitAll();
             }
         )
-        .oauth2Login(null)
+        //.oauth2Login(null)
         .build();
     
     }
