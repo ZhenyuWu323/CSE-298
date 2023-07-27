@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import CSE298.SpringBoot_tutorial.model.UserInfo;
 
 @RestController
-@RequestMapping("/login")
+@RequestMapping("/user")
 @CrossOrigin
 public class UserController {
     //Google OAuth

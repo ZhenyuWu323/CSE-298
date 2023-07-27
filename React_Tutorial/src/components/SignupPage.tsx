@@ -1,4 +1,4 @@
-import { Flex, Box, Input, Stack, Button, Image, HStack, Text,Link} from "@chakra-ui/react";
+import { Flex, Box, Input, Stack, Button, Image, HStack, Text} from "@chakra-ui/react";
 import IconImage from "../assets/Icon.png";
 
 const SignupPage = () => {

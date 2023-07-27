@@ -14,7 +14,7 @@ interface Props{
   setSearchParam: SetURLSearchParams
 }
 
-const SidePanel = ({gameQuery, setGameQuery, updateGenreMap, updatePlatformMap, setSearchParam}:Props) => {
+const SidePanel = ({gameQuery, setGameQuery, updateGenreMap, updatePlatformMap}:Props) => {
   {/* Genre List & Platform List Loading state */}
   const [isGenreListLoading, setGenreListLoading] = useState(true);
   const [isPlatformListLoading, setPlatformListLoading] = useState(true);
