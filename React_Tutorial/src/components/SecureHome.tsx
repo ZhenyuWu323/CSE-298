@@ -85,7 +85,7 @@ function Home(){
   useEffect(() => {
     const fetchUser = async () => {
         try {
-            const response = await axios.get('https://cse-298.up.railway.app/user/google');
+            const response = await axios.get('http://localhost:8080/user/google');
             setUser(response.data);
         } catch (error) {
             console.error(error);
@@ -93,6 +93,7 @@ function Home(){
     };
 
     fetchUser();
+    console.log("NM");
     console.log(user.name, user.profileImage);
   }, []);
 

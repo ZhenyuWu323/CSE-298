@@ -2,6 +2,7 @@ package CSE298.SpringBoot_tutorial.controller;
 
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,15 +17,20 @@ import CSE298.SpringBoot_tutorial.model.UserInfo;
 public class UserController {
     //Google OAuth
     @GetMapping("/google")
-    public UserInfo GoogleLogin(OAuth2AuthenticationToken token){
+    public ResponseEntity<String> GoogleLogin(OAuth2AuthenticationToken token){
         // Fetch user details from the token attributes
         Map<String, Object> userDetails = token.getPrincipal().getAttributes();
 
         // Craft a welcome message
         String name = (String) userDetails.get("name");
-        String pictureUrl = (String) userDetails.get("picture");
+        //String pictureUrl = (String) userDetails.get("picture");
 
         // Respond with the welcome message
-        return new UserInfo(name, pictureUrl);
+        //return new UserInfo(name, pictureUrl);
+        // Craft a welcome message
+        String welcomeMessage = String.format("Hello, %s! You are logged in successfully.", name);
+
+        // Respond with the welcome message
+        return ResponseEntity.ok(welcomeMessage);
     }
 }

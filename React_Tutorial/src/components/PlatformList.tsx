@@ -65,7 +65,7 @@ const PlatformList = ({ gameQuery, setGameQuery, setLoading, updatePlatformMap}:
 		const fetchData = async () => {
 		  try {
 			setLoading(true);
-			const response = await axios.get("https://cse-298.up.railway.app/api/platforms", {
+			const response = await axios.get("http://localhost:8080/api/platforms", {
 			});
 			setPlatformList(response.data)
 			setLoading(false);
