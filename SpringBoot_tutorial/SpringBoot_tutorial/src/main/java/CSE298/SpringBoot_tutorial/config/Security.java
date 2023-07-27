@@ -17,8 +17,8 @@ public class Security {
         return http
         .authorizeHttpRequests(
             auth->{
-                auth.requestMatchers("/api/**").permitAll();
-                auth.anyRequest().authenticated();
+                //auth.requestMatchers("/api/**").permitAll();
+                auth.anyRequest().permitAll();
             }
         )
         .oauth2Login(null)
