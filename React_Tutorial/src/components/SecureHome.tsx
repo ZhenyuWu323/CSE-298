@@ -44,7 +44,6 @@ interface UserInfo{
 
 function SecureHome(){
 
-  const[user, setUser] = useState<UserInfo>();
 
   {/*Genre Mapping*/}
   const [genreMap, setGenreMap] = useState<GenreMap>({});
@@ -82,27 +81,31 @@ function SecureHome(){
     })
   }, [searchParam,searchText]);
 
-  const fetchUser = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/user/google');
-      console.log("NM");
-      console.log(response);
-  
-      // Check if the response contains 'name' property before accessing it
-      if (response.data && response.data.name && response.data.profileImage) {
-        setUser(response.data);
-        console.log(user.name);
-      } else {
-        console.error('Invalid server response:', response);
-      }
-    } catch (error) {
-      console.error('Error fetching user:', error);
-    }
-  };
-  
+  const [user, setUser] = useState<UserInfo | null>(null);
+
+  // Fetch user info when component mounts
   useEffect(() => {
-    fetchUser();
+      const fetchUserInfo = async () => {
+          try {
+              const response = await axios.get<UserInfo>('http://localhost:8080/user/google');
+              
+              if (response.data) {
+                  setUser(response.data);
+              }
+          } catch (error) {
+              console.error("Failed to fetch user info", error);
+          }
+      }
+
+      fetchUserInfo();
   }, []);
+
+  if (!user) {
+      return <div>Loading user info...</div>;
+  }
+  if(user){
+    console.log(user.name);
+  }
 
 
 
