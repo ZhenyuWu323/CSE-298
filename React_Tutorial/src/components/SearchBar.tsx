@@ -21,7 +21,7 @@ const SearchBar = ({ setGameQuery }: Props) => {
         event.preventDefault();
         if (ref.current) {
           const searchValue = ref.current.value.replace(/ /g, "+");
-          navigation(`search/${encodeURIComponent(ref.current.value)}`);
+          navigation(`searchByname/${encodeURIComponent(ref.current.value)}`);
           setGameQuery({
             selectedGenre: null,
             selectedOrder: null,

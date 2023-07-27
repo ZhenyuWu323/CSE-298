@@ -9,7 +9,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Home/>}>
-        <Route path="search/:searchText" element={<Home/>}></Route>
+        <Route path="searchByname/:searchText" element={<Home/>}></Route>
       </Route>
       <Route path='login' element = {<Users type="login"/>}></Route>
       <Route path='signup' element = {<Users type="signup"/>}></Route>

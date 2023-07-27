@@ -2,8 +2,24 @@
 
 import { Flex, Box, Input, Stack, Button, Image, HStack, Text,Link} from "@chakra-ui/react";
 import IconImage from "../assets/Icon.png";
-
+import axios from "axios";
+import { useState } from "react";
+interface UserInfo{
+  name: string,
+  profileImage : string,
+}
 const LoginPage = () => {
+
+  const[user, setUser] = useState<UserInfo>();
+
+  const googleLogin = async () => {
+    try {
+        const response = await axios.get('https://cse-298.up.railway.app/login/google');
+        return response.data as UserInfo;  // handle the response here
+    } catch (error) {
+        console.log(error);  // handle the error here
+    }
+}
   return (
     <Flex
       align="center"
@@ -33,6 +49,11 @@ const LoginPage = () => {
           <Button colorScheme="teal" size="lg" fontSize="md">
             Log In
           </Button>
+
+          <Button onClick={googleLogin}>
+            Login with Google
+          </Button>
+          
         </Stack>
       </Box>
     </Flex>
