@@ -11,5 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/login")
 public class UserController {
     //Google OAuth
-    //
+    @GetMapping("/goole")
+    public Map<String, Object> GoogleLogin(OAuth2AuthenticationToken token){
+        System.out.println(token.getPrincipal().getAttributes());
+        return token.getPrincipal().getAttributes();
+    }
 }
