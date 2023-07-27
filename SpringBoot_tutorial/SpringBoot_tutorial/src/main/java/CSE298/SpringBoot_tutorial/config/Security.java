@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.client.OAuth2LoginConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -17,11 +18,11 @@ public class Security {
         return http
         .authorizeHttpRequests(
             auth->{
-                //auth.requestMatchers("/api/**").permitAll();
+                auth.requestMatchers("/login/**").authenticated();
                 auth.anyRequest().permitAll();
             }
         )
-        //.oauth2Login(null)
+        .oauth2Login(withDefaults())
         .build();
     
     }
