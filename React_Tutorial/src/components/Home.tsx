@@ -107,7 +107,7 @@ function Home(){
   return(
       <div>
         <Grid templateAreas={`'nav nav' 'panel main'`} templateColumns={"230px 1fr"}>
-          <GridItem area={'nav'} > <NavigationBar setGameQuery={setGameQuery} user={user}/></GridItem>
+          <GridItem area={'nav'} > <NavigationBar setGameQuery={setGameQuery} user={user} setUser={setUser}/></GridItem>
           <GridItem area={'panel'} paddingX={5}> <SidePanel gameQuery={gameQuery} setGameQuery={setGameQuery} updateGenreMap={updateGenreMap} updatePlatformMap={updatePlatformMap} setSearchParam={setSearchParam}/></GridItem>
           <GridItem area={'main'} >
             <VStack spacing={5} paddingLeft={5} align="start">

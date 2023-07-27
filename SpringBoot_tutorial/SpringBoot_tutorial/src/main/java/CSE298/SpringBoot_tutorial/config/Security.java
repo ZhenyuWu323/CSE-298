@@ -23,6 +23,13 @@ public class Security {
             }
         )
         .oauth2Login(login->login.defaultSuccessUrl("/", true))
+        .logout(logoutConfigurer -> {
+            logoutConfigurer
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID");
+        })
         .build();
     
     }

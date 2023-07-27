@@ -1,4 +1,5 @@
-import { Avatar, AvatarBadge,  HStack, Image, Spacer, Stack,Text} from "@chakra-ui/react"
+import { Avatar, AvatarBadge,  HStack, Image, Menu, MenuButton, MenuItem, MenuList, Spacer, Stack,Text,} from "@chakra-ui/react"
+import { ExternalLinkIcon} from '@chakra-ui/icons'
 import IconImage from "../assets/Icon.png";
 import SearchBar from "./SearchBar";
 import { GameQuery, UserInfo } from "./Home";
@@ -8,6 +9,7 @@ import { Link } from "react-router-dom";
 interface Props{
   setGameQuery: (query: GameQuery) => void;
   user: UserInfo | null;
+  setUser: (user: UserInfo) => void;
 }
 
 const NavigationBar = ({ setGameQuery, user}: Props) => {
@@ -20,9 +22,18 @@ const NavigationBar = ({ setGameQuery, user}: Props) => {
       <Spacer />
       {user ? (
         <Stack direction='row'>
-          <Avatar name={user.name} src={user.profileImage} size='sm'>
-            <AvatarBadge boxSize='1.25em' bg='green.500' />
-          </Avatar>
+          <Menu>
+            <Avatar name={user.name} src={user.profileImage} size='sm' as={MenuButton}>
+              <AvatarBadge boxSize='1.25em' bg='green.500' />
+            </Avatar>
+            <MenuList>
+              <MenuItem icon={<ExternalLinkIcon />} onClick={() => {
+                  
+                }}>
+                Log out
+              </MenuItem>
+            </MenuList>
+          </Menu>
           <Text fontSize="lg" fontWeight="bold" mb="4px" as="samp">
             {user.name}
           </Text>
