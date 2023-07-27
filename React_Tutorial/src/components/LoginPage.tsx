@@ -36,7 +36,7 @@ const LoginPage = () => {
             Log In
           </Button>
 
-          <Button as={Link} href="https://cse-298.up.railway.app/login/google" colorScheme="teal">
+          <Button as={Link} href="https://cse-298.up.railway.app/oauth" colorScheme="teal">
             Login with Google
           </Button>
           
