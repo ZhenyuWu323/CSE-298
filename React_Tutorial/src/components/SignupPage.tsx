@@ -105,7 +105,7 @@ const SignupPage = () => {
       </Flex>
       {status && message && (
         <Alert
-          status={message == "Signup successful" ? 'success' : 'error'}
+          status={status == "Signup successful" ? 'success' : 'error'}
           variant='subtle'
           flexDirection='column'
           alignItems='center'
