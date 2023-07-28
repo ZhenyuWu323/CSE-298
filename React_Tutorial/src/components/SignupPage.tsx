@@ -22,8 +22,8 @@ const SignupPage = () => {
       try {
         const response = await axios.post("/user/homesign", {
           name: username.current.value,
-          password: hashedPassword,
-          salt: salt,
+          password: hashedPassword.toString(),
+          salt: salt.toString(),
         });
   
         // Handle the response from the backend
