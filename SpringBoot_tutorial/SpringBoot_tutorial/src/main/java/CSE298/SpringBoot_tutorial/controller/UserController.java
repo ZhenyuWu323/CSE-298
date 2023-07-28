@@ -6,6 +6,7 @@ import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,8 @@ public class UserController {
     private SessionRepository SessionMap;
     @Autowired
     private UserRepository UserRepo;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     
     //Google OAuth
     @GetMapping("/google")
@@ -68,5 +71,19 @@ public class UserController {
             UserProfile savedUser = UserRepo.save(newUser);
             return ResponseEntity.status(HttpStatus.SC_CREATED).body("New User Signed Up\n");
         }
+    }
+
+    public boolean validateUser(String name, String plainPassword) {
+        UserProfile user = UserRepo.findByName(name);
+        if (user == null) {
+            return false; // User not found
+        }
+        
+        String hashedPassword = user.getPassword();
+        String salt = user.getSalt();
+    
+        // Hash the provided plainPassword using the same salt and check if it matches the stored hashed password
+        String hashedPlainPassword = passwordEncoder.encode(plainPassword + salt);
+        return hashedPassword.equals(hashedPlainPassword);
     }
 }
