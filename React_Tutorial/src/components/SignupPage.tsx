@@ -1,6 +1,6 @@
-import { Flex, Box, Input, Stack, Button, Image, HStack, Text} from "@chakra-ui/react";
+import { Flex, Box, Input, Stack, Button, Image, HStack, Text, Alert, AlertIcon, AlertTitle, AlertDescription} from "@chakra-ui/react";
 import IconImage from "../assets/Icon.png";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
 import bcrypt from "bcryptjs";
 
@@ -8,10 +8,16 @@ const SignupPage = () => {
   // State to hold user input
   const username = useRef<HTMLInputElement>();
   const password = useRef<HTMLInputElement>();
-
+  const [message, setMessage] = useState<string | null>();
+  const [status, setStatus] = useState<string | null>()
 
   const handleSignup = async () => {
     if(username.current && password.current){
+      if((username.current.value == "" || password.current.value == "") || (!username.current.value || !password.current.value)){
+        setStatus("Signup failed")
+        setMessage("Please enter both username and password.");
+        return;
+      }
       // Generate a cryptographically secure random salt
       const salt = bcrypt.genSaltSync(10)
   
@@ -28,21 +34,27 @@ const SignupPage = () => {
   
         // Handle the response from the backend
         if (response.status === 201) {
-          alert("Signup successful! You can now log in.");
-          // Redirect the user to the login page or any other desired action
+          setStatus("Signup successful")
+          setMessage("Redirecting to login.");
+          setTimeout(() => {
+            window.location.href = '/userCenter'; // Replace '/login' with the desired login page URL
+          }, 5000);
         } else {
-          alert("Signup failed. Please try again later.");
+          setStatus("Signup failed")
+          setMessage("Please try again later.");
         }
       } catch (error) {
+        setStatus("Signup failed")
         if (error.response && error.response.status === 409) {
-          alert("Username already exists. Please choose a different username.");
+          setMessage("Username already exists. Please choose a different username.");
         } else {
-          alert("Signup failed. Please try again later.");
+          setMessage("Please try again later.");
         }
       }
     }
     else{
-      alert("Please enter both username and password.");
+      setStatus("Signup failed")
+      setMessage("Please enter both username and password.");
       return;
     }
   };
@@ -63,33 +75,54 @@ const SignupPage = () => {
 
 
   return (
-    <Flex
-      align="center"
-      justify="center"
-      height="100vh"
-    >
-      <Box
-        p={8}
-        borderWidth={1}
-        borderRadius="lg"
-        shadow="lg"
-        width={{ base: "90%", sm: "70%", md: "40%" }}
+    <>
+      <Flex
+        align="center"
+        justify="center"
+        height="100vh"
       >
-        <Stack spacing={4} justify="center">
-          <HStack>
-            <Image src={IconImage} boxSize="70px" />
-            <Text fontSize="3xl" fontWeight="bold" mb="4px" color="teal">GameExplorer: Sign up</Text>
-          </HStack>
-          <form>
-            <Input type="text" placeholder="Username" ref={username}/>
-            <Input type="password" placeholder="Password" ref={password} />
-            <Button colorScheme="teal" size="lg" fontSize="md" onClick={handleSignup}>
-              Sign Up
-            </Button>
-          </form>
-        </Stack>
-      </Box>
-    </Flex>
+        <Box
+          p={8}
+          borderWidth={1}
+          borderRadius="lg"
+          shadow="lg"
+          width={{ base: "90%", sm: "70%", md: "40%" }}
+        >
+          <Stack spacing={4} justify="center">
+            <HStack>
+              <Image src={IconImage} boxSize="70px" />
+              <Text fontSize="3xl" fontWeight="bold" mb="4px" color="teal">GameExplorer: Sign up</Text>
+            </HStack>
+            <form>
+              <Input type="text" placeholder="Username" ref={username}/>
+              <Input type="password" placeholder="Password" ref={password} />
+              <Button colorScheme="teal" size="lg" fontSize="md" onClick={handleSignup}>
+                Sign Up
+              </Button>
+            </form>
+          </Stack>
+        </Box>
+      </Flex>
+      {status && message && (
+        <Alert
+          status={message == "Signup successful" ? 'success' : 'error'}
+          variant='subtle'
+          flexDirection='column'
+          alignItems='center'
+          justifyContent='center'
+          textAlign='center'
+          height='200px'
+        >
+          <AlertIcon boxSize='40px' mr={0} />
+          <AlertTitle mt={4} mb={1} fontSize='lg'>
+            {status}
+          </AlertTitle>
+          <AlertDescription maxWidth='sm'>
+            {message}
+          </AlertDescription>
+        </Alert>
+      )}
+    </>
   );
 };
 
