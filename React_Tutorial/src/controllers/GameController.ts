@@ -15,11 +15,12 @@ export const useGameGridController = (props: Props) => {
     const [totalPage, setTotalPage] = useState<number>();
     const [searchParam, setSearchParam] = useSearchParams();
     const { searchText } = useParams();
+    const decodedSearchText = decodeURIComponent(searchText).replace(/ /g, '+');
     const pageNum = searchParam.get("page") ? parseInt(searchParam.get("page")) : 1;
     let genreNum = gameQuery.selectedGenre ? gameQuery.selectedGenre : searchParam.get("genres");
     let platformNum = gameQuery.selectedPlatform ? gameQuery.selectedPlatform : searchParam.get("platforms");
     let orderNum = gameQuery.selectedOrder ? gameQuery.selectedOrder : searchParam.get("ordering");
-    let search = gameQuery.selectedSearch? gameQuery.selectedSearch : searchText;
+    let search = gameQuery.selectedSearch? gameQuery.selectedSearch : decodedSearchText;
     const [isLoading, setLoading] = useState(false);
     const [error, setError] = useState(0);
 
@@ -45,7 +46,7 @@ export const useGameGridController = (props: Props) => {
                 if(genreNum) params.genres = genreNum;
                 if(platformNum) params.platforms = platformNum;
                 if(orderNum && orderNum != "none") params.ordering = orderNum;
-                if(search) params.search = search;
+                if(searchText) params.search = search;
                 const data = await fetchGameData(params);
                 setGameContent(data);
                 setLoading(false);
