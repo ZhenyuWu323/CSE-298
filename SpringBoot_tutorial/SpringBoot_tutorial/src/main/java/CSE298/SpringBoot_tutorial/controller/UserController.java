@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,13 +57,14 @@ public class UserController {
 
     //HomeRun Signup
     @PostMapping("/homesign")
-    public ResponseEntity<String> HomeSignUp(@RequestParam("name") String name, @RequestParam("pass") String pass) {
+    public ResponseEntity<String> HomeSignUp(@RequestBody UserProfile user) {
         // Check if a UserProfile with the given name already exists in the database
-        UserProfile existingUser = UserRepo.findByName(name);
+        UserProfile existingUser = UserRepo.findByName(user.getName());
         if (existingUser != null) {
             return ResponseEntity.status(HttpStatus.SC_CONFLICT).body("Duplicate User Name\n");
         } else {
-            UserProfile newUser = new UserProfile(name, pass, "none");
+            UserProfile newUser = new UserProfile(user.getName(), user.getPassword(), "none", user.getSalt());
+            //UserRepo.deleteAll();
             UserProfile savedUser = UserRepo.save(newUser);
             return ResponseEntity.status(HttpStatus.SC_CREATED).body("New User Signed Up\n");
         }

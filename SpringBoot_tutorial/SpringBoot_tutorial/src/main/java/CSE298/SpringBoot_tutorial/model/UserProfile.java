@@ -10,12 +10,14 @@ public class UserProfile {
     private String name;
     private String password;
     private String profileImage;
+    private String salt;
 
     // Constructor
-    public UserProfile( String name, String password, String profileImage) {
+    public UserProfile( String name, String password, String profileImage,String salt) {
         this.name = name;
         this.password = password;
         this.profileImage = profileImage;
+        this.salt = salt;
     }
 
     // Getters
@@ -35,6 +37,10 @@ public class UserProfile {
         return profileImage;
     }
 
+    public String getSalt(){
+        return salt;
+    }
+
     // Setters
     public void setId(String id) {
         this.id = id;
@@ -50,5 +56,9 @@ public class UserProfile {
 
     public void setProfileImage(String profileImage) {
         this.profileImage = profileImage;
+    } 
+    
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }
