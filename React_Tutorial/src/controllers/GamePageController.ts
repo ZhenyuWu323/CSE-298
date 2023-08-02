@@ -16,26 +16,6 @@ export const useGamePageController = () => {
 
     const [user, setUser] = useState<UserInfo | null>(null);
 
-    // Fetch user info when component mounts
-    useEffect(() => {
-        const fetchUserInfo = async () => {
-            try {
-                const response = await axios.get<UserInfo>('http://localhost:8080/user/google');
-                
-                if (response.data) {
-                    setUser(response.data);
-                }
-            } catch (error) {
-                console.error("Failed to fetch user info", error);
-            }
-        }
-
-        fetchUserInfo();
-    }, []);
-    if(user){
-        console.log(user.name);
-    }
-
     useEffect(()=>{
         setError(0);
         const fetchData = async () => {
@@ -52,6 +32,18 @@ export const useGamePageController = () => {
             }
         };
         fetchData();
+        const fetchUserInfo = async () => {
+            try {
+                const response = await axios.get<UserInfo>('http://localhost:8080/user/google');
+                
+                if (response.data) {
+                    setUser(response.data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch user info", error);
+            }
+        }
+        fetchUserInfo();
     },[]);
 
     return {gameInfo, isLoading, error, user};

@@ -37,7 +37,7 @@ public class Security {
         .oauth2Login(login->login.defaultSuccessUrl("/", true))
         .logout(logoutConfigurer -> {
             logoutConfigurer
-                .logoutRequestMatcher((RequestMatcher) new AntPathRequestMatcher("/logout", "GET"))
+                .logoutRequestMatcher((RequestMatcher) new AntPathRequestMatcher("/oauthLogout", "GET"))
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");

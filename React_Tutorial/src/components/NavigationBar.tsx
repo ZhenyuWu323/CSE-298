@@ -51,7 +51,7 @@ const NavigationBar = ({ setGameQuery, user}: Props) => {
             </Avatar>
             <MenuList>
               <MenuItem icon={<ExternalLinkIcon />} onClick={() => {
-                  navigation('/logout');
+                  navigation('/oauthLogout');
                 }}>
                 Log out
               </MenuItem>
