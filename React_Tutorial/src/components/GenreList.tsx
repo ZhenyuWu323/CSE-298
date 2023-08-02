@@ -2,6 +2,7 @@ import { HStack, List, ListItem, Image, Text, Spinner, Button } from "@chakra-ui
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { GameQuery } from "./Home";
+import { useSearchParams } from "react-router-dom";
 
 export interface Genre {
   id: string;
@@ -30,6 +31,7 @@ const GenreList = ({gameQuery, setGameQuery, setLoading, updateGenreMap}: Props)
     /* Genre List */
   }
   const [genreList, setGenreList] = useState<Genre[]>([]);
+  const [searchParam, setSearchParam] = useSearchParams();
   {
     /* Loading State */
   }
@@ -77,7 +79,13 @@ const GenreList = ({gameQuery, setGameQuery, setLoading, updateGenreMap}: Props)
                   borderRadius={8}
                   src={ResizeImage(genre.image)}
                 ></Image>
-                <Button onClick={() =>setGameQuery({...gameQuery, selectedGenre: genre.id})} variant='link' ><Text fontSize="large">{genre.name}</Text></Button>
+                <Button onClick={()=>{
+                  setGameQuery({...gameQuery, selectedGenre: genre.id});
+                  const currentSearchParams = new URLSearchParams(searchParam);
+                  currentSearchParams.set('genres', genre.id);
+                  const updatedSearchParam = currentSearchParams.toString();
+                  setSearchParam(updatedSearchParam);
+              }} variant='link' ><Text fontSize="large">{genre.name}</Text></Button>
               </HStack>
             </ListItem>
           ))}

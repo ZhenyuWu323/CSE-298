@@ -7,6 +7,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { IconType } from "react-icons";
 import { GameQuery } from "./Home";
+import { useSearchParams } from "react-router-dom";
 
 export interface Platform {
   id: string;
@@ -60,6 +61,7 @@ const PlatformList = ({ gameQuery, setGameQuery, setLoading, updatePlatformMap}:
 
 	{/* Genre List */}
 	const [platformList, setPlatformList] = useState<Platform[]>([]);
+	const [searchParam, setSearchParam] = useSearchParams();
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -97,7 +99,13 @@ const PlatformList = ({ gameQuery, setGameQuery, setLoading, updatePlatformMap}:
 			  <ListItem key={platform.id} paddingY="5px">
 				<HStack justify="flex-start">
 				  <Icon as={PlatformIcon[platform.name]} />
-				  <Button onClick={() => setGameQuery({...gameQuery, selectedPlatform: platform.id})} variant="link"><Text fontSize="large">{platform.name}</Text></Button>
+				  <Button onClick={() => {
+					setGameQuery({...gameQuery, selectedPlatform: platform.id});
+					const currentSearchParams = new URLSearchParams(searchParam);
+					currentSearchParams.set('platforms', platform.id);
+					const updatedSearchParam = currentSearchParams.toString();
+					setSearchParam(updatedSearchParam);
+				}} variant="link"><Text fontSize="large">{platform.name}</Text></Button>
 				</HStack>
 			  </ListItem>
 			))}

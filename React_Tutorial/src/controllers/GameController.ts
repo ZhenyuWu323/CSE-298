@@ -17,20 +17,22 @@ export const useGameGridController = (props: Props) => {
     const { searchText } = useParams();
     const decodedSearchText = decodeURIComponent(searchText).replace(/ /g, '+');
     const pageNum = searchParam.get("page") ? parseInt(searchParam.get("page")) : 1;
-    let genreNum = gameQuery.selectedGenre ? gameQuery.selectedGenre : searchParam.get("genres");
-    let platformNum = gameQuery.selectedPlatform ? gameQuery.selectedPlatform : searchParam.get("platforms");
-    let orderNum = gameQuery.selectedOrder ? gameQuery.selectedOrder : searchParam.get("ordering");
-    let search = gameQuery.selectedSearch? gameQuery.selectedSearch : decodedSearchText;
+    let genreNum = searchParam.get("genres");
+    let platformNum = searchParam.get("platforms");
+    let orderNum = searchParam.get("ordering");
+    let search = decodedSearchText;
     const [isLoading, setLoading] = useState(false);
     const [error, setError] = useState(0);
 
     useEffect(()=>{
-        setSearchParam({
-            ...(pageNum != 1 ? { page: pageNum.toString() } : {}),
-            ...(genreNum ? { genres: genreNum } : {}),
-            ...(platformNum ? { platforms: platformNum } : {}),
-            ...(orderNum && orderNum != "none" ? { ordering: orderNum } : {}),
-        });
+        if(gameQuery == {} as GameQuery){
+            setSearchParam({
+                ...(pageNum != 1 ? { page: pageNum.toString() } : {}),
+                ...(genreNum ? { genres: genreNum } : {}),
+                ...(platformNum ? { platforms: platformNum } : {}),
+                ...(orderNum && orderNum != "none" ? { ordering: orderNum } : {}),
+            });
+        }
     },[genreNum, platformNum, orderNum]);
 
     useEffect(()=>{
@@ -57,7 +59,7 @@ export const useGameGridController = (props: Props) => {
             }
         };
         fetchData();
-    }, [ searchParam, gameQuery]);
+    }, [ searchParam, searchText]);
 
     useEffect(() => {
         if (gameContent) {
