@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import CSE298.SpringBoot_tutorial.model.GameContent;
+import CSE298.SpringBoot_tutorial.model.GameDetail;
+import CSE298.SpringBoot_tutorial.model.GameStores;
 import CSE298.SpringBoot_tutorial.model.Games;
 import CSE298.SpringBoot_tutorial.model.Genre;
 import CSE298.SpringBoot_tutorial.model.Platforms;
@@ -25,6 +27,7 @@ import CSE298.SpringBoot_tutorial.repository.GenreRepository;
 import CSE298.SpringBoot_tutorial.repository.PlatformRepository;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -160,6 +163,128 @@ public class GameApiController {
             GameList.AddGame(singleGame);
         }
         return new GameContent(totalPage, GameList.FindAllGames());
+    }
+    
+    @GetMapping("/queryGame")
+    public Object getGame( @RequestParam @NotEmpty String gameId) throws ParseException {
+        String steamApiUrl = "https://api.rawg.io/api/games/"  + String.valueOf(gameId) + "?key=c5cbbf661c79425e9064cd8c3976db42";
+        System.out.println(steamApiUrl);
+        StringBuilder response = new StringBuilder();
+        HttpClient httpClient = HttpClients.createDefault();
+
+        try {
+            HttpGet request = new HttpGet(steamApiUrl);
+            HttpResponse httpResponse = httpClient.execute(request);
+            HttpEntity entity = httpResponse.getEntity();
+
+            if (entity != null) {
+                try (BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()))) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        response.append(line);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //Parse the string response
+        JSONParser parser = new JSONParser();
+        JSONObject res = (JSONObject) parser.parse(String.valueOf(response));
+
+        String name = res.get("name").toString();
+
+        String description = "";
+        if(res.get("description_raw") != null){
+                description = res.get("description_raw").toString();
+        }
+
+        String web= "";
+        if(res.get("website") != null){
+                web = res.get("website").toString();
+        }
+
+        String image = "";
+        if(res.get("background_image") != null){
+            image = res.get("background_image").toString();
+        }
+
+        List<String> tags = new ArrayList<>();
+        if(res.get("tags") != null){
+            JSONArray tag_list = (JSONArray) res.get("tags");
+            if(tag_list.size() > 0 ){
+                for(int j = 0; j < tag_list.size(); j++){
+                    JSONObject temp = (JSONObject) tag_list.get(j);
+                    String item = temp.get("name").toString();
+                    tags.add(item);
+                }
+            }
+        }
+
+        List<GameStores> stores = new ArrayList<>();
+        if(res.get("stores") != null){
+            JSONArray store_list = (JSONArray) res.get("stores");
+            if(store_list.size() > 0 ){
+                for(int j = 0; j < store_list.size(); j++){
+                    JSONObject temp = (JSONObject) store_list.get(j);
+                    if(temp.get("store") != null){
+                        JSONObject store = (JSONObject) temp.get("store");
+                        String store_name = "";
+                        String store_domain = "";
+                        if(store.get("name") != null){
+                            store_name = store.get("name").toString();
+                        }
+                        if(store.get("domain") != null){
+                            store_domain = store.get("domain").toString();
+                        }
+                        GameStores new_store = new GameStores(store_name, store_domain);
+                        stores.add(new_store);
+                    }
+                }
+            }
+        }
+
+        List<String> genre = new ArrayList<>();
+        if(res.get("genres") != null){
+            JSONArray genre_list = (JSONArray) res.get("genres");
+            if(genre_list.size() > 0 ){
+                for(int j = 0; j < genre_list.size(); j++){
+                JSONObject temp = (JSONObject) genre_list.get(j);
+                String item = temp.get("name").toString();
+                genre.add(item);
+                }
+            }
+        }
+
+        List<String> platform = new ArrayList<>();
+        if(res.get("parent_platforms") != null){
+            JSONArray platform_list = (JSONArray) res.get("parent_platforms");
+            if(platform_list.size() > 0){
+                for(int j = 0; j < platform_list.size(); j++){
+                JSONObject temp = (JSONObject) platform_list.get(j);
+                JSONObject each_temp = (JSONObject) temp.get("platform");
+                String item = each_temp.get("name").toString();
+                platform.add(item);
+                }
+            }
+        }
+
+        String metacritic = "";
+        if (res.get("metacritic") == null){
+            metacritic = "0";
+        }
+        else{
+            metacritic = res.get("metacritic").toString();
+        }
+
+        String release = "";
+        if (res.get("released") == null){
+            release = "0";
+        }
+        else{
+            release = res.get("released").toString();
+        }
+        return new GameDetail(name, description, web, image, tags, stores, genre, platform, metacritic, release);
     } 
 
     @GetMapping("/genres")
