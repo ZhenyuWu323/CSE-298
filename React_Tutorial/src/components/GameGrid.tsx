@@ -1,9 +1,9 @@
 import { Card, CardBody, Heading, Image, Box, Grid, Skeleton, Flex, Button, Text, HStack, Badge, Icon, SkeletonText } from "@chakra-ui/react";
 import { TbArrowBigRight, TbArrowBigLeft } from "react-icons/tb";
 import noImage from "../assets/no-image.png";
-import { Props, useGameGridController } from '../controllers/GameController';
+import { Props, useGameGridController } from '../controllers/GameGridController';
 import { PlatformIcon } from "./PlatformList";
-import { Game } from "../models/GameModel";
+import { Game } from "../models/GameGridModel";
 
 const ResizeImage = (url: string) => {
     if(url == "") return noImage;

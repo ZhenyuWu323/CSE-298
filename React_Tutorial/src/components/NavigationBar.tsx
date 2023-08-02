@@ -13,6 +13,29 @@ interface Props{
 }
 
 const NavigationBar = ({ setGameQuery, user}: Props) => {
+  function navigation(path) {
+    fetch(path, {
+      method: 'GET', // or 'POST'
+      headers: {
+        'Content-Type': 'application/json',
+        // 'Authorization': 'Bearer ' + token // if you use token-based authentication
+      },
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      } else {
+        // handle the response here.
+        if(path === '/logout'){
+          // After logging out, you might want to redirect the user to the login page.
+          window.location.href = '/'; // or wherever you want to redirect
+        }
+      }
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
+
   return (
     <HStack justifyContent="space-between" padding="10px" w="100%" bg="rgba(0, 0, 0, 0.5)">
       <HStack align="center">
@@ -28,7 +51,7 @@ const NavigationBar = ({ setGameQuery, user}: Props) => {
             </Avatar>
             <MenuList>
               <MenuItem icon={<ExternalLinkIcon />} onClick={() => {
-                  
+                  navigation('/logout');
                 }}>
                 Log out
               </MenuItem>

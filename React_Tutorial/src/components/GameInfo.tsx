@@ -1,9 +1,11 @@
+//import { useGamePageController } from "../controllers/GamePageController";
 
 
 const GameInfo = () => {
-  return (
-    <div>GameInfo</div>
-  )
+   // const {gameInfo, isLoading, error, user} = useGamePageController();
+    return (
+        <div>GameInfo</div>
+    )
 }
 
 export default GameInfo

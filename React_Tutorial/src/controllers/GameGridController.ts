@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
-import { fetchGameData, Params, GameContent, Game } from "../models/GameModel";
+import { fetchGameData, Params, GameContent, Game } from "../models/GameGridModel";
 import { GameQuery, ViewQuery } from "../components/Home";
 
 export interface Props {
