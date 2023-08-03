@@ -15,7 +15,7 @@ export interface GameDetail {
   webpage: string;
   image: string;
   tag: string[];
-  stroes: GameStore[];
+  stores: GameStore[];
   genre: string[];
   platform: string[];
   metacritic: string;

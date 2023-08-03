@@ -1,6 +1,7 @@
-import { VStack, Text, HStack, Image, Button, Box} from "@chakra-ui/react"
+import { VStack, Text, HStack, Image, Button, Box, Heading, Icon, Link, Badge, Stack} from "@chakra-ui/react"
 import { GameDetail } from "../models/GamePageModel"
 import { useState } from "react";
+import { PlatformIcon } from "./PlatformList";
 
 interface Props{
     gameInfo: GameDetail
@@ -15,7 +16,7 @@ const GameInfoGrid = ({ gameInfo }: Props) => {
     };
   
     return (
-      <VStack spacing={5} paddingLeft={5} paddingTop={20} align="start">
+      <VStack spacing={50} paddingLeft={5} paddingTop={50} align="start">
         <HStack spacing={20}>
           <VStack spacing={10}>
             {gameInfo && gameInfo.name && (
@@ -47,6 +48,89 @@ const GameInfoGrid = ({ gameInfo }: Props) => {
             />
           )}
         </HStack>
+        <Box>
+            <HStack spacing="350px"  alignItems="start">
+                <Box width={300}>
+                    <Heading>
+                        <Text fontSize="xl" fontWeight="bold" mb="4px" color={"gray"}>
+                            Genres
+                        </Text>
+                        {gameInfo && gameInfo.genre && (
+                            <Text fontSize="xl" mb="4px" >{gameInfo.genre.join(', ')}</Text>
+                        )}
+                    </Heading>
+                </Box>
+                <Box>
+                    <Heading>
+                        <Text fontSize="xl" fontWeight="bold" mb="4px" color={"gray"}>
+                            Platforms
+                        </Text>
+                        <HStack marginRight={2}>
+                        {gameInfo && gameInfo.platform && gameInfo.platform.map((platform) => (
+                            <Icon key={platform} as={PlatformIcon[platform]} boxSize={7} />
+                        ))}
+                        </HStack>
+                    </Heading>
+                </Box>
+            </HStack>
+        </Box>
+        <Box>
+            <HStack spacing="350px"  alignItems="start">
+                <Box width={300}>
+                    <Heading>
+                        <Text fontSize="xl" fontWeight="bold" mb="4px" color={"gray"}>
+                            Tags
+                        </Text>
+                        {gameInfo && gameInfo.tag && (
+                            <Text fontSize="xs" mb="4px" >{gameInfo.tag.join(', ')}</Text>
+                        )}
+                    </Heading>
+                </Box>
+                <Box>
+                    <Heading>
+                        <Text fontSize="xl" fontWeight="bold" mb="4px" color={"gray"}>
+                            Metacritic
+                        </Text>
+                        {gameInfo && gameInfo.metacritic && (
+                            <Badge
+                            colorScheme={parseInt(gameInfo.metacritic) > 75 ? "green" : parseInt(gameInfo.metacritic) > 60 ? "yellow" : "red"}
+                            fontSize="30px"
+                            paddingX={2}
+                            borderRadius="4px"
+                          >
+                            {gameInfo.metacritic}
+                          </Badge>
+                        )}
+                    </Heading>
+                </Box>
+            </HStack>
+        </Box>
+        <Box>
+            <HStack spacing="350px"  alignItems="start">
+                <Box width={300}>
+                    <Heading>
+                        <Text fontSize="xl" fontWeight="bold" mb="4px" color={"gray"}>
+                            Stores
+                        </Text>
+                        {gameInfo && gameInfo.stores && gameInfo.stores.map((store) => (
+                            <Text>{store.name}</Text>
+                        ))}
+                    </Heading>
+                </Box>
+                <Box>
+                    <Heading>
+                        <Text fontSize="xl" fontWeight="bold" mb="4px" color={"gray"}>
+                            WebSite
+                        </Text>
+                        {gameInfo && gameInfo.webpage && (
+                            <Link fontSize="xl" fontWeight="bold" mb="4px" href={gameInfo.webpage}>
+                               {gameInfo.webpage}
+                            </Link>
+                        )}
+                    </Heading>
+                </Box>
+            </HStack>
+        </Box>
       </VStack>
     );
   };
