@@ -47,11 +47,13 @@ export const CommentList = ({ comments, isLoading }: Props) => {
             <Box key={comment ? comment.id : i} p={5} shadow="md" borderWidth="1px">
               {comment ? (
                 <>
-                  <Flex>
-                    <Avatar src={comment.userImage} size='sm'/>
-                    <Text ml={4}>{comment.userName}</Text>
-                    <Text ml={4}>{comment.time}</Text>
-                  </Flex>
+                  <Flex justifyContent="space-between">
+                        <Flex>
+                            <Avatar src={comment.userImage} size='sm'/>
+                            <Text ml={4}>{comment.userName}</Text>
+                        </Flex>
+                        <Text>{new Date(comment.time).toLocaleDateString('en-GB')}</Text>
+                    </Flex>
                   <Text mt={2} align="left">
                     {comment.content}
                   </Text>
