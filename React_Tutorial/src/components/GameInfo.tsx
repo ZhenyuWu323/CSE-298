@@ -19,7 +19,7 @@ const GameInfo = () => {
         <div>
             <Grid templateAreas={`'nav nav' 'panel main'`} templateColumns={"230px 1fr"}>
                 <GridItem area={'nav'} > <GameInfoNavBar user={user}/></GridItem>
-                <GridItem area={'panel'} paddingX={5}> <GameInfoPanel/></GridItem>
+                <GridItem area={'panel'} paddingX={30}> <GameInfoPanel/></GridItem>
                 <GridItem area={'main'} >
                     {isLoading ? (
                     <Box height="100%" display="flex" alignItems="center" justifyContent="center">

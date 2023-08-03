@@ -1,5 +1,4 @@
 import { Button, VStack , Text} from "@chakra-ui/react";
-import { TbArrowBigLeft } from "react-icons/tb";
 import { useNavigate,} from "react-router-dom";
 
 
@@ -13,10 +12,7 @@ const GameInfoPanel = () => {
               <Text fontSize="3xl" fontWeight="bold" mb="4px">Home</Text>
             </Button>
             <Button
-                rightIcon={<TbArrowBigLeft />}
-                colorScheme="gray"
-                variant="solid"
-                size="100px"
+                variant='link'
                 onClick={() => {
                     navigation(-1);
                 }}
