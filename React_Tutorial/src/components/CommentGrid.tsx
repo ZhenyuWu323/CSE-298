@@ -1,19 +1,44 @@
 import { Box, Flex, HStack, Stack,Text, Heading, Avatar, AvatarBadge, Textarea, Button, Modal, ModalContent, ModalOverlay, ModalBody, Alert, AlertIcon, AlertTitle, AlertDescription, ModalFooter, useDisclosure} from '@chakra-ui/react';
 import { UserInfo } from './Home';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { CommentList } from './CommentList';
 
 interface Props{
     user: UserInfo | null
     game: String | null
+}
+
+export interface Comments{
+    id: string,
+    game: string,
+    userName: string,
+    userImage: string,
+    time: string,
+    content: string
 }
 export const CommentGrid = ({user, game}:Props) => {
     const [comment, setComment] = useState('');
     const [message, setMessage] = useState<string | null>();
     const [status, setStatus] = useState<string | null>();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [commentList,setCommentList] = useState<Comments[] | null>()
     
-
+    useEffect(() => {
+        const fetchCommentList = async () => {
+            try {
+                const response = await axios.get<Comments[]>('http://localhost:8080/community/findComment',{params:{game:game}});
+                
+                if (response.data) {
+                    setCommentList(response.data);
+                }
+            } catch (error) {
+                console.error("Failed to fetch user info", error);
+            }
+        }
+        fetchCommentList();
+      }, []);
+    
     const postComment = () => {
         if(!user){
             setStatus("Fail");
@@ -127,6 +152,7 @@ export const CommentGrid = ({user, game}:Props) => {
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                 />
+                {commentList && (<CommentList comments={commentList}/>)}
               </Stack>
             </Box>
         </>
