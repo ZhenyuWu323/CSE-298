@@ -4,7 +4,7 @@ import {
     Text,
     Avatar,
     VStack,
-    Button
+    Button,
   } from '@chakra-ui/react';
 import { useState } from 'react';
 import { Comments } from './CommentGrid';
@@ -12,11 +12,12 @@ import { TbArrowBigLeft, TbArrowBigRight } from 'react-icons/tb';
 
 interface Props{
     comments: Comments[]
+    isLoading: boolean
 }
 
 
   
-export const CommentList = ({ comments }: Props) => {
+export const CommentList = ({ comments, isLoading }: Props) => {
     const[page, setPage] = useState(0);
     const currentPageComments = comments.slice(page * 10, (page + 1) * 10);
     const totalPage = comments.length>10 ? comments.length/10 : 1
@@ -27,6 +28,7 @@ export const CommentList = ({ comments }: Props) => {
     }
 
     return (
+        
         <VStack spacing={4} align="stretch">
             {paddedComments.map((comment, i) => (
                 <Box key={comment ? comment.id : i} p={5} shadow="md" borderWidth="1px">
@@ -59,6 +61,7 @@ export const CommentList = ({ comments }: Props) => {
                   >
                     Back
                 </Button>
+                <Box mx={6}>Page {page+1 + " / " + totalPage}</Box>
                 <Button
                     leftIcon={<TbArrowBigRight />}
                     colorScheme="gray"
@@ -71,8 +74,6 @@ export const CommentList = ({ comments }: Props) => {
                   >
                     Next
                 </Button>
-
-                
               </Flex>
         </VStack>
     );
