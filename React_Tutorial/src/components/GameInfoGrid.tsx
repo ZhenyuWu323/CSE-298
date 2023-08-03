@@ -1,9 +1,13 @@
-import { VStack, Text, HStack, Image, Button, Box, Heading, Icon, Link, Badge, Card} from "@chakra-ui/react"
+import { VStack, Text, HStack, Image, Button, Box, Heading, Icon, Link, Badge, Card, Stat, StatLabel, StatNumber, StatHelpText, StatArrow, IconButton} from "@chakra-ui/react"
 import { GameDetail } from "../models/GamePageModel"
 import { useState } from "react";
 import { PlatformIcon } from "./PlatformList";
 import { CommentGrid } from "./CommentGrid";
 import { UserInfo } from "./Home";
+import buyIcon from "../assets/flying-money.png";
+import maybeIcon from "../assets/review.png";
+import trashIcon from "../assets/delete.png";
+
 
 interface Props{
     gameInfo: GameDetail
@@ -16,38 +20,97 @@ const GameInfoGrid = ({ gameInfo, user }: Props) => {
     const toggleDescription = () => {
       setShowFullDescription(!showFullDescription);
     };
+    const ResizeImage = (url: string) => {
+        const index = url.indexOf("media/") + "media/".length;
+        return url.slice(0, index) + "crop/600/400/" + url.slice(index);
+    };
   
     return (
     <Box>
         <VStack spacing={50} paddingLeft={5} paddingTop={50} align="start">
-            <HStack spacing={20} paddingEnd={5}>
-                <VStack spacing={10}>
-                    {gameInfo && gameInfo.name && (
-                    <Text fontSize="6xl" fontWeight="bold" mb="4px">
-                        {gameInfo.name}
-                    </Text>
-                    )}
-                    {gameInfo && gameInfo.description && (
-                    <Box>
-                        <Text
-                            fontSize="xl"
-                            mb="4px"
-                            noOfLines={showFullDescription ? undefined : 3}
-                        >
-                            About: {gameInfo.description}
-                        </Text>
-                        <Button variant="solid" onClick={toggleDescription}>
-                            {showFullDescription ? 'Show Less' : 'Show More'}
-                        </Button>
-                    </Box>
-                    )}
-                </VStack>
+            <VStack spacing={10} paddingEnd={10}>
+                <HStack>
+                {gameInfo && gameInfo.name && (
+                <Text fontSize="6xl" fontWeight="bold" mb="4px">
+                    {gameInfo.name}
+                </Text>
+                )}
                 {gameInfo && gameInfo.image && gameInfo.image != "" &&(
                     <Card key={gameInfo.name} borderRadius={10} overflow="hidden">
-                        <Image src={gameInfo.image} />
+                        <Image src={ResizeImage(gameInfo.image)} />
                     </Card>
                 )}
-            </HStack>
+                </HStack>
+                {gameInfo && gameInfo.description && (
+                <Box>
+                    <Text
+                        fontSize="xl"
+                        mb="4px"
+                        noOfLines={showFullDescription ? undefined : 3}
+                    >
+                        About: {gameInfo.description}
+                    </Text>
+                    <Button variant="solid" onClick={toggleDescription}>
+                        {showFullDescription ? 'Show Less' : 'Show More'}
+                    </Button>
+                </Box>
+                )}
+            </VStack>
+            <Box>
+                <HStack spacing="350px"  alignItems="start">
+                    <Box >
+                        <Stat>
+                            <StatLabel fontSize={20} textColor={"green.400"}>Take My Money</StatLabel>
+                            <StatNumber fontSize={50}>345,670</StatNumber>
+                            <StatHelpText>
+                            <StatArrow type='increase' />
+                                23.36%
+                            </StatHelpText>
+                        </Stat>
+                        <Button
+                        leftIcon={<Image boxSize={10} src={buyIcon} alt="Buy" />}
+                        colorScheme="green"
+                        variant='outline'
+                        >
+                            Rate
+                        </Button>
+                    </Box>
+                    <Box>
+                        <Stat>
+                            <StatLabel fontSize={20} textColor={"orange.400"}>Maybe</StatLabel>
+                            <StatNumber fontSize={50}>45</StatNumber>
+                            <StatHelpText>
+                            <StatArrow type='decrease' />
+                                9.05%
+                            </StatHelpText>
+                        </Stat>
+                        <Button
+                        leftIcon={<Image boxSize={10} src={maybeIcon} alt="Maybe" />}
+                        colorScheme="orange"
+                        variant='outline'
+                        >
+                            Rate
+                        </Button>
+                    </Box>
+                    <Box>
+                        <Stat>
+                            <StatLabel fontSize={20} textColor={"red.400"}>Trash</StatLabel>
+                            <StatNumber fontSize={50}>345,670</StatNumber>
+                            <StatHelpText>
+                            <StatArrow type='increase' />
+                                23.36%
+                            </StatHelpText>
+                        </Stat>
+                        <Button
+                        leftIcon={<Image boxSize={10} src={trashIcon} alt="trash" />}
+                        colorScheme="red"
+                        variant='outline'
+                        >
+                            Rate
+                        </Button>
+                    </Box>
+                </HStack>
+            </Box>
             <Box>
                 <HStack spacing="350px"  alignItems="start">
                     <Box width={300}>
