@@ -2,12 +2,15 @@ import { VStack, Text, HStack, Image, Button, Box, Heading, Icon, Link, Badge, S
 import { GameDetail } from "../models/GamePageModel"
 import { useState } from "react";
 import { PlatformIcon } from "./PlatformList";
+import { CommentGrid } from "./CommentGrid";
+import { UserInfo } from "./Home";
 
 interface Props{
     gameInfo: GameDetail
+    user: UserInfo | null
 }
 
-const GameInfoGrid = ({ gameInfo }: Props) => {
+const GameInfoGrid = ({ gameInfo, user }: Props) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
     // Function to toggle show/hide full description
     const toggleDescription = () => {
@@ -144,6 +147,7 @@ const GameInfoGrid = ({ gameInfo }: Props) => {
                     )}
                 </Heading>
             </Box>
+            {gameInfo && gameInfo.name && (<CommentGrid user={user} game={gameInfo.name} />)}
         </VStack>
     </Box>
     );

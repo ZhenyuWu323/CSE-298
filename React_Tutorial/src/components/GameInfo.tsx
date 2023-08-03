@@ -5,6 +5,7 @@ import GameInfoPanel from "./GameInfoPanel";
 import GameInfoGrid from "./GameInfoGrid";
 
 
+
 const GameInfo = () => {
    const {gameInfo, isLoading, error, user} = useGamePageController();
    if (error == 1) {
@@ -25,7 +26,7 @@ const GameInfo = () => {
                     <Box height="100%" display="flex" alignItems="center" justifyContent="center">
                             <CircularProgress isIndeterminate color="grey" size='120px' />
                     </Box>) : (
-                    <GameInfoGrid gameInfo={gameInfo}/>
+                    <GameInfoGrid gameInfo={gameInfo} user={user}/>
                         )}
                 </GridItem>
             </Grid>
