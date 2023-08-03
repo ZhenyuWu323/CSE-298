@@ -1,7 +1,8 @@
-import { VStack, Text, HStack, Image, Button, Box, Heading, Icon, Link, Badge, Stack} from "@chakra-ui/react"
+import { VStack, Text, HStack, Image, Button, Box, Heading, Icon, Link, Badge, Stack, Card} from "@chakra-ui/react"
 import { GameDetail } from "../models/GamePageModel"
 import { useState } from "react";
 import { PlatformIcon } from "./PlatformList";
+import noImage from "../assets/no-image.png";
 
 interface Props{
     gameInfo: GameDetail
@@ -9,7 +10,6 @@ interface Props{
 
 const GameInfoGrid = ({ gameInfo }: Props) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
-  
     // Function to toggle show/hide full description
     const toggleDescription = () => {
       setShowFullDescription(!showFullDescription);
@@ -17,7 +17,7 @@ const GameInfoGrid = ({ gameInfo }: Props) => {
   
     return (
       <VStack spacing={50} paddingLeft={5} paddingTop={50} align="start">
-        <HStack spacing={20}>
+        <HStack spacing={20} paddingEnd={5}>
           <VStack spacing={10}>
             {gameInfo && gameInfo.name && (
               <Text fontSize="6xl" fontWeight="bold" mb="4px">
@@ -40,12 +40,9 @@ const GameInfoGrid = ({ gameInfo }: Props) => {
             )}
           </VStack>
           {gameInfo && gameInfo.image && (
-            <Image
-              boxSize="400px"
-              src={gameInfo.image}
-              paddingRight={5}
-              borderRadius={10}
-            />
+            <Card key={gameInfo.name} borderRadius={10} overflow="hidden">
+                <Image src={gameInfo.image} />
+            </Card>
           )}
         </HStack>
         <Box>
@@ -113,7 +110,10 @@ const GameInfoGrid = ({ gameInfo }: Props) => {
                             Stores
                         </Text>
                         {gameInfo && gameInfo.stores && gameInfo.stores.map((store) => (
-                            <Text>{store.name}</Text>
+                            <HStack key={store.name}>
+                                <Text fontSize="sm" fontWeight="bold" mb="4px">{store.name}: </Text>
+                                <Link fontSize="xs" fontWeight="bold" mb="4px"  href={gameInfo.webpage}>{store.domin}</Link>
+                            </HStack>
                         ))}
                     </Heading>
                 </Box>
@@ -129,7 +129,20 @@ const GameInfoGrid = ({ gameInfo }: Props) => {
                         )}
                     </Heading>
                 </Box>
+                
             </HStack>
+        </Box>
+        <Box width={300}>
+            <Heading>
+                <Text fontSize="xl" fontWeight="bold" mb="4px" color={"gray"}>
+                    Release Time
+                </Text>
+                {gameInfo && gameInfo.released && (
+                    <Text fontSize="xl" fontWeight="bold" mb="4px">
+                        {gameInfo.released}
+                    </Text>
+                )}
+            </Heading>
         </Box>
       </VStack>
     );

@@ -6,7 +6,7 @@ export interface GameInfoParams {
 
 interface GameStore{
     name: string;
-    domain: string;
+    domin: string;
 }
 
 export interface GameDetail {

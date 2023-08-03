@@ -21,7 +21,7 @@ const GameInfo = () => {
                 <GridItem area={'nav'} > <GameInfoNavBar user={user}/></GridItem>
                 <GridItem area={'panel'} paddingX={30}> <GameInfoPanel/></GridItem>
                 <GridItem area={'main'} >
-                    {isLoading ? (
+                    {isLoading && !gameInfo ? (
                     <Box height="100%" display="flex" alignItems="center" justifyContent="center">
                             <CircularProgress isIndeterminate color="grey" size='120px' />
                     </Box>) : (
