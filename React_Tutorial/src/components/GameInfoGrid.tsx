@@ -1,17 +1,26 @@
-import { VStack, Text, HStack, Image, Button, Box, Heading, Icon, Link, Badge, Card, Stat, StatLabel, StatNumber, StatHelpText, StatArrow, IconButton} from "@chakra-ui/react"
+import { VStack, Text, HStack, Image, Button, Box, Heading, Icon, Link, Badge, Card, Stat, StatLabel, StatNumber, StatHelpText, StatArrow} from "@chakra-ui/react"
 import { GameDetail } from "../models/GamePageModel"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PlatformIcon } from "./PlatformList";
 import { CommentGrid } from "./CommentGrid";
 import { UserInfo } from "./Home";
 import buyIcon from "../assets/flying-money.png";
 import maybeIcon from "../assets/review.png";
 import trashIcon from "../assets/delete.png";
+import axios from "axios";
 
 
 interface Props{
     gameInfo: GameDetail
     user: UserInfo | null
+}
+
+interface Rating{
+    id:string,
+    game: string,
+    buy: string,
+    maybe: string,
+    trash: string,
 }
 
 const GameInfoGrid = ({ gameInfo, user }: Props) => {
@@ -24,7 +33,30 @@ const GameInfoGrid = ({ gameInfo, user }: Props) => {
         const index = url.indexOf("media/") + "media/".length;
         return url.slice(0, index) + "crop/600/400/" + url.slice(index);
     };
-  
+
+    const fetchRating = async () => {
+        try {
+            const response = await axios.get<Rating>('http://localhost:8080/community/findRating',{params:{game:gameInfo.name}});
+            
+            if (response.data) {
+                setBuyRate(response.data.buy);
+                setMaybeRate(response.data.maybe);
+                settrashRate(response.data.trash)
+            }
+        } catch (error) {
+            console.error("Failed to fetch user info", error);
+        }
+    }
+    const[buyRate, setBuyRate] = useState("");
+    const[maybeRate, setMaybeRate] = useState("");
+    const[trashRate, settrashRate] = useState("");
+
+    useEffect(()=>{
+        if (gameInfo && gameInfo.name) {
+            fetchRating();
+        }
+    },[gameInfo]);
+
     return (
     <Box>
         <VStack spacing={50} paddingLeft={5} paddingTop={50} align="start">
@@ -61,10 +93,9 @@ const GameInfoGrid = ({ gameInfo, user }: Props) => {
                     <Box >
                         <Stat>
                             <StatLabel fontSize={20} textColor={"green.400"}>Take My Money</StatLabel>
-                            <StatNumber fontSize={50}>345,670</StatNumber>
-                            <StatHelpText>
-                            <StatArrow type='increase' />
-                                23.36%
+                            <StatNumber fontSize={50}>{buyRate}</StatNumber>
+                            <StatHelpText textColor={"green.400"}>
+                                {buyRate}
                             </StatHelpText>
                         </Stat>
                         <Button
@@ -78,10 +109,9 @@ const GameInfoGrid = ({ gameInfo, user }: Props) => {
                     <Box>
                         <Stat>
                             <StatLabel fontSize={20} textColor={"orange.400"}>Maybe</StatLabel>
-                            <StatNumber fontSize={50}>45</StatNumber>
-                            <StatHelpText>
-                            <StatArrow type='decrease' />
-                                9.05%
+                            <StatNumber fontSize={50}>{maybeRate}</StatNumber>
+                            <StatHelpText textColor={"orange.400"}>
+                                {maybeRate}
                             </StatHelpText>
                         </Stat>
                         <Button
@@ -95,10 +125,9 @@ const GameInfoGrid = ({ gameInfo, user }: Props) => {
                     <Box>
                         <Stat>
                             <StatLabel fontSize={20} textColor={"red.400"}>Trash</StatLabel>
-                            <StatNumber fontSize={50}>345,670</StatNumber>
-                            <StatHelpText>
-                            <StatArrow type='increase' />
-                                23.36%
+                            <StatNumber fontSize={50}>{trashRate}</StatNumber>
+                            <StatHelpText textColor={"red.400"}>
+                                {trashRate}
                             </StatHelpText>
                         </Stat>
                         <Button
