@@ -1,4 +1,4 @@
-import { VStack, Text, HStack, Image, Button, Box, Heading, Icon, Link, Badge, Stack, Card} from "@chakra-ui/react"
+import { VStack, Text, HStack, Image, Button, Box, Heading, Icon, Link, Badge, Card} from "@chakra-ui/react"
 import { GameDetail } from "../models/GamePageModel"
 import { useState } from "react";
 import { PlatformIcon } from "./PlatformList";

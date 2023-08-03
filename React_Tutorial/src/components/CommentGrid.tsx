@@ -1,6 +1,6 @@
 import { Box, Flex, HStack, Stack,Text, Heading, Avatar, AvatarBadge, Textarea, Button, Modal, ModalContent, ModalOverlay, ModalBody, Alert, AlertIcon, AlertTitle, AlertDescription, ModalFooter, useDisclosure} from '@chakra-ui/react';
 import { UserInfo } from './Home';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 
 interface Props{
@@ -65,13 +65,13 @@ export const CommentGrid = ({user, game}:Props) => {
                 <ModalContent>
                 <ModalBody>
                     <Alert
-                    status={status === 'success' ? 'success' : 'error'}
+                    status={status === 'Success' ? 'success' : 'error'}
                     variant='subtle'
                     flexDirection='column'
                     alignItems='center'
                     justifyContent='center'
                     textAlign='center'
-                    height='200px'
+                    height="100%"
                     >
                     <AlertIcon boxSize='40px' mr={0} />
                     <AlertTitle mt={4} mb={1} fontSize='lg'>
