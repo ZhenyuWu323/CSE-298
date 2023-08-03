@@ -1,18 +1,15 @@
 import { Avatar, AvatarBadge,  HStack, Image, Menu, MenuButton, MenuItem, MenuList, Spacer, Stack,Text,} from "@chakra-ui/react"
 import { ExternalLinkIcon} from '@chakra-ui/icons'
 import IconImage from "../assets/Icon.png";
-import SearchBar from "./SearchBar";
-import { GameQuery, UserInfo } from "./Home";
+import { UserInfo } from "./Home";
 import { Link } from "react-router-dom";
 
 {/*Selected Props for platform & genre */}
 interface Props{
-  setGameQuery: (query: GameQuery) => void;
   user: UserInfo | null;
-  setUser: (user: UserInfo) => void;
 }
 
-const NavigationBar = ({ setGameQuery, user}: Props) => {
+const GameInfoNavBar = ({ user}: Props) => {
   function navigation(path) {
     fetch(path, {
       method: 'GET', // or 'POST'
@@ -40,7 +37,6 @@ const NavigationBar = ({ setGameQuery, user}: Props) => {
     <HStack justifyContent="space-between" padding="10px" w="100%" bg="rgba(0, 0, 0, 0.5)">
       <HStack align="center">
         <Image src={IconImage} boxSize="70px" />
-        <SearchBar setGameQuery={setGameQuery} />
       </HStack>
       <Spacer />
       {user ? (
@@ -73,4 +69,4 @@ const NavigationBar = ({ setGameQuery, user}: Props) => {
   );
 };
 
-export default NavigationBar;
+export default GameInfoNavBar;

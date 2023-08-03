@@ -4,6 +4,7 @@ import noImage from "../assets/no-image.png";
 import { Props, useGameGridController } from '../controllers/GameGridController';
 import { PlatformIcon } from "./PlatformList";
 import { Game } from "../models/GameGridModel";
+import { useNavigate } from "react-router-dom";
 
 const ResizeImage = (url: string) => {
     if(url == "") return noImage;
@@ -13,6 +14,7 @@ const ResizeImage = (url: string) => {
 
 function GameGrid(props: Props) {
     const { gameList, isLoading, error, setSearchParam, pageNum, totalPage, genreNum, platformNum, viewQuery, orderNum} = useGameGridController(props);
+    const navigation = useNavigate();
 
     if (error == 1) {
       return (
@@ -43,7 +45,13 @@ function GameGrid(props: Props) {
                   <Card key={game.id} borderRadius={10} overflow="hidden">
                     <Image src={ResizeImage(game.image)} />
                     <CardBody>
-                      <Heading fontSize="2xl">{game.name}</Heading>
+                      <Button
+                        onClick={() => navigation(`gameDetail/${encodeURIComponent(game.id)}/${encodeURIComponent(game.name)}`)}
+                        variant="link"
+                        p={0} 
+                      >
+                        <Heading fontSize="2xl">{game.name}</Heading>
+                      </Button>
                       <HStack>
                         {game.platform.map((platform) => (
                           <Icon key={platform} as={PlatformIcon[platform]} />
