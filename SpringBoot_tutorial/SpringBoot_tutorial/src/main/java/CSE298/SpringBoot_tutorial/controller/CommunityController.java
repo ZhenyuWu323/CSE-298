@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import CSE298.SpringBoot_tutorial.model.Comment;
 import CSE298.SpringBoot_tutorial.model.Rating;
+import CSE298.SpringBoot_tutorial.model.RatingRequest;
 import CSE298.SpringBoot_tutorial.model.UserInfo;
 import CSE298.SpringBoot_tutorial.model.UserProfile;
 import CSE298.SpringBoot_tutorial.repository.CommentRepository;
@@ -64,7 +65,9 @@ public class CommunityController {
     }
 
     @PutMapping("/putRating")
-    public ResponseEntity<String> putRating(@RequestParam String game, @RequestParam String which) {
+    public ResponseEntity<String> putRating(@RequestBody RatingRequest ratingRequest) {
+        String game = ratingRequest.getGame();
+        String which = ratingRequest.getWhich();
         Rating rating = RatingRepo.findByGame(game);
         if (rating != null) {
             switch(which) {
