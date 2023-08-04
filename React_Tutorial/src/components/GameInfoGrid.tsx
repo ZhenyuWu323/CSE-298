@@ -74,10 +74,14 @@ const GameInfoGrid = ({ gameInfo, user }: Props) => {
             if(response.status == 200){
                 setStatus("Success")
                 setMessage("Post a new comment")
-                which=='buy' && setBuyRate((parseInt(buyRate)+1).toString())
-                which=='maybe' && setBuyRate((parseInt(maybeRate)+1).toString())
-                which=='trash' && setBuyRate((parseInt(trashRate)+1).toString())
-                setTotalRate((parseInt(buyRate)+parseInt(maybeRate)+parseInt(trashRate)))
+                let newBuyRate = which=='buy' ? (parseInt(buyRate)+1) : parseInt(buyRate);
+                let newMaybeRate = which=='maybe' ? (parseInt(maybeRate)+1) : parseInt(maybeRate);
+                let newTrashRate = which=='trash' ? (parseInt(trashRate)+1) : parseInt(trashRate);
+
+                setBuyRate(newBuyRate.toString())
+                setMaybeRate(newMaybeRate.toString())
+                settrashRate(newTrashRate.toString())
+                setTotalRate(newBuyRate + newMaybeRate + newTrashRate)
                 onOpen();
             }
             else{
