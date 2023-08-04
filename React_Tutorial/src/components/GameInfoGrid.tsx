@@ -23,6 +23,7 @@ interface Rating{
     trash: string,
 }
 
+
 const GameInfoGrid = ({ gameInfo, user }: Props) => {
     const [showFullDescription, setShowFullDescription] = useState(false);
     // Function to toggle show/hide full description
@@ -63,7 +64,12 @@ const GameInfoGrid = ({ gameInfo, user }: Props) => {
     },[gameInfo]);
 
     const postRating = (which) => {
-        
+        if(!user){
+            setStatus("Fail");
+            setMessage("Please Login to post comment");
+            onOpen();
+            return;
+        }
         axios
           .put('http://localhost:8080/community/putRating', 
           {game: gameInfo.name,
@@ -73,7 +79,7 @@ const GameInfoGrid = ({ gameInfo, user }: Props) => {
             console.log(response);
             if(response.status == 200){
                 setStatus("Success")
-                setMessage("Post a new comment")
+                setMessage("Rate Success")
                 let newBuyRate = which=='buy' ? (parseInt(buyRate)+1) : parseInt(buyRate);
                 let newMaybeRate = which=='maybe' ? (parseInt(maybeRate)+1) : parseInt(maybeRate);
                 let newTrashRate = which=='trash' ? (parseInt(trashRate)+1) : parseInt(trashRate);
@@ -86,14 +92,14 @@ const GameInfoGrid = ({ gameInfo, user }: Props) => {
             }
             else{
                 setStatus("Fail")
-                setMessage("Fail to Post a new comment")
+                setMessage("Fail to Rate")
                 onOpen();
             }
           })
           .catch((error) => {
             console.log(error);
             setStatus("Fail")
-            setMessage("Fail to Post a new comment")
+            setMessage("Fail to Rate")
             onOpen();
           });
       };
