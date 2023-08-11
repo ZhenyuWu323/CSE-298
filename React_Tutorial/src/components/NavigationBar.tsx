@@ -30,7 +30,7 @@ const NavigationBar = ({ setGameQuery, user}: Props) => {
             </Avatar>
             <MenuList>
               <MenuItem icon={<ExternalLinkIcon />} onClick={() => {
-                  nav("https://cse-298.up.railway.app/oauthLogout")
+                  nav("/oauthLogout")
                 }}>
                 Log out
               </MenuItem>
