@@ -1,8 +1,7 @@
-import { Avatar, AvatarBadge,  HStack, Image, Menu, MenuButton, MenuItem, MenuList, Spacer, Stack,Text,} from "@chakra-ui/react"
+import { Avatar, AvatarBadge,  Button,  HStack, Image, Menu, MenuButton, MenuItem, MenuList, Spacer, Stack,Text, Link} from "@chakra-ui/react"
 import { ExternalLinkIcon} from '@chakra-ui/icons'
 import IconImage from "../assets/Icon.png";
 import { UserInfo } from "./Home";
-import { Link } from "react-router-dom";
 
 {/*Selected Props for platform & genre */}
 interface Props{
@@ -10,30 +9,6 @@ interface Props{
 }
 
 const GameInfoNavBar = ({ user}: Props) => {
-  function navigation(path) {
-    const fullPath = `https://cse-298.up.railway.app${path}`;
-    fetch(fullPath, {
-      method: 'GET', // or 'POST'
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Authorization': 'Bearer ' + token // if you use token-based authentication
-      },
-    }).then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      } else {
-        // handle the response here.
-        if(path === '/oauthLogout'){
-          // After logging out, you might want to redirect the user to the login page.
-          window.location.href = '/'; // or wherever you want to redirect
-        }
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-  }
-
   return (
     <HStack justifyContent="space-between" padding="10px" w="100%" bg="rgba(0, 0, 0, 0.5)">
       <HStack align="center">
@@ -47,9 +22,7 @@ const GameInfoNavBar = ({ user}: Props) => {
               <AvatarBadge boxSize='1.25em' bg='green.500' />
             </Avatar>
             <MenuList>
-              <MenuItem icon={<ExternalLinkIcon />} onClick={() => {
-                  navigation('/oauthLogout');
-                }}>
+              <MenuItem icon={<ExternalLinkIcon />} as={Link} href="/oauthLogout">
                 Log out
               </MenuItem>
             </MenuList>
@@ -61,9 +34,9 @@ const GameInfoNavBar = ({ user}: Props) => {
       ) : (
         <Stack direction='row'>
           <Avatar size='sm' />
-          <Link color='teal.500' to='/userCenter'>
-              Login
-          </Link>
+          <Button as={Link} href="/userCenter" colorScheme="white" variant="outline">
+            Login
+          </Button>
         </Stack>
       )}
     </HStack>
