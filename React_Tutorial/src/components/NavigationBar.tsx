@@ -14,7 +14,8 @@ interface Props{
 
 const NavigationBar = ({ setGameQuery, user}: Props) => {
   function navigation(path) {
-    fetch(path, {
+    const fullPath = `https://cse-298.up.railway.app${path}`;
+    fetch(fullPath, {
       method: 'GET', // or 'POST'
       headers: {
         'Content-Type': 'application/json',
