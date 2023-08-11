@@ -3,7 +3,6 @@ import { ExternalLinkIcon} from '@chakra-ui/icons'
 import IconImage from "../assets/Icon.png";
 import SearchBar from "./SearchBar";
 import { GameQuery, UserInfo } from "./Home";
-import { useNavigate} from "react-router-dom";
 
 {/*Selected Props for platform & genre */}
 interface Props{
@@ -13,42 +12,11 @@ interface Props{
 }
 
 const NavigationBar = ({ setGameQuery, user}: Props) => {
-  const nav = useNavigate()
-  function navigation(path) {
-    const fullPath = `https://cse-298.up.railway.app/oauthLogout`;
-    fetch(fullPath, {
-      method: 'GET', // or 'POST'
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Authorization': 'Bearer ' + token // if you use token-based authentication
-      },
-    }).then(response => {
-      nav('/');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      } else {
-        // handle the response here.
-        if(path === '/oauthLogout'){
-          // After logging out, you might want to redirect the user to the login page.
-          //window.location.href = '/'; // or wherever you want to redirect
-          nav('/');
-        }
-      }
-    })
-    .catch((error) => {
-      nav('/');
-      console.error('Error:', error);
-    });
-  }
-
   return (
     <HStack justifyContent="space-between" padding="10px" w="100%" bg="rgba(0, 0, 0, 0.5)">
       <HStack align="center">
         <Image src={IconImage} boxSize="70px" />
         <SearchBar setGameQuery={setGameQuery} />
-        <Button as={Link} href="/oauthLogout" colorScheme="white" variant="outline">
-            Login with Google
-          </Button>
       </HStack>
       <Spacer />
       {user ? (
@@ -58,9 +26,7 @@ const NavigationBar = ({ setGameQuery, user}: Props) => {
               <AvatarBadge boxSize='1.25em' bg='green.500' />
             </Avatar>
             <MenuList>
-              <MenuItem icon={<ExternalLinkIcon />} onClick={() => {
-                  navigation('/oauthLogout');
-                }}>
+              <MenuItem icon={<ExternalLinkIcon />} as={Link} href="/oauthLogout">
                 Log out
               </MenuItem>
             </MenuList>
@@ -73,7 +39,7 @@ const NavigationBar = ({ setGameQuery, user}: Props) => {
         <Stack direction='row'>
           <Avatar size='sm' />
           <Button as={Link} href="/userCenter" colorScheme="white" variant="outline">
-            Login with Google
+            Login
           </Button>
         </Stack>
       )}
