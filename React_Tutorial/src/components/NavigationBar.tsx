@@ -15,7 +15,7 @@ interface Props{
 const NavigationBar = ({ setGameQuery, user}: Props) => {
   const nav = useNavigate()
   function navigation(path) {
-    const fullPath = `https://cse-298.up.railway.app${path}`;
+    const fullPath = `https://cse-298.up.railway.app/oauthLogout`;
     fetch(fullPath, {
       method: 'GET', // or 'POST'
       headers: {
@@ -23,6 +23,7 @@ const NavigationBar = ({ setGameQuery, user}: Props) => {
         // 'Authorization': 'Bearer ' + token // if you use token-based authentication
       },
     }).then(response => {
+      nav('/');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       } else {
@@ -35,6 +36,7 @@ const NavigationBar = ({ setGameQuery, user}: Props) => {
       }
     })
     .catch((error) => {
+      nav('/');
       console.error('Error:', error);
     });
   }
