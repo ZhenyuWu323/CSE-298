@@ -3,7 +3,7 @@ import { ExternalLinkIcon} from '@chakra-ui/icons'
 import IconImage from "../assets/Icon.png";
 import SearchBar from "./SearchBar";
 import { GameQuery, UserInfo } from "./Home";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 {/*Selected Props for platform & genre */}
 interface Props{
@@ -13,29 +13,7 @@ interface Props{
 }
 
 const NavigationBar = ({ setGameQuery, user}: Props) => {
-  function navigation(path) {
-    const fullPath = `https://cse-298.up.railway.app${path}`;
-    fetch(fullPath, {
-      method: 'GET', // or 'POST'
-      headers: {
-        'Content-Type': 'application/json',
-        // 'Authorization': 'Bearer ' + token // if you use token-based authentication
-      },
-    }).then(response => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      } else {
-        // handle the response here.
-        if(path === '/oauthLogout'){
-          // After logging out, you might want to redirect the user to the login page.
-          window.location.href = '/'; // or wherever you want to redirect
-        }
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-    });
-  }
+  const nav = useNavigate();
 
   return (
     <HStack justifyContent="space-between" padding="10px" w="100%" bg="rgba(0, 0, 0, 0.5)">
@@ -52,7 +30,7 @@ const NavigationBar = ({ setGameQuery, user}: Props) => {
             </Avatar>
             <MenuList>
               <MenuItem icon={<ExternalLinkIcon />} onClick={() => {
-                  navigation('/oauthLogout');
+                  nav("https://cse-298.up.railway.app/oauthLogout")
                 }}>
                 Log out
               </MenuItem>
