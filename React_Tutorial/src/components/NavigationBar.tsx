@@ -1,9 +1,9 @@
-import { Avatar, AvatarBadge,  HStack, Image, Menu, MenuButton, MenuItem, MenuList, Spacer, Stack,Text,} from "@chakra-ui/react"
+import { Avatar, AvatarBadge,  Button,  HStack, Image, Menu, MenuButton, MenuItem, MenuList, Spacer, Stack,Text, Link} from "@chakra-ui/react"
 import { ExternalLinkIcon} from '@chakra-ui/icons'
 import IconImage from "../assets/Icon.png";
 import SearchBar from "./SearchBar";
 import { GameQuery, UserInfo } from "./Home";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 
 {/*Selected Props for platform & genre */}
 interface Props{
@@ -46,6 +46,9 @@ const NavigationBar = ({ setGameQuery, user}: Props) => {
       <HStack align="center">
         <Image src={IconImage} boxSize="70px" />
         <SearchBar setGameQuery={setGameQuery} />
+        <Button as={Link} href="/oauthLogout" colorScheme="white" variant="outline">
+            Login with Google
+          </Button>
       </HStack>
       <Spacer />
       {user ? (
@@ -69,9 +72,9 @@ const NavigationBar = ({ setGameQuery, user}: Props) => {
       ) : (
         <Stack direction='row'>
           <Avatar size='sm' />
-          <Link color='teal.500' to='/userCenter'>
-              Login
-          </Link>
+          <Button as={Link} href="/userCenter" colorScheme="white" variant="outline">
+            Login with Google
+          </Button>
         </Stack>
       )}
     </HStack>
