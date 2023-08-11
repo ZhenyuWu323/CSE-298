@@ -29,7 +29,7 @@ export const CommentGrid = ({user, game}:Props) => {
     const fetchCommentList = async () => {
         setIsLoading(true);
         try {
-            const response = await axios.get<Comments[]>('http://localhost:8080/community/findComment',{params:{game:game}});
+            const response = await axios.get<Comments[]>('https://cse-298.up.railway.app/community/findComment',{params:{game:game}});
             
             if (response.data) {
                 setCommentList(response.data);
@@ -61,7 +61,7 @@ export const CommentGrid = ({user, game}:Props) => {
         };
     
         axios
-          .post('http://localhost:8080/community/postComment', data)
+          .post('https://cse-298.up.railway.app/community/postComment', data)
           .then((response) => {
             console.log(response);
             if(response.status == 201){

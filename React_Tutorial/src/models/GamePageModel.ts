@@ -25,7 +25,7 @@ export interface GameDetail {
 
 export const fetchGameInfo = async (params: GameInfoParams) => {
     try {
-        const response = await axios.get("http://localhost:8080/api/queryGame", { params: params });
+        const response = await axios.get("https://cse-298.up.railway.app/api/queryGame", { params: params });
         console.log(response.request);
         return response.data as GameDetail;
     } catch (error) {

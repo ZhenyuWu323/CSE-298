@@ -42,7 +42,7 @@ const GenreList = ({gameQuery, setGameQuery, setLoading, updateGenreMap}: Props)
       try {
         setLoading(true);
         const response = await axios.get(
-          "http://localhost:8080/api/genres",
+          "https://cse-298.up.railway.app/api/genres",
           {}
         );
         setGenreList(response.data);

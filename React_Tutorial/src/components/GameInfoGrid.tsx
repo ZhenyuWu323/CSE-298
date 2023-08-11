@@ -37,7 +37,7 @@ const GameInfoGrid = ({ gameInfo, user }: Props) => {
 
     const fetchRating = async () => {
         try {
-            const response = await axios.get<Rating>('http://localhost:8080/community/findRating',{params:{game:gameInfo.name}});
+            const response = await axios.get<Rating>('https://cse-298.up.railway.app/community/findRating',{params:{game:gameInfo.name}});
             
             if (response.data) {
                 setBuyRate(response.data.buy);
@@ -71,7 +71,7 @@ const GameInfoGrid = ({ gameInfo, user }: Props) => {
             return;
         }
         axios
-          .put('http://localhost:8080/community/putRating', 
+          .put('https://cse-298.up.railway.app/community/putRating', 
           {game: gameInfo.name,
           which: which
       })

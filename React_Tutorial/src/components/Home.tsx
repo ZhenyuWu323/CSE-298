@@ -86,7 +86,7 @@ function Home(){
   useEffect(() => {
       const fetchUserInfo = async () => {
           try {
-              const response = await axios.get<UserInfo>('http://localhost:8080/user/google');
+              const response = await axios.get<UserInfo>('https://cse-298.up.railway.app/user/google');
               
               if (response.data) {
                   setUser(response.data);
